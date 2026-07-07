@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="围棋陪练">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#efe5d2">
+  <title>围棋陪练</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="child-mode">
+  <main class="app-shell">
+    <section class="board-section" aria-label="围棋棋盘">
+      <div class="board-wrap">
+        <canvas id="board" width="1000" height="1000"></canvas>
+        <div id="thinking" class="thinking hidden">AI 思考中...</div>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <header class="header">
+        <div class="title-row">
+          <h1>围棋陪练</h1>
+          <span class="level-gem" aria-hidden="true"></span>
+        </div>
+        <p id="subtitle">9 路儿童自适应对弈网页版</p>
+      </header>
+
+      <section class="card status-card">
+        <h2 id="status">黑棋先行，请孩子落子</h2>
+        <div class="metrics">
+          <div><strong id="moveCount">0</strong><span>手数</span></div>
+          <div><strong id="blackCaptures">0</strong><span>孩子吃子</span></div>
+          <div><strong id="whiteCaptures">0</strong><span>AI吃子</span></div>
+        </div>
+      </section>
+
+      <section class="card setup-card">
+        <h2>学习设置</h2>
+        <label class="field-row">
+          <span id="childLabel">孩子</span>
+          <select id="childSelect"></select>
+        </label>
+        <div class="field-row split">
+          <input id="newChildName" type="text" maxlength="16" placeholder="新孩子名字">
+          <button id="addChildBtn" type="button" class="mini-btn">添加</button>
+        </div>
+        <label class="field-row">
+          <span id="boardLabel">棋盘</span>
+          <select id="boardSizeSelect">
+            <option value="9">9 路入门</option>
+            <option value="13">13 路进阶</option>
+            <option value="19">19 路完整</option>
+          </select>
+        </label>
+        <label class="field-row">
+          <span id="difficultyLabel">初始难度</span>
+          <select id="difficultySelect">
+            <option value="480">启蒙</option>
+            <option value="640">入门</option>
+            <option value="760">进阶</option>
+            <option value="880">强手</option>
+            <option value="980">挑战</option>
+          </select>
+        </label>
+        <label class="field-row">
+          <span id="languageLabel">语言</span>
+          <select id="languageSelect">
+            <option value="zh">中文</option>
+            <option value="yue">粤语</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+          </select>
+        </label>
+        <div class="stage-row">
+          <span id="stageLabel">阶段</span>
+          <strong id="stageText">入门</strong>
+        </div>
+      </section>
+
+      <section class="card skill-card">
+        <h2>能力档案</h2>
+        <div class="row"><span id="ratingLabel">总体棋力</span><progress id="rating" value="520" max="1000"></progress><b id="ratingText">520</b></div>
+        <div class="row"><span id="openingLabel">布局</span><progress id="opening" value="52" max="100"></progress><b id="openingText">52</b></div>
+        <div class="row"><span id="fightingLabel">战斗</span><progress id="fighting" value="58" max="100"></progress><b id="fightingText">58</b></div>
+        <div class="row"><span id="stabilityLabel">稳定</span><progress id="stability" value="48" max="100"></progress><b id="stabilityText">48</b></div>
+        <div class="metrics compact">
+          <div><strong id="gamesPlayed">0</strong><span id="playedLabel">已下</span></div>
+          <div><strong id="winRate">0%</strong><span id="winRateLabel">胜率</span></div>
+          <div><strong id="aiLevel">520</strong><span id="aiLevelLabel">AI强度</span></div>
+        </div>
+      </section>
+
+      <section class="card support-card task-card">
+        <div class="card-title">
+          <h2 id="taskTitle">今日任务</h2>
+          <strong id="taskStatus">0%</strong>
+        </div>
+        <p id="taskDescription">完成一局后会生成适合孩子的任务。</p>
+      </section>
+
+      <section class="card support-card ai-analysis-card">
+        <h2 id="aiAnalysisTitle">AI 分析</h2>
+        <div class="analysis-grid">
+          <div><strong id="analysisWinrate">--</strong><span id="analysisWinrateLabel">胜率</span></div>
+          <div><strong id="analysisScoreLead">--</strong><span id="analysisScoreLeadLabel">目差</span></div>
+          <div><strong id="analysisBestMove">--</strong><span id="analysisBestMoveLabel">推荐</span></div>
+        </div>
+        <p id="analysisNote">连接 KataGo 后会显示分析结果。</p>
+      </section>
+
+      <section class="actions">
+        <button id="hintBtn" type="button">提示一手</button>
+        <button id="explainBtn" type="button">解释局面</button>
+        <button id="passBtn" type="button">停一手</button>
+        <button id="undoBtn" type="button">悔棋</button>
+        <button id="finishBtn" type="button">结束并评估</button>
+        <button id="newBtn" type="button">新局</button>
+        <button id="sgfBtn" type="button">导出SGF</button>
+        <button id="parentBtn" type="button">家长查看</button>
+      </section>
+
+      <section class="card support-card">
+        <h2>本局复盘</h2>
+        <ul id="review">
+          <li>完成一局后，这里会给 3 条简短反馈。</li>
+        </ul>
+      </section>
+
+      <section class="card support-card">
+        <div class="card-title">
+          <h2>最近对局</h2>
+          <button id="resetBtn" type="button" class="link-btn">重置</button>
+        </div>
+        <ul id="history" class="history">
+          <li>还没有完成的对局。</li>
+        </ul>
+      </section>
+
+      <section id="parentPanel" class="card parent-panel hidden">
+        <div class="card-title">
+          <h2>家长查看</h2>
+          <button id="closeParentBtn" type="button" class="link-btn">关闭</button>
+        </div>
+        <div class="parent-grid">
+          <div><strong id="parentAvgMoves">0</strong><span id="parentAvgMovesLabel">平均手数</span></div>
+          <div><strong id="parentAvgLevel">0</strong><span id="parentAvgLevelLabel">平均强度</span></div>
+          <div><strong id="parentTrend">暂无</strong><span id="parentTrendLabel">最近趋势</span></div>
+        </div>
+        <ul id="parentNotes" class="parent-notes">
+          <li>完成几局后，这里会显示趋势。</li>
+        </ul>
+        <div class="parent-controls">
+          <label>
+            <input id="rewardToggle" type="checkbox" checked>
+            <span id="rewardLabel">赢棋奖励</span>
+          </label>
+          <label>
+            <span id="remoteAiLabel">远程AI地址</span>
+            <input id="remoteAiUrl" type="url" placeholder="https://.../game/move">
+          </label>
+          <label>
+            <span id="kataGoLabel">KataGo分析地址</span>
+            <input id="kataGoUrl" type="url" placeholder="https://.../katago/analyze">
+          </label>
+          <p id="remoteAiStatus" class="remote-status">远程 AI 未配置</p>
+          <button id="saveParentSettingsBtn" type="button">保存设置</button>
+          <button id="exportBackupBtn" type="button">导出备份</button>
+          <button id="importBackupBtn" type="button">导入备份</button>
+          <input id="backupFileInput" type="file" accept="application/json,.json" class="hidden">
+          <button id="parentFinishBtn" type="button">结束并评估</button>
+          <button id="parentSgfBtn" type="button">导出SGF</button>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <div id="endConfirmPopup" class="end-popup hidden" role="dialog" aria-live="polite" aria-label="终局确认">
+    <div class="end-card">
+      <h2>确认终局？</h2>
+      <p id="endEstimate">正在估算形势...</p>
+      <div class="end-actions">
+        <button id="confirmEndBtn" type="button">确认结束</button>
+        <button id="continueGameBtn" type="button">继续下</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="victoryPopup" class="victory-popup hidden" role="dialog" aria-live="polite" aria-label="胜利奖励">
+    <div class="victory-card">
+      <img class="dino" src="assets/t-rex-victory.png" alt="">
+      <div class="speech">真棒</div>
+      <button id="closeVictoryBtn" type="button">继续</button>
+    </div>
+  </div>
+
+  <script src="engine-analysis.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    }
+  </script>
+</body>
+</html>
