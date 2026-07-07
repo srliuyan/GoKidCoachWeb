@@ -293,9 +293,11 @@ function applyLanguage() {
   document.querySelector("#boardSizeSelect option[value='13']").textContent = t("board13");
   document.querySelector("#boardSizeSelect option[value='19']").textContent = t("board19");
   setText("#difficultyLabel", t("difficulty"));
+  setText("#mainDifficultyLabel", t("difficulty"));
   difficultyPresets.forEach(preset => {
-    const option = document.querySelector(`#difficultySelect option[value='${preset.value}']`);
-    if (option) option.textContent = t(preset.key);
+    document.querySelectorAll(`#difficultySelect option[value='${preset.value}'], #mainDifficultySelect option[value='${preset.value}']`).forEach(option => {
+      option.textContent = t(preset.key);
+    });
   });
   setText(".skill-card h2", t("profile"));
   setText("#ratingLabel", t("rating"));
@@ -1388,7 +1390,9 @@ function update() {
   document.getElementById("subtitle").textContent = t("subtitle", { size });
   document.getElementById("stageText").textContent = stage.name;
   document.getElementById("boardSizeSelect").value = String(profile.boardSize || size);
-  document.getElementById("difficultySelect").value = String(nearestDifficultyPreset(profile.initialAiLevel || profile.aiLevel).value);
+  const selectedDifficulty = String(nearestDifficultyPreset(profile.initialAiLevel || profile.aiLevel).value);
+  document.getElementById("difficultySelect").value = selectedDifficulty;
+  document.getElementById("mainDifficultySelect").value = selectedDifficulty;
   document.getElementById("languageSelect").value = currentLanguage();
   renderChildSelect();
 
@@ -1685,6 +1689,7 @@ document.getElementById("childSelect").addEventListener("change", event => switc
 document.getElementById("addChildBtn").addEventListener("click", addChild);
 document.getElementById("boardSizeSelect").addEventListener("change", event => changeBoardSize(event.target.value));
 document.getElementById("difficultySelect").addEventListener("change", event => changeInitialDifficulty(event.target.value));
+document.getElementById("mainDifficultySelect").addEventListener("change", event => changeInitialDifficulty(event.target.value));
 document.getElementById("languageSelect").addEventListener("change", event => {
   profile.language = event.target.value;
   saveProfile();

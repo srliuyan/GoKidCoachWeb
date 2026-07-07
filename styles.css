@@ -286,6 +286,31 @@ progress {
   color: #f2cb78;
 }
 
+.main-difficulty {
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(10, 31, 52, 0.46);
+  border: 1px solid rgba(126, 196, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.main-difficulty label {
+  display: grid;
+  grid-template-columns: auto minmax(132px, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.main-difficulty span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.main-difficulty select {
+  min-height: 38px;
+}
+
 .actions {
   display: grid;
   grid-template-columns: 1fr;
