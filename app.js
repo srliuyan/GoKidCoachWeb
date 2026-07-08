@@ -747,10 +747,18 @@ function localPolicyPrior(point, color, grid = board) {
       lastMove,
       features
     }));
-    if (Number.isFinite(modelScore)) score += modelScore;
+    if (Number.isFinite(modelScore)) score += modelScore * policyModelWeight();
   }
 
   return score;
+}
+
+function policyModelWeight() {
+  const level = clamp(Number(profile.aiLevel) || defaultInitialAiLevel, 120, 980);
+  if (level < 560) return 0.35;
+  if (level < 700) return 0.5;
+  if (level < 840) return 0.7;
+  return 0.9;
 }
 
 function scoreMove(point, color) {

@@ -1,11 +1,13 @@
-const cacheName = "gokidcoach-web-v22";
+const cacheName = "gokidcoach-web-v23";
 const assets = [
   "./",
   "./index.html",
   "./styles.css",
   "./engine-analysis.js",
+  "./offline-policy.js",
   "./app.js",
   "./manifest.webmanifest",
+  "./assets/offline-policy-model.json",
   "./assets/t-rex-victory.png",
   "./assets/icon-192.png",
   "./assets/icon-512.png"
