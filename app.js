@@ -1548,7 +1548,27 @@ function updateAnalysisCard() {
   document.getElementById("analysisWinrate").textContent = `${analysis.winrate}%`;
   document.getElementById("analysisScoreLead").textContent = `${analysis.scoreLead >= 0 ? "+" : ""}${analysis.scoreLead.toFixed(1)}`;
   document.getElementById("analysisBestMove").textContent = analysis.bestMove;
+  document.getElementById("activeAiSource").textContent = activeAiSourceText();
   document.getElementById("analysisNote").textContent = analysis.note;
+}
+
+function activeAiSourceText() {
+  const remoteConfigured = Boolean(profile.remoteAIUrl || profile.kataGoUrl);
+  if (remoteConfigured && remoteAiState === "connected") return "当前AI：远程 KataGo / AI";
+
+  const policy = window.GoKidCoachPolicyModel;
+  const policyState = policy?.state;
+  const model = policyState?.model;
+  if (policyState?.loaded && model) {
+    const version = model.version ? ` v${model.version}` : "";
+    const training = model.training?.sourceCounts
+      ? `，样本 ${Object.entries(model.training.sourceCounts).map(([key, value]) => `${key}:${value}`).join(" ")}`
+      : "";
+    const fallback = remoteConfigured && remoteAiState === "failed" ? "（远程失败，已回退）" : "";
+    return `当前AI：训练离线模型${version}${training}${fallback}`;
+  }
+  if (policyState?.failed) return "当前AI：内置增强启发式（离线模型未加载）";
+  return "当前AI：内置增强启发式（等待离线模型）";
 }
 
 function updateStatus(text) {
@@ -1925,6 +1945,7 @@ document.getElementById("parentSgfBtn").addEventListener("click", exportSGF);
 document.getElementById("confirmEndBtn").addEventListener("click", finishGame);
 document.getElementById("continueGameBtn").addEventListener("click", continueGameAfterEndConfirm);
 document.getElementById("closeVictoryBtn").addEventListener("click", hideVictoryPopup);
+window.addEventListener("gokidcoach-policy-ready", updateAnalysisCard);
 document.getElementById("resetBtn").addEventListener("click", () => {
   try {
     localStorage.removeItem(profileStoreKey);
