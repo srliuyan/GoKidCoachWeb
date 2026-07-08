@@ -1544,8 +1544,13 @@ function updateAnalysisCard() {
   document.getElementById("analysisWinrate").textContent = `${analysis.winrate}%`;
   document.getElementById("analysisScoreLead").textContent = `${analysis.scoreLead >= 0 ? "+" : ""}${analysis.scoreLead.toFixed(1)}`;
   document.getElementById("analysisBestMove").textContent = analysis.bestMove;
-  document.getElementById("activeAiSource").textContent = activeAiSourceText();
+  updateActiveAiSource();
   document.getElementById("analysisNote").textContent = analysis.note;
+}
+
+function updateActiveAiSource() {
+  const source = document.getElementById("activeAiSource");
+  if (source) source.textContent = activeAiSourceText();
 }
 
 function activeAiSourceText() {
@@ -1941,7 +1946,7 @@ document.getElementById("parentSgfBtn").addEventListener("click", exportSGF);
 document.getElementById("confirmEndBtn").addEventListener("click", finishGame);
 document.getElementById("continueGameBtn").addEventListener("click", continueGameAfterEndConfirm);
 document.getElementById("closeVictoryBtn").addEventListener("click", hideVictoryPopup);
-window.addEventListener("gokidcoach-policy-ready", updateAnalysisCard);
+window.addEventListener("gokidcoach-policy-ready", updateActiveAiSource);
 document.getElementById("resetBtn").addEventListener("click", () => {
   try {
     localStorage.removeItem(profileStoreKey);
@@ -1964,3 +1969,4 @@ if (new URLSearchParams(window.location.search).get("demo") === "1") {
 }
 
 update();
+updateActiveAiSource();

@@ -1,4 +1,4 @@
-const cacheName = "gokidcoach-web-v23";
+const cacheName = "gokidcoach-web-v24";
 const assets = [
   "./",
   "./index.html",
