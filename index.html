@@ -40,6 +40,38 @@
         </div>
       </section>
 
+      <section class="actions">
+        <button id="undoBtn" type="button">悔棋</button>
+        <button id="newBtn" type="button">新局</button>
+        <button id="finishBtn" type="button">结束</button>
+        <button id="hintBtn" type="button">提示</button>
+        <button id="passBtn" type="button">停一手</button>
+        <button id="explainBtn" type="button">解释局面</button>
+        <button id="sgfBtn" type="button">导出SGF</button>
+        <button id="parentBtn" type="button">家长查看</button>
+      </section>
+
+      <section class="main-settings">
+        <label>
+          <span id="mainBoardSizeLabel">棋盘</span>
+          <select id="mainBoardSizeSelect">
+            <option value="9">9 路</option>
+            <option value="13">13 路</option>
+            <option value="19">19 路</option>
+          </select>
+        </label>
+        <label>
+          <span id="mainDifficultyLabel">难度</span>
+          <select id="mainDifficultySelect">
+            <option value="480">启蒙</option>
+            <option value="640">入门</option>
+            <option value="760">进阶</option>
+            <option value="880">强手</option>
+            <option value="980">挑战</option>
+          </select>
+        </label>
+      </section>
+
       <section class="card setup-card">
         <h2>学习设置</h2>
         <label class="field-row">
@@ -113,30 +145,6 @@
           <div><strong id="analysisBestMove">--</strong><span id="analysisBestMoveLabel">推荐</span></div>
         </div>
         <p id="analysisNote">连接 KataGo 后会显示分析结果。</p>
-      </section>
-
-      <section class="main-difficulty">
-        <label>
-          <span id="mainDifficultyLabel">难度</span>
-          <select id="mainDifficultySelect">
-            <option value="480">启蒙</option>
-            <option value="640">入门</option>
-            <option value="760">进阶</option>
-            <option value="880">强手</option>
-            <option value="980">挑战</option>
-          </select>
-        </label>
-      </section>
-
-      <section class="actions">
-        <button id="hintBtn" type="button">提示一手</button>
-        <button id="explainBtn" type="button">解释局面</button>
-        <button id="passBtn" type="button">停一手</button>
-        <button id="undoBtn" type="button">悔棋</button>
-        <button id="finishBtn" type="button">结束并评估</button>
-        <button id="newBtn" type="button">新局</button>
-        <button id="sgfBtn" type="button">导出SGF</button>
-        <button id="parentBtn" type="button">家长查看</button>
       </section>
 
       <section class="card support-card">

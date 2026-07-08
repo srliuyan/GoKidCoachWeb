@@ -15,6 +15,13 @@ const difficultyPresets = [
   { value: 880, key: "difficultyStrong" },
   { value: 980, key: "difficultyChallenge" }
 ];
+const compactLabels = {
+  zh: { difficulty: "难度", winrate: "胜率" },
+  yue: { difficulty: "難度", winrate: "勝率" },
+  en: { difficulty: "Level", winrate: "Win" },
+  ja: { difficulty: "難度", winrate: "勝率" },
+  ko: { difficulty: "난이도", winrate: "승률" }
+};
 
 const i18n = {
   zh: {
@@ -24,7 +31,7 @@ const i18n = {
     difficulty: "初始难度", difficultyStarter: "启蒙", difficultyBeginner: "入门", difficultyIntermediate: "进阶", difficultyStrong: "强手", difficultyChallenge: "挑战",
     statusStart: "黑棋先行，请孩子落子", statusDone: "本局已结束，可以新开一局", statusBlack: "轮到孩子落黑棋", statusWhite: "轮到 AI 落白棋",
     moves: "手数", childCaptures: "孩子吃子", aiCaptures: "AI吃子", profile: "能力档案", rating: "总体棋力", opening: "布局", fighting: "战斗", stability: "稳定", played: "已下", winRate: "胜率", aiLevel: "AI强度",
-    hint: "提示一手", explain: "解释局面", pass: "停一手", undo: "悔棋", finish: "结束并评估", newGame: "新局", exportSgf: "导出SGF", parent: "家长查看",
+    hint: "提示", explain: "解释局面", pass: "停一手", undo: "悔棋", finish: "结束", newGame: "新局", exportSgf: "导出SGF", parent: "家长查看",
     review: "本局复盘", reviewEmpty: "完成一局后，这里会给 3 条简短反馈。", recent: "最近对局", reset: "重置",
     parentAvgMoves: "平均手数", parentAvgLevel: "平均强度", parentTrend: "最近趋势", reward: "赢棋奖励", remoteAi: "远程AI地址", kataGo: "KataGo分析地址", save: "保存设置", close: "关闭",
     confirmEndTitle: "确认终局？", estimating: "正在估算形势...", confirmEnd: "确认结束", continueGame: "继续下", great: "真棒", continue: "继续",
@@ -292,8 +299,12 @@ function applyLanguage() {
   document.querySelector("#boardSizeSelect option[value='9']").textContent = t("board9");
   document.querySelector("#boardSizeSelect option[value='13']").textContent = t("board13");
   document.querySelector("#boardSizeSelect option[value='19']").textContent = t("board19");
+  setText("#mainBoardSizeLabel", t("board"));
+  document.querySelector("#mainBoardSizeSelect option[value='9']").textContent = t("board9").replace(/\s*(入门|进阶|完整|Beginner|Next|Full|中級|完整|입문|중급|전체).*$/, "");
+  document.querySelector("#mainBoardSizeSelect option[value='13']").textContent = t("board13").replace(/\s*(入门|进阶|完整|Beginner|Next|Full|中級|完整|입문|중급|전체).*$/, "");
+  document.querySelector("#mainBoardSizeSelect option[value='19']").textContent = t("board19").replace(/\s*(入门|进阶|完整|Beginner|Next|Full|中級|完整|입문|중급|전체).*$/, "");
   setText("#difficultyLabel", t("difficulty"));
-  setText("#mainDifficultyLabel", t("difficulty"));
+  setText("#mainDifficultyLabel", compactLabels[currentLanguage()]?.difficulty || t("difficulty"));
   difficultyPresets.forEach(preset => {
     document.querySelectorAll(`#difficultySelect option[value='${preset.value}'], #mainDifficultySelect option[value='${preset.value}']`).forEach(option => {
       option.textContent = t(preset.key);
@@ -325,7 +336,7 @@ function applyLanguage() {
   setText("#closeParentBtn", t("close"));
   setText("#taskTitle", t("taskTitle"));
   setText("#aiAnalysisTitle", t("aiAnalysis"));
-  setText("#analysisWinrateLabel", t("childWinrate"));
+  setText("#analysisWinrateLabel", compactLabels[currentLanguage()]?.winrate || t("childWinrate"));
   setText("#analysisScoreLeadLabel", t("scoreLead"));
   setText("#analysisBestMoveLabel", t("bestMove"));
   setText("#parentAvgMovesLabel", t("parentAvgMoves"));
@@ -1000,6 +1011,7 @@ function changeBoardSize(value) {
   if (![9, 13, 19].includes(nextSize) || nextSize === profile.boardSize) return;
   if (moveHistory.length && !window.confirm(t("switchBoardConfirm"))) {
     document.getElementById("boardSizeSelect").value = String(profile.boardSize);
+    document.getElementById("mainBoardSizeSelect").value = String(profile.boardSize);
     return;
   }
   profile.boardSize = nextSize;
@@ -1390,6 +1402,7 @@ function update() {
   document.getElementById("subtitle").textContent = t("subtitle", { size });
   document.getElementById("stageText").textContent = stage.name;
   document.getElementById("boardSizeSelect").value = String(profile.boardSize || size);
+  document.getElementById("mainBoardSizeSelect").value = String(profile.boardSize || size);
   const selectedDifficulty = String(nearestDifficultyPreset(profile.initialAiLevel || profile.aiLevel).value);
   document.getElementById("difficultySelect").value = selectedDifficulty;
   document.getElementById("mainDifficultySelect").value = selectedDifficulty;
@@ -1688,6 +1701,7 @@ document.getElementById("explainBtn").addEventListener("click", explainPosition)
 document.getElementById("childSelect").addEventListener("change", event => switchChild(event.target.value));
 document.getElementById("addChildBtn").addEventListener("click", addChild);
 document.getElementById("boardSizeSelect").addEventListener("change", event => changeBoardSize(event.target.value));
+document.getElementById("mainBoardSizeSelect").addEventListener("change", event => changeBoardSize(event.target.value));
 document.getElementById("difficultySelect").addEventListener("change", event => changeInitialDifficulty(event.target.value));
 document.getElementById("mainDifficultySelect").addEventListener("change", event => changeInitialDifficulty(event.target.value));
 document.getElementById("languageSelect").addEventListener("change", event => {

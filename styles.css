@@ -152,8 +152,10 @@ canvas {
   padding: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   border-left: 0;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .panel > * {
@@ -286,7 +288,10 @@ progress {
   color: #f2cb78;
 }
 
-.main-difficulty {
+.main-settings {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
   padding: 10px 12px;
   border-radius: 16px;
   background: rgba(10, 31, 52, 0.46);
@@ -294,52 +299,55 @@ progress {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-.main-difficulty label {
+.main-settings label {
   display: grid;
   grid-template-columns: auto minmax(132px, 1fr);
   align-items: center;
   gap: 10px;
 }
 
-.main-difficulty span {
+.main-settings span {
   color: var(--muted);
   font-size: 13px;
   font-weight: 800;
 }
 
-.main-difficulty select {
+.main-settings select {
   min-height: 38px;
 }
 
 .actions {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
   opacity: 0.9;
-  margin-top: 8px;
+  margin-top: 0;
 }
 
 .actions button {
   position: relative;
   display: grid;
-  grid-template-columns: 40px 1fr;
+  grid-template-columns: 1fr;
   align-items: center;
-  gap: 10px;
-  text-align: left;
-  padding-left: 12px;
+  justify-items: center;
+  gap: 7px;
+  min-width: 0;
+  min-height: 70px;
+  padding: 9px 7px;
+  text-align: center;
 }
 
 .actions button::before {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 11px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   color: #f8d89a;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(126, 196, 255, 0.12);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  font-size: 22px;
+  font-size: 21px;
   line-height: 1;
 }
 
@@ -370,6 +378,14 @@ progress {
   background: linear-gradient(145deg, #f3cf83, #c99a45);
   font-size: 27px;
   font-weight: 800;
+}
+
+#finishBtn::before {
+  content: "✓";
+  color: #133657;
+  background: linear-gradient(145deg, #f3cf83, #c99a45);
+  font-size: 24px;
+  font-weight: 900;
 }
 
 .actions button:first-child {
@@ -451,17 +467,40 @@ li {
 
 body.child-mode .setup-card,
 body.child-mode .skill-card,
-body.child-mode .support-card:not(.task-card):not(.ai-analysis-card),
+body.child-mode .task-card,
+body.child-mode .support-card:not(.ai-analysis-card),
 body.child-mode .parent-panel {
   display: none !important;
 }
 
 body.child-mode .panel {
-  gap: 14px;
+  gap: 12px;
 }
 
-body.child-mode .actions {
-  margin-top: 0;
+body.child-mode #explainBtn,
+body.child-mode #sgfBtn,
+body.child-mode #parentBtn {
+  display: none;
+}
+
+body.child-mode .ai-analysis-card {
+  display: block;
+  padding: 12px;
+}
+
+body.child-mode .ai-analysis-card h2 {
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+body.child-mode .analysis-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 0;
+}
+
+body.child-mode .analysis-grid div:nth-child(2),
+body.child-mode .ai-analysis-card p {
+  display: none;
 }
 
 body.parent-mode .setup-card,
@@ -784,20 +823,19 @@ body.parent-mode .support-card {
     opacity: 0.76;
   }
 
-  #finishBtn,
-  #sgfBtn,
-  #parentBtn {
-    display: block;
+  .actions button {
+    min-height: 64px;
   }
 
-  .support-card {
+  body.parent-mode .support-card {
     display: block;
   }
 }
 
 body.child-mode .setup-card,
 body.child-mode .skill-card,
-body.child-mode .support-card:not(.task-card):not(.ai-analysis-card),
+body.child-mode .task-card,
+body.child-mode .support-card:not(.ai-analysis-card),
 body.child-mode .parent-panel {
   display: none !important;
 }
