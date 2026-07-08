@@ -9,8 +9,8 @@ const currentGameKeyPrefix = "gokidcoach-web-current-game-v2-";
 const komi = 7;
 const supportedLanguages = ["zh", "yue", "en", "ja", "ko"];
 const defaultInitialAiLevel = 980;
+const minimumInitialAiLevel = 640;
 const difficultyPresets = [
-  { value: 480, key: "difficultyStarter" },
   { value: 640, key: "difficultyBeginner" },
   { value: 760, key: "difficultyIntermediate" },
   { value: 880, key: "difficultyStrong" },
@@ -29,7 +29,7 @@ const i18n = {
     appTitle: "围棋陪练", subtitle: "{size} 路儿童自适应对弈网页版", thinking: "AI 思考中...",
     setup: "学习设置", child: "孩子", newChild: "新孩子名字", add: "添加", board: "棋盘", language: "语言", stage: "阶段",
     board9: "9 路入门", board13: "13 路进阶", board19: "19 路完整",
-    difficulty: "初始难度", difficultyStarter: "启蒙", difficultyBeginner: "入门", difficultyIntermediate: "进阶", difficultyStrong: "强手", difficultyChallenge: "挑战",
+    difficulty: "初始难度", difficultyBeginner: "入门", difficultyIntermediate: "进阶", difficultyStrong: "强手", difficultyChallenge: "挑战",
     statusStart: "黑棋先行，请孩子落子", statusDone: "本局已结束，可以新开一局", statusBlack: "轮到孩子落黑棋", statusWhite: "轮到 AI 落白棋",
     moves: "手数", childCaptures: "孩子吃子", aiCaptures: "AI吃子", profile: "能力档案", rating: "总体棋力", opening: "布局", fighting: "战斗", stability: "稳定", played: "已下", winRate: "胜率", aiLevel: "AI强度",
     hint: "提示", explain: "解释局面", pass: "停一手", undo: "悔棋", finish: "结束", newGame: "新局", exportSgf: "导出SGF", parent: "家长查看",
@@ -54,7 +54,7 @@ const i18n = {
     appTitle: "圍棋陪練", subtitle: "{size} 路小朋友自適應對弈網頁版", thinking: "AI 諗緊...",
     setup: "學習設定", child: "小朋友", newChild: "新小朋友名", add: "新增", board: "棋盤", language: "語言", stage: "階段",
     board9: "9 路入門", board13: "13 路進階", board19: "19 路完整",
-    difficulty: "初始難度", difficultyStarter: "啟蒙", difficultyBeginner: "入門", difficultyIntermediate: "進階", difficultyStrong: "強手", difficultyChallenge: "挑戰",
+    difficulty: "初始難度", difficultyBeginner: "入門", difficultyIntermediate: "進階", difficultyStrong: "強手", difficultyChallenge: "挑戰",
     statusStart: "黑棋先行，請小朋友落子", statusDone: "呢局已結束，可以開新局", statusBlack: "輪到小朋友落黑棋", statusWhite: "輪到 AI 落白棋",
     moves: "手數", childCaptures: "小朋友食子", aiCaptures: "AI食子", profile: "能力檔案", rating: "整體棋力", opening: "布局", fighting: "戰鬥", stability: "穩定", played: "已下", winRate: "勝率", aiLevel: "AI強度",
     hint: "提示一手", explain: "講解局面", pass: "停一手", undo: "悔棋", finish: "結束並評估", newGame: "新局", exportSgf: "匯出SGF", parent: "家長查看",
@@ -78,7 +78,7 @@ const i18n = {
     appTitle: "Go Coach", subtitle: "{size}x{size} adaptive Go for kids", thinking: "AI thinking...",
     setup: "Learning", child: "Child", newChild: "New child name", add: "Add", board: "Board", language: "Language", stage: "Stage",
     board9: "9x9 Beginner", board13: "13x13 Next", board19: "19x19 Full",
-    difficulty: "Initial level", difficultyStarter: "Starter", difficultyBeginner: "Beginner", difficultyIntermediate: "Intermediate", difficultyStrong: "Strong", difficultyChallenge: "Challenge",
+    difficulty: "Initial level", difficultyBeginner: "Beginner", difficultyIntermediate: "Intermediate", difficultyStrong: "Strong", difficultyChallenge: "Challenge",
     statusStart: "Black plays first. Place a stone.", statusDone: "Game finished. Start a new game.", statusBlack: "Child to play black", statusWhite: "AI to play white",
     moves: "Moves", childCaptures: "Child captures", aiCaptures: "AI captures", profile: "Skill Profile", rating: "Rating", opening: "Opening", fighting: "Fighting", stability: "Stability", played: "Games", winRate: "Win rate", aiLevel: "AI level",
     hint: "Hint", explain: "Explain", pass: "Pass", undo: "Undo", finish: "Finish", newGame: "New Game", exportSgf: "Export SGF", parent: "Parent View",
@@ -102,7 +102,7 @@ const i18n = {
     appTitle: "囲碁コーチ", subtitle: "{size} 路 子ども向け自動調整対局", thinking: "AI 思考中...",
     setup: "学習設定", child: "子ども", newChild: "新しい名前", add: "追加", board: "盤", language: "言語", stage: "段階",
     board9: "9 路 入門", board13: "13 路 中級", board19: "19 路 完整",
-    difficulty: "初期難度", difficultyStarter: "はじめて", difficultyBeginner: "入門", difficultyIntermediate: "中級", difficultyStrong: "強め", difficultyChallenge: "挑戦",
+    difficulty: "初期難度", difficultyBeginner: "入門", difficultyIntermediate: "中級", difficultyStrong: "強め", difficultyChallenge: "挑戦",
     statusStart: "黒番です。石を置いてください", statusDone: "対局終了。新しい対局を始められます", statusBlack: "子どもの黒番", statusWhite: "AI の白番",
     moves: "手数", childCaptures: "子どもの取り", aiCaptures: "AIの取り", profile: "能力プロフィール", rating: "総合棋力", opening: "序盤", fighting: "戦い", stability: "安定", played: "対局数", winRate: "勝率", aiLevel: "AI強度",
     hint: "一手ヒント", explain: "局面説明", pass: "パス", undo: "待った", finish: "終了して評価", newGame: "新局", exportSgf: "SGF出力", parent: "保護者",
@@ -126,7 +126,7 @@ const i18n = {
     appTitle: "바둑 코치", subtitle: "{size}줄 어린이 맞춤 대국", thinking: "AI 생각 중...",
     setup: "학습 설정", child: "아이", newChild: "새 아이 이름", add: "추가", board: "바둑판", language: "언어", stage: "단계",
     board9: "9줄 입문", board13: "13줄 중급", board19: "19줄 전체",
-    difficulty: "초기 난이도", difficultyStarter: "첫걸음", difficultyBeginner: "입문", difficultyIntermediate: "중급", difficultyStrong: "강함", difficultyChallenge: "도전",
+    difficulty: "초기 난이도", difficultyBeginner: "입문", difficultyIntermediate: "중급", difficultyStrong: "강함", difficultyChallenge: "도전",
     statusStart: "흑이 먼저 둡니다. 돌을 놓으세요", statusDone: "대국이 끝났습니다. 새 판을 시작하세요", statusBlack: "아이의 흑 차례", statusWhite: "AI의 백 차례",
     moves: "수순", childCaptures: "아이 잡은 돌", aiCaptures: "AI 잡은 돌", profile: "실력 기록", rating: "종합 실력", opening: "포석", fighting: "전투", stability: "안정", played: "대국", winRate: "승률", aiLevel: "AI 강도",
     hint: "힌트", explain: "국면 설명", pass: "한 수 쉼", undo: "무르기", finish: "끝내고 평가", newGame: "새 판", exportSgf: "SGF 내보내기", parent: "부모 보기",
@@ -175,7 +175,7 @@ function freshBoard() {
 }
 
 function createProfile(name = "孩子", initialAiLevel = defaultInitialAiLevel) {
-  const aiLevel = clamp(Number(initialAiLevel) || defaultInitialAiLevel, 120, 980);
+  const aiLevel = clamp(Number(initialAiLevel) || defaultInitialAiLevel, minimumInitialAiLevel, 980);
   return {
     name,
     language: "zh",
@@ -205,8 +205,8 @@ function normalizeProfile(profile, name = "孩子") {
   merged.name = String(merged.name || name).slice(0, 16);
   merged.language = supportedLanguages.includes(merged.language) ? merged.language : "zh";
   merged.boardSize = fixedBoardSize;
-  merged.aiLevel = clamp(Number(merged.aiLevel) || fallback.aiLevel, 120, 980);
-  merged.initialAiLevel = clamp(Number(merged.initialAiLevel) || merged.aiLevel || fallback.initialAiLevel, 120, 980);
+  merged.aiLevel = clamp(Number(merged.aiLevel) || fallback.aiLevel, minimumInitialAiLevel, 980);
+  merged.initialAiLevel = clamp(Number(merged.initialAiLevel) || merged.aiLevel || fallback.initialAiLevel, minimumInitialAiLevel, 980);
   merged.history = Array.isArray(merged.history) ? merged.history : [];
   merged.trend = Array.isArray(merged.trend) ? merged.trend : [];
   merged.taskHistory = Array.isArray(merged.taskHistory) ? merged.taskHistory : [];
@@ -837,21 +837,26 @@ function chooseLocalAIMove(moves) {
   if (!evaluated.length) return null;
 
   const bestScore = evaluated[0].score;
+  const difficulty = clamp(Number(profile.aiLevel) || defaultInitialAiLevel, minimumInitialAiLevel, 980);
+  const normalized = (difficulty - minimumInitialAiLevel) / (980 - minimumInitialAiLevel);
 
-  const expertCandidates = evaluated
-    .filter(item => item.score >= bestScore - 18)
-    .slice(0, 4);
-  const humanCandidates = evaluated
-    .filter(item => item.score >= bestScore - 38)
-    .slice(0, 7);
-  const looseButReasonable = evaluated
-    .filter(item => item.score >= bestScore - 58)
-    .slice(0, 10);
+  const expertWindow = 28 - normalized * 8;
+  const humanWindow = 48 - normalized * 10;
+  const looseWindow = 72 - normalized * 8;
+  const expertCount = Math.max(3, Math.round(3 + normalized * 3));
+  const humanCount = Math.max(5, Math.round(6 + normalized * 2));
+  const looseCount = Math.max(8, Math.round(9 + normalized * 2));
 
+  const expertCandidates = evaluated.filter(item => item.score >= bestScore - expertWindow).slice(0, expertCount);
+  const humanCandidates = evaluated.filter(item => item.score >= bestScore - humanWindow).slice(0, humanCount);
+  const looseButReasonable = evaluated.filter(item => item.score >= bestScore - looseWindow).slice(0, looseCount);
+
+  const expertChance = 0.58 + normalized * 0.24;
+  const humanChance = 0.27 - normalized * 0.11;
   const roll = Math.random();
-  if (roll < 0.82) return weightedChoice(expertCandidates, bestScore, 6);
-  if (roll < 0.97) return weightedChoice(humanCandidates, bestScore, 11);
-  return weightedChoice(looseButReasonable, bestScore, 16);
+  if (roll < expertChance) return weightedChoice(expertCandidates, bestScore, 7 - normalized * 2);
+  if (roll < expertChance + humanChance) return weightedChoice(humanCandidates, bestScore, 12 - normalized * 2);
+  return weightedChoice(looseButReasonable, bestScore, 18 - normalized * 3);
 }
 
 function weightedChoice(candidates, bestScore, temperature) {
@@ -1062,7 +1067,7 @@ function finishGame() {
   if (childWon) profile.wins += 1;
   const adjustment = Math.round((analysis.performance - 50) * 1.4);
   profile.rating = clamp(profile.rating + adjustment, 100, 1000);
-  profile.aiLevel = clamp(profile.aiLevel + adjustment + (childWon ? 14 : -2), 240, 980);
+  profile.aiLevel = clamp(profile.aiLevel + adjustment + (childWon ? 14 : -2), minimumInitialAiLevel, 980);
   profile.fighting = clamp(profile.fighting * 0.72 + analysis.fightingScore * 0.28, 10, 100);
   profile.opening = clamp(profile.opening * 0.75 + analysis.openingScore * 0.25, 10, 100);
   profile.stability = clamp(profile.stability * 0.75 + analysis.completionScore * 0.25, 10, 100);
@@ -1219,7 +1224,7 @@ function nearestDifficultyPreset(level) {
 }
 
 function changeInitialDifficulty(value) {
-  const nextLevel = clamp(Number(value) || defaultInitialAiLevel, 120, 980);
+  const nextLevel = clamp(Number(value) || defaultInitialAiLevel, minimumInitialAiLevel, 980);
   profile.initialAiLevel = nextLevel;
   profile.aiLevel = nextLevel;
   saveProfile();
