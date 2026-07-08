@@ -471,8 +471,14 @@ body.child-mode .analysis-grid {
 }
 
 body.child-mode .analysis-grid div:nth-child(2),
-body.child-mode .ai-analysis-card p {
+body.child-mode .ai-analysis-card #analysisNote {
   display: none;
+}
+
+body.child-mode .ai-analysis-card .ai-source {
+  display: block;
+  margin-top: 6px;
+  font-size: 10.5px;
 }
 
 body.parent-mode .setup-card,

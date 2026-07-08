@@ -8,7 +8,7 @@ const profileStoreKey = "gokidcoach-web-profile-store-v2";
 const currentGameKeyPrefix = "gokidcoach-web-current-game-v2-";
 const komi = 7;
 const supportedLanguages = ["zh", "yue", "en", "ja", "ko"];
-const defaultInitialAiLevel = 760;
+const defaultInitialAiLevel = 980;
 const difficultyPresets = [
   { value: 480, key: "difficultyStarter" },
   { value: 640, key: "difficultyBeginner" },
@@ -754,11 +754,7 @@ function localPolicyPrior(point, color, grid = board) {
 }
 
 function policyModelWeight() {
-  const level = clamp(Number(profile.aiLevel) || defaultInitialAiLevel, 120, 980);
-  if (level < 560) return 0.35;
-  if (level < 700) return 0.5;
-  if (level < 840) return 0.7;
-  return 0.9;
+  return 1.0;
 }
 
 function scoreMove(point, color) {
@@ -841,7 +837,7 @@ function chooseLocalAIMove(moves) {
   if (!evaluated.length) return null;
 
   const stage = learningStage();
-  const level = clamp(profile.aiLevel, 120, 980);
+  const level = 980;
   const poolSize = Math.max(
     1,
     Math.min(
