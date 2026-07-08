@@ -1,4 +1,5 @@
-let size = 19;
+const fixedBoardSize = 19;
+let size = fixedBoardSize;
 const empty = 0;
 const black = 1;
 const white = 2;
@@ -153,7 +154,7 @@ const thinking = document.getElementById("thinking");
 
 let profileStore = loadProfileStore();
 let profile = getActiveProfile();
-size = profile.boardSize || 9;
+size = fixedBoardSize;
 let board = freshBoard();
 let turn = black;
 let lastMove = null;
@@ -185,7 +186,7 @@ function createProfile(name = "孩子", initialAiLevel = defaultInitialAiLevel) 
     aiLevel,
     initialAiLevel: aiLevel,
     stage: "入门",
-    boardSize: 9,
+    boardSize: fixedBoardSize,
     gamesPlayed: 0,
     wins: 0,
     history: [],
@@ -203,7 +204,7 @@ function normalizeProfile(profile, name = "孩子") {
   const merged = { ...fallback, ...profile };
   merged.name = String(merged.name || name).slice(0, 16);
   merged.language = supportedLanguages.includes(merged.language) ? merged.language : "zh";
-  merged.boardSize = [9, 13, 19].includes(Number(merged.boardSize)) ? Number(merged.boardSize) : fallback.boardSize;
+  merged.boardSize = fixedBoardSize;
   merged.aiLevel = clamp(Number(merged.aiLevel) || fallback.aiLevel, 120, 980);
   merged.initialAiLevel = clamp(Number(merged.initialAiLevel) || merged.aiLevel || fallback.initialAiLevel, 120, 980);
   merged.history = Array.isArray(merged.history) ? merged.history : [];
@@ -230,7 +231,7 @@ function loadProfileStore() {
     const legacy = JSON.parse(localStorage.getItem(legacyStorageKey) || "null");
     if (legacy) {
       fallback.profiles["child-1"] = normalizeProfile(legacy, "孩子");
-      fallback.profiles["child-1"].boardSize = 19;
+      fallback.profiles["child-1"].boardSize = fixedBoardSize;
     }
   } catch {
     return fallback;
@@ -293,16 +294,8 @@ function applyLanguage() {
   setText("#newChildName", "");
   document.getElementById("newChildName").placeholder = t("newChild");
   setText("#addChildBtn", t("add"));
-  setText("#boardLabel", t("board"));
   setText("#languageLabel", t("language"));
   setText("#stageLabel", t("stage"));
-  document.querySelector("#boardSizeSelect option[value='9']").textContent = t("board9");
-  document.querySelector("#boardSizeSelect option[value='13']").textContent = t("board13");
-  document.querySelector("#boardSizeSelect option[value='19']").textContent = t("board19");
-  setText("#mainBoardSizeLabel", t("board"));
-  document.querySelector("#mainBoardSizeSelect option[value='9']").textContent = t("board9").replace(/\s*(入门|进阶|完整|Beginner|Next|Full|中級|完整|입문|중급|전체).*$/, "");
-  document.querySelector("#mainBoardSizeSelect option[value='13']").textContent = t("board13").replace(/\s*(入门|进阶|完整|Beginner|Next|Full|中級|完整|입문|중급|전체).*$/, "");
-  document.querySelector("#mainBoardSizeSelect option[value='19']").textContent = t("board19").replace(/\s*(入门|进阶|完整|Beginner|Next|Full|中級|完整|입문|중급|전체).*$/, "");
   setText("#difficultyLabel", t("difficulty"));
   setText("#mainDifficultyLabel", compactLabels[currentLanguage()]?.difficulty || t("difficulty"));
   difficultyPresets.forEach(preset => {
@@ -330,8 +323,8 @@ function applyLanguage() {
   updateMoreButtonLabel();
   setText("#sgfBtn", t("exportSgf"));
   setText("#parentBtn", t("parent"));
-  document.querySelectorAll(".support-card h2")[0].textContent = t("review");
-  document.querySelectorAll(".support-card h2")[1].textContent = t("recent");
+  setText("#reviewTitle", t("review"));
+  setText("#recentTitle", t("recent"));
   setText("#resetBtn", t("reset"));
   setText("#parentPanel .card-title h2", t("parent"));
   setText("#closeParentBtn", t("close"));
@@ -421,9 +414,8 @@ function isValidBoard(value) {
 function loadCurrentGame() {
   try {
     const saved = JSON.parse(localStorage.getItem(currentGameKey()) || "null");
-    if (saved && [9, 13, 19].includes(Number(saved.size)) && Number(saved.size) !== size) {
-      size = Number(saved.size);
-      profile.boardSize = size;
+    if (saved && Number(saved.size) !== fixedBoardSize) {
+      return false;
     }
     if (!saved || !isValidBoard(saved.board)) return false;
     restore({
@@ -452,10 +444,6 @@ function opponent(color) {
 }
 
 function learningStage() {
-  if (profile.boardSize === 9 && profile.rating < 430) return { key: "enlightenment", name: t("enlightenment"), pool: 8, goal: t("goalEnlightenment") };
-  if (profile.boardSize === 9) return { key: "beginner", name: t("beginner"), pool: 6, goal: t("goalBeginner") };
-  if (profile.boardSize === 13 && profile.rating < 680) return { key: "intermediate", name: t("intermediate"), pool: 4, goal: t("goalIntermediate") };
-  if (profile.boardSize === 13) return { key: "battle", name: t("battle"), pool: 3, goal: t("goalBattle") };
   if (profile.rating < 820) return { key: "fullBoard", name: t("fullBoard"), pool: 2, goal: t("goalFullBoard") };
   return { key: "challenge", name: t("challenge"), pool: 1, goal: t("goalChallenge") };
 }
@@ -640,8 +628,140 @@ function legalMoves(color) {
   return moves;
 }
 
+function groupKey(group) {
+  const anchor = groupAnchor(group);
+  return anchor ? `${anchor.x},${anchor.y}` : "";
+}
+
+function groupLibertyPoints(group) {
+  return Array.from(group.liberties).map(value => {
+    const [x, y] = value.split(",").map(Number);
+    return { x, y };
+  });
+}
+
+function pointDistance(a, b) {
+  return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+}
+
+function uniqueGroupsNear(point, color, grid = board) {
+  const groups = new Map();
+  for (const next of neighbors(point)) {
+    if (grid[next.y][next.x] !== color) continue;
+    const group = groupAt(next, grid);
+    groups.set(groupKey(group), group);
+  }
+  return Array.from(groups.values());
+}
+
+function openingShapeScore(point) {
+  const edge = Math.min(point.x, point.y, size - 1 - point.x, size - 1 - point.y);
+  const star = 3;
+  const farStar = size - 1 - star;
+  const cornerStars = [
+    { x: star, y: star },
+    { x: farStar, y: star },
+    { x: star, y: farStar },
+    { x: farStar, y: farStar }
+  ];
+  const sideStars = [
+    { x: 9, y: star },
+    { x: star, y: 9 },
+    { x: farStar, y: 9 },
+    { x: 9, y: farStar }
+  ];
+  const cornerDistance = Math.min(...cornerStars.map(starPoint => pointDistance(point, starPoint)));
+  const sideDistance = Math.min(...sideStars.map(starPoint => pointDistance(point, starPoint)));
+  const early = moveHistory.length < 50;
+  let score = 0;
+
+  if (edge === 0) score -= early ? 48 : 18;
+  if (edge === 1) score -= early ? 18 : 4;
+  if (edge === 2) score += early ? 7 : 2;
+  if (edge === 3) score += early ? 13 : 4;
+  if (early) {
+    score += Math.max(0, 20 - cornerDistance * 5);
+    score += Math.max(0, 10 - sideDistance * 2.2);
+  } else if (moveHistory.length < 120) {
+    score += Math.max(0, 8 - sideDistance);
+  }
+
+  return score;
+}
+
+function extractPolicyFeatures(point, color, grid = board) {
+  const opponentColor = opponent(color);
+  const adjacent = neighbors(point);
+  const edge = Math.min(point.x, point.y, size - 1 - point.x, size - 1 - point.y);
+  const friendlyGroups = uniqueGroupsNear(point, color, grid);
+  const opponentGroups = uniqueGroupsNear(point, opponentColor, grid);
+  return {
+    edge,
+    emptyNeighbors: adjacent.filter(next => grid[next.y][next.x] === empty).length,
+    friendlyNeighbors: adjacent.filter(next => grid[next.y][next.x] === color).length,
+    opponentNeighbors: adjacent.filter(next => grid[next.y][next.x] === opponentColor).length,
+    friendlyGroups: friendlyGroups.length,
+    opponentGroups: opponentGroups.length,
+    friendlyAtariGroups: friendlyGroups.filter(group => group.liberties.size <= 1).length,
+    opponentAtariGroups: opponentGroups.filter(group => group.liberties.size <= 1).length,
+    lastMoveDistance: lastMove ? pointDistance(point, lastMove) : null
+  };
+}
+
+function localPolicyPrior(point, color, grid = board) {
+  let score = openingShapeScore(point);
+  const features = extractPolicyFeatures(point, color, grid);
+
+  score += features.emptyNeighbors * 2.5;
+  score += features.friendlyNeighbors * 3;
+  score += features.opponentNeighbors * 2;
+  score += features.friendlyGroups >= 2 ? 8 : 0;
+  score += features.opponentGroups >= 2 ? 7 : 0;
+  score += features.friendlyAtariGroups * 18;
+  score += features.opponentAtariGroups * 22;
+
+  if (lastMove && grid[lastMove.y][lastMove.x] === opponent(color)) {
+    if (features.lastMoveDistance <= 2) score += 9;
+    else if (features.lastMoveDistance <= 4) score += 4;
+  }
+
+  for (let y = Math.max(0, point.y - 4); y <= Math.min(size - 1, point.y + 4); y++) {
+    for (let x = Math.max(0, point.x - 4); x <= Math.min(size - 1, point.x + 4); x++) {
+      const value = grid[y][x];
+      if (value === empty) continue;
+      const distance = Math.abs(point.x - x) + Math.abs(point.y - y);
+      if (distance === 0 || distance > 4) continue;
+      const influence = 4.5 / distance;
+      score += value === color ? influence : influence * 0.65;
+    }
+  }
+
+  const learnedModel = window.GoKidCoachPolicyModel;
+  if (learnedModel && typeof learnedModel.scoreMove === "function") {
+    const modelScore = Number(learnedModel.scoreMove({
+      board: grid,
+      point,
+      color,
+      size,
+      moveHistory,
+      lastMove,
+      features
+    }));
+    if (Number.isFinite(modelScore)) score += modelScore;
+  }
+
+  return score;
+}
+
 function scoreMove(point, color) {
   const before = snapshot();
+  const opponentColor = opponent(color);
+  const friendlyBefore = uniqueGroupsNear(point, color);
+  const opponentBefore = uniqueGroupsNear(point, opponentColor);
+  const savesFriendly = friendlyBefore.filter(group => group.liberties.has(`${point.x},${point.y}`));
+  const attacksOpponent = opponentBefore.filter(group => group.liberties.has(`${point.x},${point.y}`));
+  const policyPrior = localPolicyPrior(point, color);
+
   if (!playMove(point, color)) {
     restore(before);
     return -Infinity;
@@ -650,34 +770,94 @@ function scoreMove(point, color) {
   let score = 0;
   const move = moveHistory[moveHistory.length - 1];
   const captures = move?.captures || 0;
-  const center = (size - 1) / 2;
   const ownGroup = groupAt(point);
-  score += captures * 32;
-  score += ownGroup.liberties.size * 2.6;
-  if (ownGroup.liberties.size <= 1) score -= captures > 0 ? 10 : 90;
-  if (ownGroup.liberties.size === 2) score -= captures > 0 ? 2 : 14;
-  score -= Math.abs(point.x - center) * 0.32 + Math.abs(point.y - center) * 0.32;
+  const ownLiberties = ownGroup.liberties.size;
+  const connectedFriendlyGroups = friendlyBefore.length;
+  const cutOpponentGroups = opponentBefore.length;
+
+  score += policyPrior * 0.75;
+  score += captures * 58;
+  score += Math.min(ownLiberties, 6) * 5.2;
+  if (ownLiberties <= 1) score -= captures > 0 ? 18 : 150;
+  if (ownLiberties === 2) score -= captures > 0 ? 2 : 22;
+
+  for (const group of savesFriendly) {
+    const liberties = group.liberties.size;
+    if (liberties <= 1) score += 82;
+    else if (liberties === 2) score += 38;
+    else if (liberties === 3) score += 12;
+  }
+
+  for (const group of attacksOpponent) {
+    const liberties = group.liberties.size;
+    if (liberties <= 1) score += 90;
+    else if (liberties === 2) score += 42;
+    else if (liberties === 3) score += 14;
+  }
+
+  if (connectedFriendlyGroups >= 2) score += 28 + connectedFriendlyGroups * 6;
+  if (cutOpponentGroups >= 2) score += 22 + cutOpponentGroups * 8;
 
   for (const next of neighbors(point)) {
     const value = board[next.y][next.x];
-    if (value === color) score += 5;
-    if (value === opponent(color)) score += 3;
-    if (value === opponent(color) && groupAt(next).liberties.size <= 1) score += 42;
-    if (value === opponent(color) && groupAt(next).liberties.size === 2) score += 22;
+    if (value === color) score += 7;
+    if (value === opponentColor) score += 4;
+    if (value === opponentColor && groupAt(next).liberties.size <= 1) score += 56;
+    if (value === opponentColor && groupAt(next).liberties.size === 2) score += 28;
     if (value === color && groupAt(next).liberties.size <= 1) score -= 24;
-    if (value === color && groupAt(next).liberties.size === 2) score += 8;
+    if (value === color && groupAt(next).liberties.size === 2) score += 12;
   }
 
-  const star = size === 9 ? 2 : 3;
-  const farStar = size - 1 - star;
-  const cornerStars = [{ x: star, y: star }, { x: farStar, y: star }, { x: star, y: farStar }, { x: farStar, y: farStar }];
-  for (const star of cornerStars) {
-    if (Math.abs(point.x - star.x) + Math.abs(point.y - star.y) <= 2) score += moveHistory.length < 40 ? 8 : 1;
+  if (ownLiberties <= 2) {
+    const escapeOptions = groupLibertyPoints(ownGroup).filter(liberty => {
+      const state = snapshot();
+      const legal = playMove(liberty, opponentColor);
+      const captured = legal && board[point.y][point.x] !== color;
+      restore(state);
+      return captured;
+    }).length;
+    if (escapeOptions > 0) score -= escapeOptions * 38;
   }
 
-  const result = score + Math.random() * Math.max(1.2, 10 - profile.aiLevel / 140);
+  const result = score;
   restore(before);
   return result;
+}
+
+function chooseLocalAIMove(moves) {
+  const evaluated = moves
+    .map(point => ({ point, score: scoreMove(point, white) }))
+    .filter(item => Number.isFinite(item.score))
+    .sort((a, b) => b.score - a.score);
+
+  if (!evaluated.length) return null;
+
+  const stage = learningStage();
+  const level = clamp(profile.aiLevel, 120, 980);
+  const poolSize = Math.max(
+    1,
+    Math.min(
+      evaluated.length,
+      Math.max(stage.pool, Math.round(7 - level / 170))
+    )
+  );
+  const bestScore = evaluated[0].score;
+  const candidates = evaluated
+    .filter(item => item.score >= bestScore - 32)
+    .slice(0, poolSize);
+  const temperature = Math.max(4, 28 - level / 42);
+  const weighted = candidates.map(item => ({
+    ...item,
+    weight: Math.exp((item.score - bestScore) / temperature)
+  }));
+  const total = weighted.reduce((sum, item) => sum + item.weight, 0);
+  let roll = Math.random() * total;
+
+  for (const item of weighted) {
+    roll -= item.weight;
+    if (roll <= 0) return item.point;
+  }
+  return weighted[0].point;
 }
 
 async function requestRemoteAIMove() {
@@ -773,15 +953,7 @@ function aiMove() {
       return;
     }
 
-    moves.sort((a, b) => scoreMove(b, white) - scoreMove(a, white));
-    const stage = learningStage();
-    const poolSize = Math.max(1, Math.min(stage.pool, Math.round(6 - profile.aiLevel / 210)));
-    const bestScore = scoreMove(moves[0], white);
-    const candidates = moves
-      .map(point => ({ point, score: scoreMove(point, white) }))
-      .filter(item => item.score >= bestScore - 18)
-      .slice(0, Math.min(poolSize, moves.length));
-    const choice = (candidates[Math.floor(Math.random() * candidates.length)] || { point: moves[0] }).point;
+    const choice = chooseLocalAIMove(moves) || moves[0];
     undoStack.push(snapshot());
     playMove(choice, white);
     thinking.classList.add("hidden");
@@ -949,7 +1121,8 @@ function undoMove() {
 }
 
 function newGame() {
-  size = profile.boardSize || size;
+  size = fixedBoardSize;
+  profile.boardSize = fixedBoardSize;
   board = freshBoard();
   turn = black;
   lastMove = null;
@@ -974,7 +1147,8 @@ function newGame() {
 }
 
 function resetGameState() {
-  size = profile.boardSize || 9;
+  size = fixedBoardSize;
+  profile.boardSize = fixedBoardSize;
   board = freshBoard();
   turn = black;
   lastMove = null;
@@ -999,7 +1173,7 @@ function switchChild(childId) {
   saveCurrentGame();
   profileStore.activeChildId = childId;
   profile = getActiveProfile();
-  size = profile.boardSize || 9;
+  size = fixedBoardSize;
   if (!loadCurrentGame()) resetGameState();
   saveProfile();
   update();
@@ -1022,19 +1196,9 @@ function addChild() {
 }
 
 function changeBoardSize(value) {
-  const nextSize = Number(value);
-  if (![9, 13, 19].includes(nextSize) || nextSize === profile.boardSize) return;
-  if (moveHistory.length && !window.confirm(t("switchBoardConfirm"))) {
-    document.getElementById("boardSizeSelect").value = String(profile.boardSize);
-    document.getElementById("mainBoardSizeSelect").value = String(profile.boardSize);
-    return;
-  }
-  profile.boardSize = nextSize;
-  size = nextSize;
-  resetGameState();
-  saveProfile();
-  saveCurrentGame();
-  update();
+  void value;
+  profile.boardSize = fixedBoardSize;
+  size = fixedBoardSize;
 }
 
 function nearestDifficultyPreset(level) {
@@ -1052,8 +1216,8 @@ function changeInitialDifficulty(value) {
 }
 
 function setupDemoPosition() {
-  size = 19;
-  profile.boardSize = 19;
+  size = fixedBoardSize;
+  profile.boardSize = fixedBoardSize;
   board = freshBoard();
   const stones = [
     [black, 2, 3], [black, 3, 3], [black, 3, 4], [black, 4, 4], [black, 9, 3],
@@ -1299,7 +1463,7 @@ function importBackupFile(file) {
         profileStore.profiles[id] = normalizeProfile(item, item.name || t("child"));
       }
       profile = getActiveProfile();
-      size = profile.boardSize || 9;
+      size = fixedBoardSize;
       saveProfile();
       if (data.currentGames && typeof data.currentGames === "object") {
         for (const [childId, game] of Object.entries(data.currentGames)) {
@@ -1416,8 +1580,6 @@ function update() {
   document.getElementById("aiLevel").textContent = Math.round(profile.aiLevel);
   document.getElementById("subtitle").textContent = t("subtitle", { size });
   document.getElementById("stageText").textContent = stage.name;
-  document.getElementById("boardSizeSelect").value = String(profile.boardSize || size);
-  document.getElementById("mainBoardSizeSelect").value = String(profile.boardSize || size);
   const selectedDifficulty = String(nearestDifficultyPreset(profile.initialAiLevel || profile.aiLevel).value);
   document.getElementById("difficultySelect").value = selectedDifficulty;
   document.getElementById("mainDifficultySelect").value = selectedDifficulty;
@@ -1715,9 +1877,7 @@ document.getElementById("hintBtn").addEventListener("click", hintMove);
 document.getElementById("explainBtn").addEventListener("click", explainPosition);
 document.getElementById("childSelect").addEventListener("change", event => switchChild(event.target.value));
 document.getElementById("addChildBtn").addEventListener("click", addChild);
-document.getElementById("boardSizeSelect").addEventListener("change", event => changeBoardSize(event.target.value));
-document.getElementById("mainBoardSizeSelect").addEventListener("change", event => changeBoardSize(event.target.value));
-document.getElementById("difficultySelect").addEventListener("change", event => changeInitialDifficulty(event.target.value));
+  document.getElementById("difficultySelect").addEventListener("change", event => changeInitialDifficulty(event.target.value));
 document.getElementById("mainDifficultySelect").addEventListener("change", event => changeInitialDifficulty(event.target.value));
 document.getElementById("languageSelect").addEventListener("change", event => {
   profile.language = event.target.value;
@@ -1767,7 +1927,7 @@ document.getElementById("resetBtn").addEventListener("click", () => {
   }
   profileStore = loadProfileStore();
   profile = getActiveProfile();
-  size = profile.boardSize || 9;
+  size = fixedBoardSize;
   newGame();
 });
 window.addEventListener("resize", drawBoard);

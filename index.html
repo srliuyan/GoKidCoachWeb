@@ -28,7 +28,7 @@
           <h1>围棋陪练</h1>
           <span class="level-gem" aria-hidden="true"></span>
         </div>
-        <p id="subtitle">9 路儿童自适应对弈网页版</p>
+        <p id="subtitle">19 路儿童自适应对弈网页版</p>
       </header>
 
       <section class="card status-card">
@@ -54,14 +54,6 @@
 
       <section class="main-settings">
         <label>
-          <span id="mainBoardSizeLabel">棋盘</span>
-          <select id="mainBoardSizeSelect">
-            <option value="9">9 路</option>
-            <option value="13">13 路</option>
-            <option value="19">19 路</option>
-          </select>
-        </label>
-        <label>
           <span id="mainDifficultyLabel">难度</span>
           <select id="mainDifficultySelect">
             <option value="480">启蒙</option>
@@ -83,14 +75,6 @@
           <input id="newChildName" type="text" maxlength="16" placeholder="新孩子名字">
           <button id="addChildBtn" type="button" class="mini-btn">添加</button>
         </div>
-        <label class="field-row">
-          <span id="boardLabel">棋盘</span>
-          <select id="boardSizeSelect">
-            <option value="9">9 路入门</option>
-            <option value="13">13 路进阶</option>
-            <option value="19">19 路完整</option>
-          </select>
-        </label>
         <label class="field-row">
           <span id="difficultyLabel">初始难度</span>
           <select id="difficultySelect">
@@ -149,7 +133,7 @@
       </section>
 
       <section class="card support-card">
-        <h2>本局复盘</h2>
+        <h2 id="reviewTitle">本局复盘</h2>
         <ul id="review">
           <li>完成一局后，这里会给 3 条简短反馈。</li>
         </ul>
@@ -157,7 +141,7 @@
 
       <section class="card support-card">
         <div class="card-title">
-          <h2>最近对局</h2>
+          <h2 id="recentTitle">最近对局</h2>
           <button id="resetBtn" type="button" class="link-btn">重置</button>
         </div>
         <ul id="history" class="history">
