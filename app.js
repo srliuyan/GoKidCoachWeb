@@ -16,11 +16,11 @@ const difficultyPresets = [
   { value: 980, key: "difficultyChallenge" }
 ];
 const compactLabels = {
-  zh: { difficulty: "难度", winrate: "胜率" },
-  yue: { difficulty: "難度", winrate: "勝率" },
-  en: { difficulty: "Level", winrate: "Win" },
-  ja: { difficulty: "難度", winrate: "勝率" },
-  ko: { difficulty: "난이도", winrate: "승률" }
+  zh: { difficulty: "难度", winrate: "胜率", more: "更多", less: "收起" },
+  yue: { difficulty: "難度", winrate: "勝率", more: "更多", less: "收起" },
+  en: { difficulty: "Level", winrate: "Win", more: "More", less: "Less" },
+  ja: { difficulty: "難度", winrate: "勝率", more: "その他", less: "閉じる" },
+  ko: { difficulty: "난이도", winrate: "승률", more: "더보기", less: "접기" }
 };
 
 const i18n = {
@@ -327,6 +327,7 @@ function applyLanguage() {
   setText("#undoBtn", t("undo"));
   setText("#finishBtn", t("finish"));
   setText("#newBtn", t("newGame"));
+  updateMoreButtonLabel();
   setText("#sgfBtn", t("exportSgf"));
   setText("#parentBtn", t("parent"));
   document.querySelectorAll(".support-card h2")[0].textContent = t("review");
@@ -356,6 +357,20 @@ function applyLanguage() {
   setText("#continueGameBtn", t("continueGame"));
   setText(".speech", t("great"));
   setText("#closeVictoryBtn", t("continue"));
+}
+
+function updateMoreButtonLabel() {
+  const moreBtn = document.getElementById("moreBtn");
+  if (!moreBtn) return;
+  const labels = compactLabels[currentLanguage()] || compactLabels.zh;
+  const expanded = document.body.classList.contains("show-more");
+  moreBtn.textContent = expanded ? labels.less : labels.more;
+  moreBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
+}
+
+function toggleMorePanel() {
+  document.body.classList.toggle("show-more");
+  updateMoreButtonLabel();
 }
 
 function updateRemoteAiStatus() {
@@ -1712,6 +1727,7 @@ document.getElementById("languageSelect").addEventListener("change", event => {
 document.getElementById("undoBtn").addEventListener("click", undoMove);
 document.getElementById("finishBtn").addEventListener("click", finishGame);
 document.getElementById("newBtn").addEventListener("click", newGame);
+document.getElementById("moreBtn").addEventListener("click", toggleMorePanel);
 document.getElementById("sgfBtn").addEventListener("click", exportSGF);
 document.getElementById("parentBtn").addEventListener("click", () => {
   setInterfaceMode("parent");

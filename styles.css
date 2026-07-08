@@ -325,67 +325,18 @@ progress {
 }
 
 .actions button {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
   align-items: center;
-  justify-items: center;
-  gap: 7px;
+  justify-content: center;
   min-width: 0;
-  min-height: 70px;
-  padding: 9px 7px;
+  min-height: 56px;
+  padding: 10px 7px;
   text-align: center;
+  word-break: keep-all;
 }
 
 .actions button::before {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  color: #f8d89a;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(126, 196, 255, 0.12);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  font-size: 21px;
-  line-height: 1;
-}
-
-#passBtn::before {
-  content: "✋";
-}
-
-#hintBtn::before {
-  content: "?";
-  font-size: 24px;
-  font-weight: 900;
-}
-
-#explainBtn::before {
-  content: "i";
-  font-size: 24px;
-  font-weight: 900;
-}
-
-#undoBtn::before {
-  content: "↩";
-  font-size: 28px;
-}
-
-#newBtn::before {
-  content: "+";
-  color: #133657;
-  background: linear-gradient(145deg, #f3cf83, #c99a45);
-  font-size: 27px;
-  font-weight: 800;
-}
-
-#finishBtn::before {
-  content: "✓";
-  color: #133657;
-  background: linear-gradient(145deg, #f3cf83, #c99a45);
-  font-size: 24px;
-  font-weight: 900;
+  display: none;
 }
 
 .actions button:first-child {
@@ -483,6 +434,27 @@ body.child-mode #parentBtn {
   display: none;
 }
 
+body.child-mode.show-more #explainBtn,
+body.child-mode.show-more #sgfBtn,
+body.child-mode.show-more #parentBtn {
+  display: flex;
+}
+
+body.child-mode.show-more .setup-card,
+body.child-mode.show-more .skill-card {
+  display: grid !important;
+}
+
+body.child-mode.show-more .task-card,
+body.child-mode.show-more .support-card:not(.ai-analysis-card) {
+  display: block !important;
+}
+
+body.child-mode.show-more #moreBtn {
+  color: #133657;
+  background: linear-gradient(145deg, #f3cf83, #c99a45);
+}
+
 body.child-mode .ai-analysis-card {
   display: block;
   padding: 12px;
@@ -536,57 +508,28 @@ body.parent-mode .support-card {
 }
 
 .level-gem {
-  position: relative;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 2px solid rgba(230, 186, 91, 0.9);
-  box-shadow: 0 0 20px rgba(231, 174, 73, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  flex: 0 0 auto;
+  display: none;
 }
 
 .level-gem::before {
-  content: "";
-  position: absolute;
-  inset: 8px;
-  transform: rotate(45deg);
-  background: linear-gradient(145deg, #f4cf85, #7aa8dc 52%, #1f5b8f);
-  border-radius: 3px;
+  display: none;
 }
 
 .status-card h2 {
   position: relative;
   margin: 14px 0 0;
-  padding: 14px 24px 0 46px;
+  padding: 14px 24px 0 0;
   border-top: 1px solid rgba(122, 179, 226, 0.18);
   color: #f6fbff;
   font-size: 16px;
 }
 
 .status-card h2::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 17px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.38), transparent 15%),
-    radial-gradient(circle at 45% 42%, #3a3936, #020202 70%);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.36);
+  display: none;
 }
 
 .status-card h2::after {
-  content: "";
-  position: absolute;
-  right: 2px;
-  top: 25px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #3295ff;
-  box-shadow: 0 0 12px rgba(50, 149, 255, 0.8);
+  display: none;
 }
 
 .parent-grid {
@@ -830,14 +773,6 @@ body.parent-mode .support-card {
   body.parent-mode .support-card {
     display: block;
   }
-}
-
-body.child-mode .setup-card,
-body.child-mode .skill-card,
-body.child-mode .task-card,
-body.child-mode .support-card:not(.ai-analysis-card),
-body.child-mode .parent-panel {
-  display: none !important;
 }
 
 @media (max-width: 520px) {
