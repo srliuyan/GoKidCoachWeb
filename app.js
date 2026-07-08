@@ -836,21 +836,28 @@ function chooseLocalAIMove(moves) {
 
   if (!evaluated.length) return null;
 
-  const stage = learningStage();
-  const level = 980;
-  const poolSize = Math.max(
-    1,
-    Math.min(
-      evaluated.length,
-      Math.max(stage.pool, Math.round(7 - level / 170))
-    )
-  );
   const bestScore = evaluated[0].score;
-  const candidates = evaluated
-    .filter(item => item.score >= bestScore - 32)
-    .slice(0, poolSize);
-  const temperature = Math.max(4, 28 - level / 42);
-  const weighted = candidates.map(item => ({
+
+  const expertCandidates = evaluated
+    .filter(item => item.score >= bestScore - 18)
+    .slice(0, 4);
+  const humanCandidates = evaluated
+    .filter(item => item.score >= bestScore - 38)
+    .slice(0, 7);
+  const looseButReasonable = evaluated
+    .filter(item => item.score >= bestScore - 58)
+    .slice(0, 10);
+
+  const roll = Math.random();
+  if (roll < 0.82) return weightedChoice(expertCandidates, bestScore, 6);
+  if (roll < 0.97) return weightedChoice(humanCandidates, bestScore, 11);
+  return weightedChoice(looseButReasonable, bestScore, 16);
+}
+
+function weightedChoice(candidates, bestScore, temperature) {
+  const safeCandidates = candidates.length ? candidates : [];
+  if (!safeCandidates.length) return null;
+  const weighted = safeCandidates.map(item => ({
     ...item,
     weight: Math.exp((item.score - bestScore) / temperature)
   }));
