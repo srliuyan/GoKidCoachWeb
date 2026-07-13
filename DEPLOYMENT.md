@@ -140,6 +140,8 @@ The Pages artifact intentionally excludes:
 - `training/`
 - local backups
 
+If GitHub Pages is still configured to `Deploy from a branch`, `_config.yml` applies the same exclusion policy as a fallback so tests, evaluation reports and release audit JSON are not published.
+
 Recommended release branch before merging to `main`:
 
 ```bash

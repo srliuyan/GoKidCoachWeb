@@ -88,7 +88,7 @@ function activeDependencyMap() {
     } else if (file.startsWith(".github/workflows/")) {
       classification = "documentation_only";
       evidence = "GitHub Pages deployment workflow, not loaded by browser runtime";
-    } else if (file === ".gitignore" || file === ".nojekyll" || file.startsWith("release/") || file.startsWith("screenshots/")) {
+    } else if (file === ".gitignore" || file === ".nojekyll" || file === "_config.yml" || file.startsWith("release/") || file.startsWith("screenshots/")) {
       classification = "documentation_only";
       evidence = "release/manual validation or repository configuration artifact";
     }
