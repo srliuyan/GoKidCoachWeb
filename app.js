@@ -11,10 +11,10 @@ const supportedLanguages = ["zh", "yue", "en", "ja", "ko"];
 const defaultInitialAiLevel = 980;
 const minimumInitialAiLevel = 640;
 const difficultyPresets = [
-  { value: 640, key: "difficultyBeginner" },
-  { value: 760, key: "difficultyIntermediate" },
-  { value: 880, key: "difficultyStrong" },
-  { value: 980, key: "difficultyChallenge" }
+  { value: "beginner", level: 640, key: "difficultyBeginner" },
+  { value: "basic", level: 760, key: "difficultyIntermediate" },
+  { value: "advanced", level: 880, key: "difficultyStrong" },
+  { value: "adaptive", level: 880, key: "difficultyChallenge" }
 ];
 const compactLabels = {
   zh: { difficulty: "难度", winrate: "胜率", more: "更多", less: "收起" },
@@ -29,8 +29,8 @@ const i18n = {
     appTitle: "围棋陪练", subtitle: "{size} 路儿童自适应对弈网页版", thinking: "AI 思考中...",
     setup: "学习设置", child: "孩子", newChild: "新孩子名字", add: "添加", board: "棋盘", language: "语言", stage: "阶段",
     board9: "9 路入门", board13: "13 路进阶", board19: "19 路完整",
-    difficulty: "初始难度", difficultyBeginner: "入门", difficultyIntermediate: "进阶", difficultyStrong: "强手", difficultyChallenge: "挑战",
-    statusStart: "黑棋先行，请孩子落子", statusDone: "本局已结束，可以新开一局", statusBlack: "轮到孩子落黑棋", statusWhite: "轮到 AI 落白棋",
+    difficulty: "陪练模式", difficultyBeginner: "入门陪练", difficultyIntermediate: "基础陪练", difficultyStrong: "进阶陪练", difficultyChallenge: "自适应陪练",
+    statusStart: "黑棋先行，请孩子落子", statusDone: "本局已结束，可以新开一局", statusBlack: "轮到孩子落子", statusWhite: "轮到 AI 落子",
     moves: "手数", childCaptures: "孩子吃子", aiCaptures: "AI吃子", profile: "能力档案", rating: "总体棋力", opening: "布局", fighting: "战斗", stability: "稳定", played: "已下", winRate: "胜率", aiLevel: "AI强度",
     hint: "提示", explain: "解释局面", pass: "停一手", undo: "悔棋", finish: "结束", newGame: "新局", exportSgf: "导出SGF", parent: "家长查看",
     review: "本局复盘", reviewEmpty: "完成一局后，这里会给 3 条简短反馈。", recent: "最近对局", reset: "重置",
@@ -154,6 +154,12 @@ const thinking = document.getElementById("thinking");
 
 let profileStore = loadProfileStore();
 let profile = getActiveProfile();
+let studentProfile = loadStudentProfileForChild(profileStore.activeChildId);
+let companionState = createCompanionStateForChild();
+let currentCompanionPlan = null;
+let currentMoveQualityPlan = null;
+let lastAdaptiveSummary = null;
+let previousPositionEval = null;
 size = fixedBoardSize;
 let board = freshBoard();
 let turn = black;
@@ -170,6 +176,22 @@ let passHoldTimer = null;
 let passHoldTriggered = false;
 let remoteAiState = "notConfigured";
 let lastAiAnalysis = null;
+let restoreCount = 0;
+let childIllegalAttemptCount = 0;
+let aiRejectedCandidateCount = 0;
+let aiThinkTimes = [];
+let gameStartTimestamp = Date.now();
+let currentGameId = `game-${Date.now()}`;
+currentCompanionPlan = createCompanionPlanForCurrentChild();
+currentMoveQualityPlan = null;
+
+function childStoneColor() {
+  return profile?.childColor === "white" ? white : black;
+}
+
+function aiStoneColor() {
+  return opponent(childStoneColor());
+}
 function freshBoard() {
   return Array.from({ length: size }, () => Array(size).fill(empty));
 }
@@ -185,14 +207,14 @@ function createProfile(name = "孩子", initialAiLevel = defaultInitialAiLevel) 
     stability: 48,
     aiLevel,
     initialAiLevel: aiLevel,
+    difficultyMode: "adaptive",
+    childColor: "black",
     stage: "入门",
     boardSize: fixedBoardSize,
     gamesPlayed: 0,
     wins: 0,
     history: [],
     trend: [],
-    currentTask: null,
-    taskHistory: [],
     rewardEnabled: true,
     remoteAIUrl: "",
     kataGoUrl: ""
@@ -202,15 +224,18 @@ function createProfile(name = "孩子", initialAiLevel = defaultInitialAiLevel) 
 function normalizeProfile(profile, name = "孩子") {
   const fallback = createProfile(name);
   const merged = { ...fallback, ...profile };
+  const product = productSupportApi();
   merged.name = String(merged.name || name).slice(0, 16);
   merged.language = supportedLanguages.includes(merged.language) ? merged.language : "zh";
   merged.boardSize = fixedBoardSize;
+  merged.difficultyMode = product && typeof product.normalizeDifficultyMode === "function"
+    ? product.normalizeDifficultyMode(merged.difficultyMode || merged.initialAiLevel || merged.aiLevel)
+    : (merged.difficultyMode || "adaptive");
+  merged.childColor = merged.childColor === "white" ? "white" : "black";
   merged.aiLevel = clamp(Number(merged.aiLevel) || fallback.aiLevel, minimumInitialAiLevel, 980);
   merged.initialAiLevel = clamp(Number(merged.initialAiLevel) || merged.aiLevel || fallback.initialAiLevel, minimumInitialAiLevel, 980);
   merged.history = Array.isArray(merged.history) ? merged.history : [];
   merged.trend = Array.isArray(merged.trend) ? merged.trend : [];
-  merged.taskHistory = Array.isArray(merged.taskHistory) ? merged.taskHistory : [];
-  merged.currentTask = merged.currentTask && typeof merged.currentTask === "object" ? merged.currentTask : null;
   return merged;
 }
 
@@ -255,6 +280,154 @@ function saveProfile() {
   } catch {
     // Keep the current session usable even if Safari storage is unavailable.
   }
+}
+
+function studentModelApi() {
+  return window.GoKidCoachStudentModel;
+}
+
+function difficultyControllerApi() {
+  return window.GoKidCoachDifficultyController;
+}
+
+function companionEngineApi() {
+  return window.GoKidCoachCompanionEngine;
+}
+
+function moveQualityControllerApi() {
+  return window.GoKidCoachMoveQualityController;
+}
+
+function contextFusionApi() {
+  return window.GoKidCoachContextFusion;
+}
+
+function productSupportApi() {
+  return window.GoKidCoachProductSupport;
+}
+
+function policyPatternApi() {
+  return window.GoKidCoachPolicyPattern;
+}
+
+function shapeLibraryApi() {
+  return window.GoKidCoachShapeLibrary;
+}
+
+function fusekiLibraryApi() {
+  return window.GoKidCoachFusekiLibrary;
+}
+
+function tacticalLibraryApi() {
+  return window.GoKidCoachTacticalLibrary;
+}
+
+function josekiLibraryApi() {
+  return window.GoKidCoachJosekiLibrary;
+}
+
+function endgameLibraryApi() {
+  return window.GoKidCoachEndgameLibrary;
+}
+
+function positionEvaluatorApi() {
+  return window.GoKidCoachPositionEvaluator;
+}
+
+function midgameStabilityApi() {
+  return window.GoKidCoachMidgameStability;
+}
+
+function loadStudentProfileForChild(childId = profileStore.activeChildId) {
+  const api = studentModelApi();
+  if (!api || typeof api.loadStudentProfile !== "function") return null;
+  return api.loadStudentProfile(childId);
+}
+
+function saveStudentProfileForChild(nextProfile, childId = profileStore.activeChildId) {
+  const api = studentModelApi();
+  if (!api || typeof api.saveStudentProfile !== "function") return nextProfile || null;
+  studentProfile = api.saveStudentProfile(nextProfile || studentProfile || {}, childId);
+  return studentProfile;
+}
+
+function createCompanionStateForChild() {
+  const api = companionEngineApi();
+  if (!api || typeof api.createCompanionState !== "function") return null;
+  return api.createCompanionState();
+}
+
+function recentChildResults(limit = 8) {
+  if (studentProfile?.recentResults?.length) return studentProfile.recentResults.slice(0, limit).map(Boolean);
+  return (profile.history || [])
+    .slice(0, limit)
+    .map(item => item.result === "childWin" || item.result === "孩子胜");
+}
+
+function recentGamesForAdaptive(limit = 8) {
+  return (profile.history || []).slice(0, limit).map(item => ({
+    result: item.result,
+    childWon: item.result === "childWin" || item.result === "孩子胜",
+    adaptiveBand: item.adaptiveBand || null,
+    moves: item.moves || 0
+  }));
+}
+
+function createAdaptiveGameState() {
+  const result = estimateWinner();
+  const earlyMoves = moveHistory.filter(item => !item.pass && item.color === black).slice(0, 20);
+  const cornerMoves = earlyMoves.filter(item => {
+    const edge = Math.min(item.x, item.y, size - 1 - item.x, size - 1 - item.y);
+    return edge <= 3;
+  }).length;
+  return {
+    moveCount: moveHistory.length,
+    blackCaptures,
+    whiteCaptures,
+    scoreLead: result.blackScore - result.whiteScore,
+    weakBlackGroups: collectGroups(black).filter(group => group.liberties.size <= 2).length,
+    pressuredWhiteGroups: collectGroups(white).filter(group => group.liberties.size <= 2).length,
+    openingDiscipline: earlyMoves.length ? clamp(40 + cornerMoves * 8, 20, 90) : 50,
+    completion: clamp(Math.round(moveHistory.length / 150 * 100), 0, 100)
+  };
+}
+
+function createCompanionPlanForCurrentChild() {
+  const api = companionEngineApi();
+  if (!api || typeof api.createCompanionPlan !== "function") return null;
+  return api.createCompanionPlan(
+    studentProfile || loadStudentProfileForChild(),
+    recentGamesForAdaptive(),
+    createAdaptiveGameState(),
+    companionState
+  );
+}
+
+function createMoveQualityPlanForCurrentChild(companionPlan = currentCompanionPlan || createCompanionPlanForCurrentChild()) {
+  void companionPlan;
+  return null;
+}
+
+function observeChildMove(point, candidates) {
+  const api = companionEngineApi();
+  if (!api || typeof api.observeStudentMove !== "function") return;
+  const observation = api.observeStudentMove({
+    move: point,
+    candidates,
+    studentProfile: studentProfile || loadStudentProfileForChild(),
+    companionState: companionState || createCompanionStateForChild(),
+    gameState: createAdaptiveGameState()
+  });
+  companionState = observation.companionState;
+  studentProfile = saveStudentProfileForChild(observation.updatedProfile);
+  currentCompanionPlan = createCompanionPlanForCurrentChild();
+  currentMoveQualityPlan = null;
+  const quality = observation.assessment?.quality || "acceptable";
+  lastAdaptiveSummary = {
+    summary: `Companion observed a ${quality} child move.`,
+    confidence: 0,
+    precisionBand: currentCompanionPlan?.precisionBand || "balanced"
+  };
 }
 
 function currentGameKey() {
@@ -345,6 +518,8 @@ function applyLanguage() {
   setText("#importBackupBtn", t("backupImport"));
   setText("#parentFinishBtn", t("finish"));
   setText("#parentSgfBtn", t("exportSgf"));
+  setText("#debugExportBtn", "导出调试摘要");
+  setText("#versionText", `版本 ${productSupportApi()?.appVersion || "1.0.0-rc1"} / 引擎 ${productSupportApi()?.engineVersion || "baseline-v3.6-frozen"}`);
   setText(".end-card h2", t("confirmEndTitle"));
   setText("#confirmEndBtn", t("confirmEnd"));
   setText("#continueGameBtn", t("continueGame"));
@@ -376,30 +551,57 @@ function updateRemoteAiStatus() {
 }
 
 function saveCurrentGame() {
+  const snapshotPayload = {
+    id: currentGameKey(),
+    gameId: currentGameId,
+    size,
+    board: cloneBoard(),
+    turn,
+    lastMove: lastMove ? { ...lastMove } : null,
+    blackCaptures,
+    whiteCaptures,
+    moveHistory: moveHistory.map(item => ({ ...item })),
+    undoStack: undoStack.slice(-20).map(item => ({
+      ...item,
+      board: item.board.map(row => row.slice()),
+      moveHistory: item.moveHistory.map(move => ({ ...move })),
+      positionHashes: item.positionHashes.slice(),
+      lastMove: item.lastMove ? { ...item.lastMove } : null
+    })),
+    positionHashes: positionHashes.slice(),
+    finished,
+    consecutivePasses,
+    childColor: profile.childColor || "black",
+    difficultyMode: profile.difficultyMode || "adaptive",
+    adaptiveDifficultyState: {
+      companionState,
+      currentCompanionPlan,
+      currentMoveQualityPlan
+    },
+    studentModelSummary: studentProfile || null,
+    gameStartTimestamp,
+    appVersion: productSupportApi()?.appVersion || "1.0.0-rc1",
+    engineVersion: productSupportApi()?.engineVersion || "baseline-v3.6-frozen",
+    diagnostics: {
+      restoreCount,
+      childIllegalAttemptCount,
+      aiRejectedCandidateCount,
+      aiThinkTimes: aiThinkTimes.slice(-250)
+    },
+    lastAiAnalysis,
+    companionState,
+    currentCompanionPlan,
+    currentMoveQualityPlan,
+    savedAt: Date.now()
+  };
   try {
-    localStorage.setItem(currentGameKey(), JSON.stringify({
-      size,
-      board: cloneBoard(),
-      turn,
-      lastMove: lastMove ? { ...lastMove } : null,
-      blackCaptures,
-      whiteCaptures,
-      moveHistory: moveHistory.map(item => ({ ...item })),
-      undoStack: undoStack.slice(-20).map(item => ({
-        ...item,
-        board: item.board.map(row => row.slice()),
-        moveHistory: item.moveHistory.map(move => ({ ...move })),
-        positionHashes: item.positionHashes.slice(),
-        lastMove: item.lastMove ? { ...item.lastMove } : null
-      })),
-      positionHashes: positionHashes.slice(),
-      finished,
-      consecutivePasses,
-      lastAiAnalysis,
-      savedAt: Date.now()
-    }));
+    localStorage.setItem(currentGameKey(), JSON.stringify(snapshotPayload));
   } catch {
     // Safari private mode or full storage can reject writes; the game still works.
+  }
+  const product = productSupportApi();
+  if (product && typeof product.saveCurrentGame === "function") {
+    product.saveCurrentGame(snapshotPayload).catch(() => {});
   }
 }
 
@@ -433,6 +635,19 @@ function loadCurrentGame() {
     });
     undoStack = Array.isArray(saved.undoStack) ? saved.undoStack.filter(item => item && isValidBoard(item.board)) : [];
     lastAiAnalysis = saved.lastAiAnalysis || null;
+    companionState = saved.companionState && typeof saved.companionState === "object" ? saved.companionState : createCompanionStateForChild();
+    currentCompanionPlan = saved.currentCompanionPlan && typeof saved.currentCompanionPlan === "object" ? saved.currentCompanionPlan : createCompanionPlanForCurrentChild();
+    currentMoveQualityPlan = saved.currentMoveQualityPlan && typeof saved.currentMoveQualityPlan === "object"
+      ? saved.currentMoveQualityPlan
+      : null;
+    profile.childColor = saved.childColor === "white" ? "white" : profile.childColor || "black";
+    profile.difficultyMode = productSupportApi()?.normalizeDifficultyMode?.(saved.difficultyMode || profile.difficultyMode) || profile.difficultyMode || "adaptive";
+    currentGameId = saved.gameId || currentGameId;
+    gameStartTimestamp = Number(saved.gameStartTimestamp) || Date.now();
+    restoreCount = Number(saved.diagnostics?.restoreCount || saved.restoreCount || 0) + 1;
+    childIllegalAttemptCount = Number(saved.diagnostics?.childIllegalAttemptCount) || 0;
+    aiRejectedCandidateCount = Number(saved.diagnostics?.aiRejectedCandidateCount) || 0;
+    aiThinkTimes = Array.isArray(saved.diagnostics?.aiThinkTimes) ? saved.diagnostics.aiThinkTimes.slice(-250) : [];
     return true;
   } catch {
     return false;
@@ -448,52 +663,17 @@ function learningStage() {
   return { key: "challenge", name: t("challenge"), pool: 1, goal: t("goalChallenge") };
 }
 
-function ensureCurrentTask() {
-  if (profile.currentTask && profile.currentTask.boardSize === size) return profile.currentTask;
-  profile.currentTask = createTask();
-  saveProfile();
-  return profile.currentTask;
-}
-
-function createTask() {
-  if (profile.stability < 55) {
-    return { type: "moves", target: size === 9 ? 45 : size === 13 ? 75 : 120, boardSize: size, createdAt: Date.now() };
+function adaptiveStatus() {
+  const plan = currentMoveQualityPlan || currentCompanionPlan;
+  if (!plan) {
+    return { title: "Adaptive Engine", status: "--", text: "In-game adaptive strength is waiting for the first evaluation." };
   }
-  if (profile.fighting < 55) {
-    return { type: "captures", target: size === 9 ? 2 : 4, boardSize: size, createdAt: Date.now() };
-  }
-  if (profile.gamesPlayed > 0 && profile.wins / Math.max(1, profile.gamesPlayed) < 0.4) {
-    return { type: "safe", target: size === 9 ? 4 : size === 13 ? 7 : 10, boardSize: size, createdAt: Date.now() };
-  }
-  return { type: "corners", target: size === 9 ? 2 : 3, limit: size === 9 ? 16 : 24, boardSize: size, createdAt: Date.now() };
-}
-
-function taskProgress(task = ensureCurrentTask()) {
-  if (!task) return { done: 0, target: 1, ratio: 0, complete: false, text: "" };
-  let done = 0;
-  if (task.type === "moves") done = moveHistory.length;
-  if (task.type === "captures") done = blackCaptures;
-  if (task.type === "safe") done = Math.max(0, task.target - whiteCaptures);
-  if (task.type === "corners") {
-    const corner = size === 9 ? 2 : 3;
-    const far = size - 1 - corner;
-    const corners = new Set([[corner, corner], [far, corner], [corner, far], [far, far]].map(item => item.join(",")));
-    done = new Set(moveHistory
-      .filter(item => !item.pass && item.color === black)
-      .slice(0, task.limit)
-      .filter(item => corners.has(`${item.x},${item.y}`))
-      .map(item => `${item.x},${item.y}`)).size;
-  }
-  const target = Math.max(1, task.target);
-  const ratio = task.type === "safe" ? (whiteCaptures <= task.target ? 1 : 0) : Math.min(1, done / target);
-  return { done: Math.min(done, target), target, ratio, complete: ratio >= 1, text: taskDescription(task) };
-}
-
-function taskDescription(task = ensureCurrentTask()) {
-  if (task.type === "moves") return t("taskMoves", { target: task.target });
-  if (task.type === "captures") return t("taskCaptures", { target: task.target });
-  if (task.type === "safe") return t("taskSafe", { target: task.target });
-  return t("taskCorners", { target: task.target, limit: task.limit });
+  const confidence = Math.round((plan.confidenceBase || 0.7) * 100);
+  return {
+    title: "Adaptive Engine",
+    status: `${confidence}%`,
+    text: `Current strength ${plan.currentStrength}, AI target ${plan.targetAiStrength}, precision ${plan.precisionBand}, focus ${plan.focus}.`
+  };
 }
 
 function normalizeRemoteAnalysis(data) {
@@ -757,7 +937,31 @@ function policyModelWeight() {
   return 1.0;
 }
 
-function scoreMove(point, color) {
+function openingBookScore(point, color) {
+  const openingBook = window.GoKidCoachOpeningBook;
+  if (!openingBook || typeof openingBook.openingMoveScore !== "function") return 0;
+  const score = Number(openingBook.openingMoveScore({
+    point,
+    color,
+    size,
+    moveHistory
+  }));
+  return Number.isFinite(score) ? score : 0;
+}
+
+function nearestStoneDistance(point, grid = board) {
+  let best = Infinity;
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      if (grid[y][x] === empty) continue;
+      const distance = Math.abs(point.x - x) + Math.abs(point.y - y);
+      if (distance < best) best = distance;
+    }
+  }
+  return best;
+}
+
+function evaluateMoveCandidate(point, color) {
   const before = snapshot();
   const opponentColor = opponent(color);
   const friendlyBefore = uniqueGroupsNear(point, color);
@@ -765,51 +969,71 @@ function scoreMove(point, color) {
   const savesFriendly = friendlyBefore.filter(group => group.liberties.has(`${point.x},${point.y}`));
   const attacksOpponent = opponentBefore.filter(group => group.liberties.has(`${point.x},${point.y}`));
   const policyPrior = localPolicyPrior(point, color);
+  const bookScore = openingBookScore(point, color);
+  const patternPolicy = policyPatternApi();
+  const shapePolicy = shapeLibraryApi();
+  const fusekiPolicy = fusekiLibraryApi();
+  const tacticalPolicy = tacticalLibraryApi();
+  const josekiPolicy = josekiLibraryApi();
+  const endgamePolicy = endgameLibraryApi();
+  const positionEvaluator = positionEvaluatorApi();
+  const ruleEngine = window.GoKidCoachRuleEngine;
+  const ruleEval = ruleEngine && typeof ruleEngine.evaluateMove === "function"
+    ? ruleEngine.evaluateMove({
+      board,
+      point,
+      color,
+      moveHistory,
+      lastMove,
+      positionHashes
+    })
+    : { legal: true, ruleScore: 0 };
 
-  if (!playMove(point, color)) {
+  if (!ruleEval.legal || !playMove(point, color)) {
     restore(before);
-    return -Infinity;
+    return null;
   }
 
-  let score = 0;
+  let policyScore = 0;
   const move = moveHistory[moveHistory.length - 1];
   const captures = move?.captures || 0;
   const ownGroup = groupAt(point);
   const ownLiberties = ownGroup.liberties.size;
   const connectedFriendlyGroups = friendlyBefore.length;
   const cutOpponentGroups = opponentBefore.length;
+  const edge = Math.min(point.x, point.y, size - 1 - point.x, size - 1 - point.y);
 
-  score += policyPrior * 0.75;
-  score += captures * 58;
-  score += Math.min(ownLiberties, 6) * 5.2;
-  if (ownLiberties <= 1) score -= captures > 0 ? 18 : 150;
-  if (ownLiberties === 2) score -= captures > 0 ? 2 : 22;
+  policyScore += policyPrior * 0.75;
+  policyScore += captures * 58;
+  policyScore += Math.min(ownLiberties, 6) * 5.2;
+  if (ownLiberties <= 1) policyScore -= captures > 0 ? 18 : 150;
+  if (ownLiberties === 2) policyScore -= captures > 0 ? 2 : 22;
 
   for (const group of savesFriendly) {
     const liberties = group.liberties.size;
-    if (liberties <= 1) score += 82;
-    else if (liberties === 2) score += 38;
-    else if (liberties === 3) score += 12;
+    if (liberties <= 1) policyScore += 82;
+    else if (liberties === 2) policyScore += 38;
+    else if (liberties === 3) policyScore += 12;
   }
 
   for (const group of attacksOpponent) {
     const liberties = group.liberties.size;
-    if (liberties <= 1) score += 90;
-    else if (liberties === 2) score += 42;
-    else if (liberties === 3) score += 14;
+    if (liberties <= 1) policyScore += 90;
+    else if (liberties === 2) policyScore += 42;
+    else if (liberties === 3) policyScore += 14;
   }
 
-  if (connectedFriendlyGroups >= 2) score += 28 + connectedFriendlyGroups * 6;
-  if (cutOpponentGroups >= 2) score += 22 + cutOpponentGroups * 8;
+  if (connectedFriendlyGroups >= 2) policyScore += 28 + connectedFriendlyGroups * 6;
+  if (cutOpponentGroups >= 2) policyScore += 22 + cutOpponentGroups * 8;
 
   for (const next of neighbors(point)) {
     const value = board[next.y][next.x];
-    if (value === color) score += 7;
-    if (value === opponentColor) score += 4;
-    if (value === opponentColor && groupAt(next).liberties.size <= 1) score += 56;
-    if (value === opponentColor && groupAt(next).liberties.size === 2) score += 28;
-    if (value === color && groupAt(next).liberties.size <= 1) score -= 24;
-    if (value === color && groupAt(next).liberties.size === 2) score += 12;
+    if (value === color) policyScore += 7;
+    if (value === opponentColor) policyScore += 4;
+    if (value === opponentColor && groupAt(next).liberties.size <= 1) policyScore += 56;
+    if (value === opponentColor && groupAt(next).liberties.size === 2) policyScore += 28;
+    if (value === color && groupAt(next).liberties.size <= 1) policyScore -= 24;
+    if (value === color && groupAt(next).liberties.size === 2) policyScore += 12;
   }
 
   if (ownLiberties <= 2) {
@@ -820,60 +1044,194 @@ function scoreMove(point, color) {
       restore(state);
       return captured;
     }).length;
-    if (escapeOptions > 0) score -= escapeOptions * 38;
+    if (escapeOptions > 0) policyScore -= escapeOptions * 38;
   }
 
-  const result = score;
+  const nearestDistance = nearestStoneDistance(point, before.board);
+  const moveNumber = before.moveHistory.length;
+  const territoryValue = Math.max(0, bookScore * 0.18 + Math.max(0, ownLiberties - 2) * 4);
+  const baseCandidate = {
+    point: { ...point },
+    color,
+    legal: true,
+    ruleLegal: true,
+    moveNumber,
+    openingBookScore: bookScore,
+    ruleScore: ruleEval.ruleScore || 0,
+    policyScore,
+    captures,
+    ownLiberties,
+    reasons: Array.isArray(ruleEval.reasons) ? ruleEval.reasons.slice() : [],
+    tacticalPressure: attacksOpponent.filter(group => group.liberties.size <= 2).length + (captures > 0 ? 1 : 0),
+    rescueValue: savesFriendly.filter(group => group.liberties.size <= 2).length,
+    connectionValue: connectedFriendlyGroups >= 2 ? connectedFriendlyGroups : 0,
+    cutOpportunity: cutOpponentGroups >= 2 ? cutOpponentGroups : 0,
+    lifeDeathValue: Math.max(0, captures * 2 + attacksOpponent.filter(group => group.liberties.size <= 1).length + savesFriendly.filter(group => group.liberties.size <= 1).length),
+    ladderValue: Math.max(0, attacksOpponent.length >= 1 && nearestDistance <= 4 ? attacksOpponent.length : 0),
+    territoryValue,
+    endgameValue: moveNumber >= 120 ? Math.max(1, captures + connectedFriendlyGroups + ownLiberties) : 0,
+    obviousGiveaway: ruleEval.reasons?.includes("obvious_giveaway") || (ownLiberties <= 1 && captures === 0),
+    isSuicide: false,
+    isMeaninglessFirstLine: before.moveHistory.length < 30 && edge === 0 && captures === 0 && bookScore <= 0,
+    isRandomFlyaway: before.moveHistory.length < 30 && Number.isFinite(nearestDistance) && nearestDistance > 7
+  };
+  const positionScore = positionEvaluator && typeof positionEvaluator.scoreMoveByPosition === "function"
+    ? Number(positionEvaluator.scoreMoveByPosition(baseCandidate, before.board, color))
+    : 0;
+  const patternLookup = patternPolicy && typeof patternPolicy.lookupPatternScore === "function"
+    ? patternPolicy.lookupPatternScore(before.board, point, color, { moveNumber })
+    : { patternScore: 0, confidence: 0 };
+  const shapeLookup = shapePolicy && typeof shapePolicy.scoreShape === "function"
+    ? shapePolicy.scoreShape(point, before.board, color, { moveNumber })
+    : { shapeScore: 0, confidence: 0 };
+  const fusekiLookup = fusekiPolicy && typeof fusekiPolicy.scoreFusekiMove === "function"
+    ? fusekiPolicy.scoreFusekiMove(point, before.board, color, { moveNumber, openingBookScore: bookScore, moveHistory: before.moveHistory })
+    : { fusekiScore: 0, confidence: 0 };
+  const tacticalLookup = tacticalPolicy && typeof tacticalPolicy.scoreTacticalMove === "function"
+    ? tacticalPolicy.scoreTacticalMove(point, before.board, color, { moveNumber, moveHistory: before.moveHistory })
+    : { tacticalScore: 0, confidence: 0 };
+  const josekiLookup = josekiPolicy && typeof josekiPolicy.scoreJosekiMove === "function"
+    ? josekiPolicy.scoreJosekiMove(point, before.board, color, { moveNumber, moveHistory: before.moveHistory })
+    : { josekiScore: 0, confidence: 0 };
+  const endgameLookup = endgamePolicy && typeof endgamePolicy.scoreEndgameMove === "function"
+    ? endgamePolicy.scoreEndgameMove(point, before.board, color, { moveNumber })
+    : { endgameScore: 0, confidence: 0 };
+  const patternScore = Number(patternLookup?.patternScore || 0);
+  const confidence = Number(patternLookup?.confidence || 0);
+  const shapeScore = Number(shapeLookup?.shapeScore || 0);
+  const shapeConfidence = Number(shapeLookup?.confidence || 0);
+  const fusekiScore = Number(fusekiLookup?.fusekiScore || 0);
+  const fusekiConfidence = Number(fusekiLookup?.confidence || 0);
+  const tacticalScore = Number(tacticalLookup?.tacticalScore || 0);
+  const tacticalConfidence = Number(tacticalLookup?.confidence || 0);
+  const josekiScore = Number(josekiLookup?.josekiScore || 0);
+  const josekiConfidence = Number(josekiLookup?.confidence || 0);
+  const endgameScore = Number(endgameLookup?.endgameScore || 0);
+  const endgameConfidence = Number(endgameLookup?.confidence || 0);
+  const safePositionScore = Number.isFinite(positionScore) ? positionScore : 0;
+  const safePatternScore = Number.isFinite(patternScore) ? patternScore : 0;
+  const safeShapeScore = Number.isFinite(shapeScore) ? shapeScore : 0;
+  const safeFusekiScore = Number.isFinite(fusekiScore) ? fusekiScore : 0;
+  const safeTacticalScore = Number.isFinite(tacticalScore) ? tacticalScore : 0;
+  const safeJosekiScore = Number.isFinite(josekiScore) ? josekiScore : 0;
+  const safeEndgameScore = Number.isFinite(endgameScore) ? endgameScore : 0;
+  const safeConfidence = Number.isFinite(confidence) ? confidence : 0;
+  const safeShapeConfidence = Number.isFinite(shapeConfidence) ? shapeConfidence : 0;
+  const safeFusekiConfidence = Number.isFinite(fusekiConfidence) ? fusekiConfidence : 0;
+  const safeTacticalConfidence = Number.isFinite(tacticalConfidence) ? tacticalConfidence : 0;
+  const safeJosekiConfidence = Number.isFinite(josekiConfidence) ? josekiConfidence : 0;
+  const safeEndgameConfidence = Number.isFinite(endgameConfidence) ? endgameConfidence : 0;
+  const detectedEndgame = endgameLookup?.detectedPattern || {};
+  const combinedScore = bookScore + (ruleEval.ruleScore || 0) + policyScore + safePatternScore + safeShapeScore + safeFusekiScore + safeTacticalScore + safeJosekiScore + safeEndgameScore + safePositionScore;
+  const rawCandidate = {
+    ...baseCandidate,
+    policyScore,
+    patternScore: safePatternScore,
+    shapeScore: safeShapeScore,
+    fusekiScore: safeFusekiScore,
+    tacticalScore: safeTacticalScore,
+    josekiScore: safeJosekiScore,
+    endgameScore: safeEndgameScore,
+    endgameConfidence: safeEndgameConfidence,
+    endgamePattern: detectedEndgame,
+    confidence: Math.max(safeConfidence, safeShapeConfidence, safeFusekiConfidence, safeTacticalConfidence, safeJosekiConfidence, safeEndgameConfidence),
+    positionScore: safePositionScore,
+    combinedScore,
+    positionSummary: positionEvaluator && typeof positionEvaluator.explainPositionSummary === "function"
+      ? positionEvaluator.explainPositionSummary(positionEvaluator.evaluatePosition(before.board, color))
+      : ""
+  };
+  const fusion = contextFusionApi();
+  const candidate = fusion && typeof fusion.fuseCandidate === "function"
+    ? fusion.fuseCandidate(rawCandidate, { moveNumber })
+    : rawCandidate;
   restore(before);
-  return result;
+  return candidate;
 }
 
-function chooseLocalAIMove(moves) {
-  const evaluated = moves
-    .map(point => ({ point, score: scoreMove(point, white) }))
-    .filter(item => Number.isFinite(item.score))
-    .sort((a, b) => b.score - a.score);
+function scoreMove(point, color) {
+  const candidate = evaluateMoveCandidate(point, color);
+  return candidate ? candidate.combinedScore : -Infinity;
+}
 
+function chooseLocalAIMove(moves, color = aiStoneColor()) {
+  const evaluated = moves
+    .map(point => evaluateMoveCandidate(point, color))
+    .filter(Boolean);
   if (!evaluated.length) return null;
 
-  const bestScore = evaluated[0].score;
-  const difficulty = clamp(Number(profile.aiLevel) || defaultInitialAiLevel, minimumInitialAiLevel, 980);
-  const normalized = (difficulty - minimumInitialAiLevel) / (980 - minimumInitialAiLevel);
-
-  const expertWindow = 28 - normalized * 8;
-  const humanWindow = 48 - normalized * 10;
-  const looseWindow = 72 - normalized * 8;
-  const expertCount = Math.max(3, Math.round(3 + normalized * 3));
-  const humanCount = Math.max(5, Math.round(6 + normalized * 2));
-  const looseCount = Math.max(8, Math.round(9 + normalized * 2));
-
-  const expertCandidates = evaluated.filter(item => item.score >= bestScore - expertWindow).slice(0, expertCount);
-  const humanCandidates = evaluated.filter(item => item.score >= bestScore - humanWindow).slice(0, humanCount);
-  const looseButReasonable = evaluated.filter(item => item.score >= bestScore - looseWindow).slice(0, looseCount);
-
-  const expertChance = 0.58 + normalized * 0.24;
-  const humanChance = 0.27 - normalized * 0.11;
-  const roll = Math.random();
-  if (roll < expertChance) return weightedChoice(expertCandidates, bestScore, 7 - normalized * 2);
-  if (roll < expertChance + humanChance) return weightedChoice(humanCandidates, bestScore, 12 - normalized * 2);
-  return weightedChoice(looseButReasonable, bestScore, 18 - normalized * 3);
-}
-
-function weightedChoice(candidates, bestScore, temperature) {
-  const safeCandidates = candidates.length ? candidates : [];
-  if (!safeCandidates.length) return null;
-  const weighted = safeCandidates.map(item => ({
-    ...item,
-    weight: Math.exp((item.score - bestScore) / temperature)
-  }));
-  const total = weighted.reduce((sum, item) => sum + item.weight, 0);
-  let roll = Math.random() * total;
-
-  for (const item of weighted) {
-    roll -= item.weight;
-    if (roll <= 0) return item.point;
+  const difficulty = difficultyControllerApi();
+  if (!difficulty || typeof difficulty.getDifficultySettings !== "function") {
+    return evaluated.sort((a, b) => b.combinedScore - a.combinedScore)[0]?.point || null;
   }
-  return weighted[0].point;
+
+  const moveQuality = moveQualityControllerApi();
+  const positionEvaluator = positionEvaluatorApi();
+  const midgameStability = midgameStabilityApi();
+  const companionPlan = createCompanionPlanForCurrentChild();
+  const settings = difficulty.getDifficultySettings(studentProfile || loadStudentProfileForChild(), recentChildResults(), companionPlan);
+  const currentPositionEval = positionEvaluator && typeof positionEvaluator.evaluatePosition === "function"
+    ? positionEvaluator.evaluatePosition(board, color)
+    : null;
+  const smoothedPositionEval = midgameStability && typeof midgameStability.smoothPositionEvaluation === "function"
+    ? midgameStability.smoothPositionEvaluation(currentPositionEval, previousPositionEval)
+    : currentPositionEval;
+  const fusion = contextFusionApi();
+  const stabilized = evaluated.map(candidate => {
+    const midgameScore = midgameStability && typeof midgameStability.scoreMidgameMove === "function"
+      ? Number(midgameStability.scoreMidgameMove(candidate, board, { positionEval: smoothedPositionEval }))
+      : 0;
+    const safeMidgameScore = Number.isFinite(midgameScore) ? midgameScore : 0;
+    const prepared = {
+      ...candidate,
+      midgameScore: safeMidgameScore,
+      combinedScore: candidate.combinedScore + safeMidgameScore,
+      midgameExplanation: midgameStability && typeof midgameStability.explainMidgameDecision === "function"
+        ? midgameStability.explainMidgameDecision({ ...candidate, midgameScore: safeMidgameScore }, { positionEval: smoothedPositionEval })
+        : ""
+    };
+    return fusion && typeof fusion.fuseCandidate === "function"
+      ? fusion.fuseCandidate(prepared, {
+        moveNumber: moveHistory.length,
+        companionPlan,
+        difficultySettings: settings,
+        childStrengthEstimate: companionPlan?.currentStrength,
+        aiCalibrationLevel: settings?.suggestedAiStrength
+      })
+      : prepared;
+  });
+  const adjusted = difficulty.adjustMoveCandidates(stabilized, settings);
+  const moveQualityContext = {
+    companionState,
+    recentMoveAssessments: companionState?.moveAssessments || [],
+    companionPlan,
+    difficultySettings: settings,
+    positionEval: smoothedPositionEval,
+    moveNumber: moveHistory.length
+  };
+  const ranked = moveQuality && typeof moveQuality.rankCandidates === "function"
+    ? moveQuality.rankCandidates(adjusted, moveQualityContext)
+    : { ranked: adjusted, groups: {}, context: moveQualityContext };
+  const preferred = moveQuality && typeof moveQuality.chooseMoveByQuality === "function"
+    ? moveQuality.chooseMoveByQuality(ranked, moveQualityContext)
+    : difficulty.chooseAdaptiveMove(ranked.ranked || adjusted, settings);
+  const choice = preferred
+    || ranked.ranked?.[0]
+    || adjusted[0]
+    || evaluated.sort((a, b) => b.combinedScore - a.combinedScore)[0];
+  if (choice) {
+    currentCompanionPlan = companionPlan;
+    currentMoveQualityPlan = ranked.context || moveQualityContext;
+    previousPositionEval = smoothedPositionEval;
+    lastAdaptiveSummary = {
+      summary: moveQuality && typeof moveQuality.explainMoveQuality === "function"
+        ? moveQuality.explainMoveQuality(choice)
+        : "",
+      confidence: choice.confidence || 0,
+      precisionBand: (ranked.context || moveQualityContext)?.precisionBand || "balanced"
+    };
+  }
+  return choice?.point || null;
 }
 
 async function requestRemoteAIMove() {
@@ -889,7 +1247,7 @@ async function requestRemoteAIMove() {
     aiLevel: profile.aiLevel,
     stage: learningStage().name,
     board: board.map(row => row.slice()),
-    toPlay: colorName(white),
+    toPlay: colorName(aiStoneColor()),
     komi,
     moves: moveHistory.map(item => ({
       color: colorName(item.color),
@@ -948,12 +1306,14 @@ function parseMoveText(text) {
 
 function aiMove() {
   if (finished) return;
+  const aiColor = aiStoneColor();
   thinking.classList.remove("hidden");
   updateStatus(t("thinking"));
+  const started = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
 
   aiTimer = window.setTimeout(async () => {
     aiTimer = null;
-    const moves = legalMoves(white);
+    const moves = legalMoves(aiColor);
     if (!moves.length) {
       thinking.classList.add("hidden");
       pass();
@@ -963,15 +1323,17 @@ function aiMove() {
     const remoteMove = await requestRemoteAIMove();
     if (remoteMove && moves.some(item => item.x === remoteMove.x && item.y === remoteMove.y)) {
       undoStack.push(snapshot());
-      playMove(remoteMove, white);
+      playMove(remoteMove, aiColor);
+      aiThinkTimes.push((typeof performance !== "undefined" && performance.now ? performance.now() : Date.now()) - started);
       thinking.classList.add("hidden");
       update();
       return;
     }
 
-    const choice = chooseLocalAIMove(moves) || moves[0];
+    const choice = chooseLocalAIMove(moves, aiColor) || moves[0];
     undoStack.push(snapshot());
-    playMove(choice, white);
+    playMove(choice, aiColor);
+    aiThinkTimes.push((typeof performance !== "undefined" && performance.now ? performance.now() : Date.now()) - started);
     thinking.classList.add("hidden");
     update();
   }, 350);
@@ -989,7 +1351,8 @@ function estimateWinner() {
   const territory = estimateTerritory();
   const blackScore = blackStones + territory.black;
   const whiteScore = whiteStones + territory.white + komi;
-  return { childWon: blackScore >= whiteScore, blackScore, whiteScore, territory };
+  const childWon = childStoneColor() === black ? blackScore >= whiteScore : whiteScore > blackScore;
+  return { childWon, blackScore, whiteScore, territory };
 }
 
 function estimateTerritory() {
@@ -1054,18 +1417,66 @@ function analyzeGame(result) {
   };
 }
 
+function collectStudentSignals(analysis, result) {
+  const blackGroups = collectGroups(black);
+  const whiteGroups = collectGroups(white);
+  const weakBlackGroups = blackGroups.filter(group => group.liberties.size <= 2).length;
+  const pressuredWhiteGroups = whiteGroups.filter(group => group.liberties.size <= 2).length;
+  const earlyMoves = moveHistory.filter(item => !item.pass && item.color === black).slice(0, 30);
+  const cornerCount = new Set(earlyMoves
+    .filter(item => {
+      const edge = Math.min(item.x, item.y, size - 1 - item.x, size - 1 - item.y);
+      return edge <= 3;
+    })
+    .map(item => {
+      const left = item.x < size / 2 ? "L" : "R";
+      const top = item.y < size / 2 ? "T" : "B";
+      return `${left}${top}`;
+    })).size;
+  const lateBlackMoves = moveHistory.filter(item => !item.pass && item.color === black).slice(-40);
+  const territoryGap = (result.territory.black || 0) - (result.territory.white || 0);
+
+  return {
+    opening: clamp(Math.round(analysis.openingScore * 0.65 + cornerCount * 9), 0, 100),
+    capture: clamp(50 + blackCaptures * 7 - whiteCaptures * 4 + pressuredWhiteGroups * 3, 0, 100),
+    atari: clamp(Math.round(analysis.fightingScore * 0.7 + pressuredWhiteGroups * 7 - weakBlackGroups * 10), 0, 100),
+    connection: clamp(62 - weakBlackGroups * 12 + Math.min(18, earlyMoves.length / 2), 0, 100),
+    lifeDeath: clamp(Math.round(analysis.fightingScore * 0.55 + analysis.completionScore * 0.15 + (pressuredWhiteGroups - weakBlackGroups) * 8), 0, 100),
+    ladder: clamp(Math.round((analysis.fightingScore + analysis.performance) / 2), 0, 100),
+    territory: clamp(50 + territoryGap * 2 + lateBlackMoves.length / 3, 0, 100),
+    endgame: clamp(Math.round(analysis.completionScore * 0.72 + lateBlackMoves.length * 0.5), 0, 100),
+    blunderRate: clamp(50 + whiteCaptures * 5 + weakBlackGroups * 8 - blackCaptures * 2, 0, 100),
+    readingDepth: clamp(Math.round(analysis.performance * 0.45 + analysis.fightingScore * 0.35 + moveHistory.length / 4), 0, 100)
+  };
+}
+
+function updateStudentModelFromGame(result, analysis) {
+  const api = studentModelApi();
+  if (!api || typeof api.updateProfileFromGame !== "function") return;
+  studentProfile = api.updateProfileFromGame({
+    childId: profileStore.activeChildId,
+    childWon: result.childWon,
+    moveCount: moveHistory.length,
+    blackCaptures,
+    whiteCaptures,
+    territoryBlack: result.territory.black || 0,
+    territoryWhite: result.territory.white || 0,
+    analysis,
+    studentSignals: collectStudentSignals(analysis, result)
+  }, studentProfile || api.loadStudentProfile(profileStore.activeChildId));
+}
+
 function finishGame() {
   if (finished) return;
   finished = true;
   hideEndConfirm();
   const result = estimateWinner();
   const analysis = analyzeGame(result);
-  const task = ensureCurrentTask();
-  const taskResult = taskProgress(task);
   const childWon = result.childWon;
   profile.gamesPlayed += 1;
   if (childWon) profile.wins += 1;
-  const adjustment = Math.round((analysis.performance - 50) * 1.4);
+  const rawAdjustment = Math.round((analysis.performance - 50) * 1.4);
+  const adjustment = productSupportApi()?.boundedAdaptiveAdjustment?.(profile.history, rawAdjustment) ?? clamp(rawAdjustment, -18, 18);
   profile.rating = clamp(profile.rating + adjustment, 100, 1000);
   profile.aiLevel = clamp(profile.aiLevel + adjustment + (childWon ? 14 : -2), minimumInitialAiLevel, 980);
   profile.fighting = clamp(profile.fighting * 0.72 + analysis.fightingScore * 0.28, 10, 100);
@@ -1074,26 +1485,23 @@ function finishGame() {
   profile.stage = learningStage().name;
   profile.history.unshift({
     result: childWon ? "childWin" : "aiWin",
+    childWon,
+    completed: true,
     moves: moveHistory.length,
     boardSize: size,
     stage: profile.stage,
     level: Math.round(profile.aiLevel),
     performance: analysis.performance,
     captures: `${blackCaptures}:${whiteCaptures}`,
+    adaptiveFocus: currentCompanionPlan?.focus || null,
+    adaptiveBand: currentMoveQualityPlan?.precisionBand || null,
     time: new Date().toLocaleDateString("zh-CN")
   });
   profile.history = profile.history.slice(0, 8);
   profile.trend = profile.history.slice(0, 10);
-  profile.taskHistory.unshift({
-    type: task.type,
-    complete: taskResult.complete,
-    done: taskResult.done,
-    target: taskResult.target,
-    boardSize: size,
-    time: new Date().toLocaleDateString("zh-CN")
-  });
-  profile.taskHistory = profile.taskHistory.slice(0, 20);
-  profile.currentTask = createTask();
+  updateStudentModelFromGame(result, analysis);
+  updateCompanionResultFromGame(result, analysis);
+  saveGameDiagnostic("completed", result);
   saveProfile();
   saveCurrentGame();
   renderReview(result, analysis);
@@ -1116,7 +1524,7 @@ function pass() {
     showEndConfirm();
     return;
   }
-  if (turn === white) aiMove();
+  if (turn === aiStoneColor()) aiMove();
   update();
 }
 
@@ -1137,6 +1545,7 @@ function undoMove() {
 }
 
 function newGame() {
+  if (!finished && moveHistory.length > 0) saveGameDiagnostic("abandoned", null);
   size = fixedBoardSize;
   profile.boardSize = fixedBoardSize;
   board = freshBoard();
@@ -1149,7 +1558,18 @@ function newGame() {
   positionHashes = [boardHash(board)];
   finished = false;
   consecutivePasses = 0;
+  restoreCount = 0;
+  childIllegalAttemptCount = 0;
+  aiRejectedCandidateCount = 0;
+  aiThinkTimes = [];
+  gameStartTimestamp = Date.now();
+  currentGameId = `game-${Date.now()}`;
   lastAiAnalysis = null;
+  companionState = createCompanionStateForChild();
+  currentCompanionPlan = createCompanionPlanForCurrentChild();
+  currentMoveQualityPlan = null;
+  previousPositionEval = null;
+  lastAdaptiveSummary = null;
   if (aiTimer) {
     window.clearTimeout(aiTimer);
     aiTimer = null;
@@ -1160,6 +1580,35 @@ function newGame() {
   hideEndConfirm();
   saveCurrentGame();
   update();
+  if (turn === aiStoneColor()) aiMove();
+}
+
+function continueLastGame() {
+  if (loadCurrentGame()) {
+    saveProfile();
+    update();
+    if (!finished && turn === aiStoneColor()) aiMove();
+  } else {
+    updateStatus("没有可恢复的对局");
+  }
+}
+
+function clearSavedGame() {
+  try {
+    localStorage.removeItem(currentGameKey());
+  } catch {
+    // Storage may be blocked.
+  }
+  productSupportApi()?.clearCurrentGame?.(currentGameKey()).catch(() => {});
+  resetGameState();
+  saveCurrentGame();
+  update();
+}
+
+function changeChildColor(value) {
+  profile.childColor = value === "white" ? "white" : "black";
+  saveProfile();
+  newGame();
 }
 
 function resetGameState() {
@@ -1175,6 +1624,12 @@ function resetGameState() {
   positionHashes = [boardHash(board)];
   finished = false;
   consecutivePasses = 0;
+  restoreCount = 0;
+  childIllegalAttemptCount = 0;
+  aiRejectedCandidateCount = 0;
+  aiThinkTimes = [];
+  gameStartTimestamp = Date.now();
+  currentGameId = `game-${Date.now()}`;
   if (aiTimer) {
     window.clearTimeout(aiTimer);
     aiTimer = null;
@@ -1189,6 +1644,12 @@ function switchChild(childId) {
   saveCurrentGame();
   profileStore.activeChildId = childId;
   profile = getActiveProfile();
+  studentProfile = loadStudentProfileForChild(childId);
+  companionState = createCompanionStateForChild();
+  currentCompanionPlan = createCompanionPlanForCurrentChild();
+  currentMoveQualityPlan = null;
+  previousPositionEval = null;
+  lastAdaptiveSummary = null;
   size = fixedBoardSize;
   if (!loadCurrentGame()) resetGameState();
   saveProfile();
@@ -1204,6 +1665,12 @@ function addChild() {
   profileStore.profiles[id] = createProfile(name, profile.initialAiLevel || profile.aiLevel);
   profileStore.activeChildId = id;
   profile = getActiveProfile();
+  studentProfile = saveStudentProfileForChild({ childId: id });
+  companionState = createCompanionStateForChild();
+  currentCompanionPlan = createCompanionPlanForCurrentChild();
+  currentMoveQualityPlan = null;
+  previousPositionEval = null;
+  lastAdaptiveSummary = null;
   input.value = "";
   resetGameState();
   saveProfile();
@@ -1218,16 +1685,19 @@ function changeBoardSize(value) {
 }
 
 function nearestDifficultyPreset(level) {
-  return difficultyPresets.reduce((best, preset) => {
-    return Math.abs(preset.value - level) < Math.abs(best.value - level) ? preset : best;
-  }, difficultyPresets[0]);
+  const mode = productSupportApi()?.normalizeDifficultyMode?.(profile.difficultyMode || level) || profile.difficultyMode || "adaptive";
+  return difficultyPresets.find(preset => preset.value === mode) || difficultyPresets[3];
 }
 
 function changeInitialDifficulty(value) {
-  const nextLevel = clamp(Number(value) || defaultInitialAiLevel, minimumInitialAiLevel, 980);
+  const product = productSupportApi();
+  const mode = product?.normalizeDifficultyMode?.(value) || "adaptive";
+  const nextLevel = product?.difficultyModeConfig?.(mode)?.level || defaultInitialAiLevel;
+  profile.difficultyMode = mode;
   profile.initialAiLevel = nextLevel;
   profile.aiLevel = nextLevel;
   saveProfile();
+  saveCurrentGame();
   update();
 }
 
@@ -1314,7 +1784,77 @@ function renderReview(result, analysis) {
     dangerText,
     nextGoal
   ];
+  if (lastAdaptiveSummary?.summary) points.splice(2, 0, lastAdaptiveSummary.summary);
   replaceList(list, points);
+}
+
+function updateCompanionResultFromGame(result, analysis) {
+  const api = companionEngineApi();
+  if (!api || typeof api.summarizeCompanionResult !== "function") {
+    lastAdaptiveSummary = null;
+    return;
+  }
+  lastAdaptiveSummary = api.summarizeCompanionResult({
+    childWon: result.childWon,
+    analysis,
+    recentGames: recentGamesForAdaptive(),
+    gameState: createAdaptiveGameState(),
+    board
+  }, studentProfile || loadStudentProfileForChild(), companionState);
+  currentCompanionPlan = createCompanionPlanForCurrentChild();
+  currentMoveQualityPlan = null;
+}
+
+function saveGameDiagnostic(status, result = null) {
+  const product = productSupportApi();
+  if (!product || typeof product.diagnosticSummary !== "function") return null;
+  const summary = product.diagnosticSummary({
+    gameId: currentGameId,
+    childColor: profile.childColor || "black",
+    result: result ? (result.childWon ? "childWin" : "aiWin") : status,
+    completed: status === "completed",
+    abandoned: status === "abandoned",
+    moveCount: moveHistory.length,
+    difficultyMode: profile.difficultyMode || "adaptive",
+    difficultyStart: profile.initialAiLevel,
+    difficultyEnd: profile.aiLevel,
+    aiThinkTimes,
+    restoreCount,
+    childIllegalAttemptCount,
+    aiRejectedCandidateCount,
+    appCrashRecoveryFlag: restoreCount > 0 && !finished
+  });
+  if (typeof product.saveDiagnostic === "function") product.saveDiagnostic(summary).catch(() => {});
+  return summary;
+}
+
+function exportDebugSummary() {
+  const summary = saveGameDiagnostic(finished ? "completed" : "abandoned", finished ? estimateWinner() : null);
+  const payload = {
+    app: "GoKidCoachWeb",
+    appVersion: productSupportApi()?.appVersion || "1.0.0-rc1",
+    engineVersion: productSupportApi()?.engineVersion || "baseline-v3.6-frozen",
+    summary,
+    sgf: buildSGF(),
+    moveDiagnostics: moveHistory.map((move, index) => ({
+      index: index + 1,
+      color: colorName(move.color),
+      pass: Boolean(move.pass),
+      move: move.pass ? "pass" : coordinateName(move),
+      captures: move.captures || 0
+    })),
+    shallowTacticalVerifierActive: false
+  };
+  productSupportApi()?.saveDebugExport?.({ gameId: currentGameId, payload }).catch(() => {});
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `GoKidCoach-debug-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
 }
 
 function showVictoryPopup() {
@@ -1335,10 +1875,11 @@ function coordinateName(point) {
 }
 
 function bestHintMove() {
-  if (finished || turn !== black) return null;
-  const moves = legalMoves(black);
+  const childColor = childStoneColor();
+  if (finished || turn !== childColor) return null;
+  const moves = legalMoves(childColor);
   if (!moves.length) return null;
-  moves.sort((a, b) => scoreMove(b, black) - scoreMove(a, black));
+  moves.sort((a, b) => scoreMove(b, childColor) - scoreMove(a, childColor));
   return moves[0];
 }
 
@@ -1349,9 +1890,9 @@ function hintMove() {
     return;
   }
   const before = snapshot();
-  playMove(hint, black);
+  playMove(hint, childStoneColor());
   const group = groupAt(hint);
-  const nearbyOpponent = neighbors(hint).some(point => board[point.y][point.x] === white);
+  const nearbyOpponent = neighbors(hint).some(point => board[point.y][point.x] === aiStoneColor());
   restore(before);
   const reason = nearbyOpponent
     ? t("reasonFight")
@@ -1413,11 +1954,26 @@ function sgfCoord(value) {
 
 function buildSGF() {
   const result = finished ? estimateWinner() : null;
-  const resultText = result ? (result.childWon ? "B+" : "W+") : "?";
-  const moves = moveHistory.map(item => {
-    if (item.pass) return `;${colorName(item.color)}[]`;
-    return `;${colorName(item.color)}[${sgfCoord(item.x)}${sgfCoord(item.y)}]`;
-  }).join("");
+  const resultText = result
+    ? result.childWon
+      ? (childStoneColor() === black ? "B+" : "W+")
+      : (aiStoneColor() === black ? "B+" : "W+")
+    : "?";
+  const product = productSupportApi();
+  if (product && typeof product.buildSGF === "function") {
+    return product.buildSGF({
+      size,
+      komi,
+      moveHistory,
+      childName: profile.name || t("child"),
+      childColor: childStoneColor(),
+      resultText,
+      difficultyMode: profile.difficultyMode || "adaptive",
+      difficultyStart: profile.initialAiLevel,
+      difficultyEnd: profile.aiLevel
+    });
+  }
+  const moves = moveHistory.map(item => item.pass ? `;${colorName(item.color)}[]` : `;${colorName(item.color)}[${sgfCoord(item.x)}${sgfCoord(item.y)}]`).join("");
   return `(;GM[1]FF[4]CA[UTF-8]AP[GoKidCoachWeb]SZ[${size}]KM[${komi}]PB[${profile.name || t("child")}]PW[AI]RE[${resultText}]${moves})`;
 }
 
@@ -1438,6 +1994,8 @@ function exportBackup() {
   saveProfile();
   saveCurrentGame();
   const games = {};
+  const studentProfiles = {};
+  const studentApi = studentModelApi();
   for (const childId of Object.keys(profileStore.profiles)) {
     try {
       const saved = localStorage.getItem(`${currentGameKeyPrefix}${childId}`);
@@ -1445,13 +2003,17 @@ function exportBackup() {
     } catch {
       // Ignore unavailable or malformed per-child game snapshots.
     }
+    if (studentApi && typeof studentApi.loadStudentProfile === "function") {
+      studentProfiles[childId] = studentApi.loadStudentProfile(childId);
+    }
   }
   const payload = {
     app: "GoKidCoachWeb",
     version: 2,
     exportedAt: new Date().toISOString(),
     profileStore,
-    currentGames: games
+    currentGames: games,
+    studentProfiles
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -1490,6 +2052,17 @@ function importBackupFile(file) {
           }
         }
       }
+      const studentApi = studentModelApi();
+      if (studentApi && data.studentProfiles && typeof data.studentProfiles === "object") {
+        for (const [childId, item] of Object.entries(data.studentProfiles)) {
+          studentApi.saveStudentProfile(item, childId);
+        }
+      }
+      studentProfile = loadStudentProfileForChild(profileStore.activeChildId);
+      companionState = createCompanionStateForChild();
+      currentCompanionPlan = createCompanionPlanForCurrentChild();
+      currentMoveQualityPlan = null;
+      lastAdaptiveSummary = null;
       if (!loadCurrentGame()) {
         resetGameState();
       }
@@ -1528,9 +2101,10 @@ function updateParentPanel() {
 }
 
 function updateTaskCard() {
-  const progress = taskProgress();
-  document.getElementById("taskStatus").textContent = progress.complete ? t("taskDone") : t("taskProgress", { done: progress.done, target: progress.target });
-  document.getElementById("taskDescription").textContent = progress.text;
+  const status = adaptiveStatus();
+  document.getElementById("taskTitle").textContent = status.title;
+  document.getElementById("taskStatus").textContent = status.status;
+  document.getElementById("taskDescription").textContent = status.text;
 }
 
 function localLiveAnalysis() {
@@ -1572,16 +2146,23 @@ function activeAiSourceText() {
   const policy = window.GoKidCoachPolicyModel;
   const policyState = policy?.state;
   const model = policyState?.model;
+  const openingBook = window.GoKidCoachOpeningBook;
+  const openingState = openingBook?.state;
+  const adaptiveText = studentProfile ? " + 自适应难度" : "";
+  const companionText = companionEngineApi() ? " + CompanionEngine" : "";
+  const qualityText = companionEngineApi() ? " + Move Quality Controller" : "";
   if (policyState?.loaded && model) {
     const version = model.version ? ` v${model.version}` : "";
     const training = model.training?.sourceCounts
       ? `，样本 ${Object.entries(model.training.sourceCounts).map(([key, value]) => `${key}:${value}`).join(" ")}`
       : "";
     const fallback = remoteConfigured && remoteAiState === "failed" ? "（远程失败，已回退）" : "";
-    return `当前AI：训练离线模型${version}${training}${fallback}`;
+    const openingText = openingState?.loaded ? " + 开局库" : "";
+    return `当前AI：训练离线模型${version}${openingText}${adaptiveText}${companionText}${qualityText}${training}${fallback}`;
   }
+  if (openingState?.loaded) return `当前AI：内置增强启发式 + 开局库${adaptiveText}${companionText}${qualityText}`;
   if (policyState?.failed) return "当前AI：内置增强启发式（离线模型未加载）";
-  return "当前AI：内置增强启发式（等待离线模型）";
+  return `当前AI：内置增强启发式${adaptiveText}${companionText}${qualityText}（等待离线模型/开局库）`;
 }
 
 function updateStatus(text) {
@@ -1603,11 +2184,11 @@ function update() {
   if (finished) {
     updateStatus(t("statusDone"));
   } else {
-    updateStatus(turn === black ? t("statusBlack") : t("statusWhite"));
+    updateStatus(turn === childStoneColor() ? t("statusBlack") : t("statusWhite"));
   }
   document.getElementById("moveCount").textContent = moveHistory.length;
-  document.getElementById("blackCaptures").textContent = blackCaptures;
-  document.getElementById("whiteCaptures").textContent = whiteCaptures;
+  document.getElementById("blackCaptures").textContent = childStoneColor() === black ? blackCaptures : whiteCaptures;
+  document.getElementById("whiteCaptures").textContent = aiStoneColor() === black ? blackCaptures : whiteCaptures;
   document.getElementById("rating").value = profile.rating;
   document.getElementById("ratingText").textContent = Math.round(profile.rating);
   document.getElementById("opening").value = profile.opening;
@@ -1624,6 +2205,8 @@ function update() {
   const selectedDifficulty = String(nearestDifficultyPreset(profile.initialAiLevel || profile.aiLevel).value);
   document.getElementById("difficultySelect").value = selectedDifficulty;
   document.getElementById("mainDifficultySelect").value = selectedDifficulty;
+  const colorSelect = document.getElementById("childColorSelect");
+  if (colorSelect) colorSelect.value = profile.childColor === "white" ? "white" : "black";
   document.getElementById("languageSelect").value = currentLanguage();
   renderChildSelect();
 
@@ -1871,7 +2454,8 @@ function drawStone(x, y, radius, color) {
 }
 
 canvas.addEventListener("pointerdown", event => {
-  if (turn !== black || finished) return;
+  const childColor = childStoneColor();
+  if (turn !== childColor || finished) return;
   const rect = canvas.getBoundingClientRect();
   const px = (event.clientX - rect.left) / rect.width * canvas.width;
   const py = (event.clientY - rect.top) / rect.height * canvas.height;
@@ -1880,13 +2464,19 @@ canvas.addEventListener("pointerdown", event => {
   const x = Math.round((px - pad) / cell);
   const y = Math.round((py - pad) / cell);
   if (x < 0 || x >= size || y < 0 || y >= size) return;
+  const childCandidates = legalMoves(childColor)
+    .map(point => evaluateMoveCandidate(point, childColor))
+    .filter(Boolean);
   undoStack.push(snapshot());
-  if (playMove({ x, y }, black)) {
+  if (playMove({ x, y }, childColor)) {
+    observeChildMove({ x, y }, childCandidates);
     update();
     aiMove();
   } else {
     undoStack.pop();
+    childIllegalAttemptCount += 1;
     updateStatus(t("invalidMove"));
+    saveCurrentGame();
   }
 });
 
@@ -1918,16 +2508,19 @@ document.getElementById("hintBtn").addEventListener("click", hintMove);
 document.getElementById("explainBtn").addEventListener("click", explainPosition);
 document.getElementById("childSelect").addEventListener("change", event => switchChild(event.target.value));
 document.getElementById("addChildBtn").addEventListener("click", addChild);
-  document.getElementById("difficultySelect").addEventListener("change", event => changeInitialDifficulty(event.target.value));
+document.getElementById("difficultySelect").addEventListener("change", event => changeInitialDifficulty(event.target.value));
 document.getElementById("mainDifficultySelect").addEventListener("change", event => changeInitialDifficulty(event.target.value));
+document.getElementById("childColorSelect").addEventListener("change", event => changeChildColor(event.target.value));
 document.getElementById("languageSelect").addEventListener("change", event => {
   profile.language = event.target.value;
   saveProfile();
   update();
 });
 document.getElementById("undoBtn").addEventListener("click", undoMove);
+document.getElementById("continueBtn").addEventListener("click", continueLastGame);
 document.getElementById("finishBtn").addEventListener("click", finishGame);
 document.getElementById("newBtn").addEventListener("click", newGame);
+document.getElementById("clearSaveBtn").addEventListener("click", clearSavedGame);
 document.getElementById("moreBtn").addEventListener("click", toggleMorePanel);
 document.getElementById("sgfBtn").addEventListener("click", exportSGF);
 document.getElementById("parentBtn").addEventListener("click", () => {
@@ -1955,10 +2548,12 @@ document.getElementById("backupFileInput").addEventListener("change", event => {
 });
 document.getElementById("parentFinishBtn").addEventListener("click", showEndConfirm);
 document.getElementById("parentSgfBtn").addEventListener("click", exportSGF);
+document.getElementById("debugExportBtn").addEventListener("click", exportDebugSummary);
 document.getElementById("confirmEndBtn").addEventListener("click", finishGame);
 document.getElementById("continueGameBtn").addEventListener("click", continueGameAfterEndConfirm);
 document.getElementById("closeVictoryBtn").addEventListener("click", hideVictoryPopup);
 window.addEventListener("gokidcoach-policy-ready", updateActiveAiSource);
+window.addEventListener("gokidcoach-opening-book-ready", updateActiveAiSource);
 document.getElementById("resetBtn").addEventListener("click", () => {
   try {
     localStorage.removeItem(profileStoreKey);
@@ -1982,3 +2577,4 @@ if (new URLSearchParams(window.location.search).get("demo") === "1") {
 
 update();
 updateActiveAiSource();
+if (!finished && !moveHistory.length && turn === aiStoneColor()) aiMove();

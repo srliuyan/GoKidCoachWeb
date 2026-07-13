@@ -42,7 +42,9 @@
 
       <section class="actions">
         <button id="undoBtn" type="button">悔棋</button>
+        <button id="continueBtn" type="button">继续上局</button>
         <button id="newBtn" type="button">新局</button>
+        <button id="clearSaveBtn" type="button">清除存档</button>
         <button id="finishBtn" type="button">结束</button>
         <button id="hintBtn" type="button">提示</button>
         <button id="passBtn" type="button">停一手</button>
@@ -56,10 +58,10 @@
         <label>
           <span id="mainDifficultyLabel">难度</span>
           <select id="mainDifficultySelect">
-            <option value="640">入门</option>
-            <option value="760">进阶</option>
-            <option value="880">强手</option>
-            <option value="980">挑战</option>
+            <option value="beginner">入门陪练</option>
+            <option value="basic">基础陪练</option>
+            <option value="advanced">进阶陪练</option>
+            <option value="adaptive">自适应陪练</option>
           </select>
         </label>
       </section>
@@ -77,10 +79,17 @@
         <label class="field-row">
           <span id="difficultyLabel">初始难度</span>
           <select id="difficultySelect">
-            <option value="640">入门</option>
-            <option value="760">进阶</option>
-            <option value="880">强手</option>
-            <option value="980">挑战</option>
+            <option value="beginner">入门陪练</option>
+            <option value="basic">基础陪练</option>
+            <option value="advanced">进阶陪练</option>
+            <option value="adaptive">自适应陪练</option>
+          </select>
+        </label>
+        <label class="field-row">
+          <span>孩子执棋</span>
+          <select id="childColorSelect">
+            <option value="black">孩子执黑</option>
+            <option value="white">孩子执白</option>
           </select>
         </label>
         <label class="field-row">
@@ -114,10 +123,10 @@
 
       <section class="card support-card task-card">
         <div class="card-title">
-          <h2 id="taskTitle">今日任务</h2>
-          <strong id="taskStatus">0%</strong>
+          <h2 id="taskTitle">Adaptive Engine</h2>
+          <strong id="taskStatus">--</strong>
         </div>
-        <p id="taskDescription">完成一局后会生成适合孩子的任务。</p>
+        <p id="taskDescription">The AI adapts strength during the game and stays slightly stronger than the child.</p>
       </section>
 
       <section class="card support-card ai-analysis-card">
@@ -181,6 +190,8 @@
           <input id="backupFileInput" type="file" accept="application/json,.json" class="hidden">
           <button id="parentFinishBtn" type="button">结束并评估</button>
           <button id="parentSgfBtn" type="button">导出SGF</button>
+          <button id="debugExportBtn" type="button">导出调试摘要</button>
+          <p id="versionText" class="remote-status">V1.0</p>
         </div>
       </section>
     </aside>
@@ -207,6 +218,22 @@
 
   <script src="engine-analysis.js"></script>
   <script src="offline-policy.js"></script>
+  <script src="policy-pattern.js"></script>
+  <script src="shape-library.js"></script>
+  <script src="fuseki-library.js"></script>
+  <script src="tactical-library.js"></script>
+  <script src="joseki-library.js"></script>
+  <script src="endgame-library.js"></script>
+  <script src="opening-book.js"></script>
+  <script src="rule-engine.js"></script>
+  <script src="position-evaluator.js"></script>
+  <script src="midgame-stability.js"></script>
+  <script src="context-fusion.js"></script>
+  <script src="product-support.js"></script>
+  <script src="student-model.js"></script>
+  <script src="difficulty-controller.js"></script>
+  <script src="companion-engine.js"></script>
+  <script src="move-quality-controller.js"></script>
   <script src="app.js"></script>
   <script>
     if ("serviceWorker" in navigator) {

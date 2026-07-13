@@ -1,0 +1,40 @@
+{
+  "productVersion": "1.0.0-rc1",
+  "engineVersion": "baseline-v3.6-frozen",
+  "serviceWorkerCache": "gokidcoach-web-v39-rc1",
+  "generatedAt": "2026-07-13",
+  "repositoryDetected": true,
+  "repositoryRoot": "/home/sr/codex-test/WeiqiCoachProject/GoKidCoachWeb",
+  "remoteConfigured": true,
+  "remote": "git@github.com:srliuyan/GoKidCoachWeb.git",
+  "branch": "main",
+  "publishDirectory": ".",
+  "relativePathsValid": true,
+  "manifestValid": true,
+  "serviceWorkerScopeValid": true,
+  "offlineAssetsValid": true,
+  "evaluationAssetsExcluded": true,
+  "releaseReady": false,
+  "blockingReasons": [
+    "Physical iPad Safari validation has not been completed.",
+    "HTTPS PWA install/offline validation must be performed before final release."
+  ],
+  "githubPages": {
+    "recommendedBranch": "release/v1.0-rc1",
+    "startUrl": "./",
+    "manifestPath": "manifest.webmanifest",
+    "serviceWorkerPath": "./sw.js",
+    "serviceWorkerScope": "./",
+    "subpathCompatible": true
+  },
+  "assetPolicy": {
+    "runtimeAssetsPrecached": true,
+    "evaluationJsonPrecached": false,
+    "offlineOnlyPattern": "GoKidCoachWeb/evaluation/*.json"
+  },
+  "manualValidationFiles": [
+    "GoKidCoachWeb/IPAD-TEST-CHECKLIST.md",
+    "GoKidCoachWeb/release/ipad-difficulty-validation.json",
+    "GoKidCoachWeb/release/ipad-full-game-validation.json"
+  ]
+}

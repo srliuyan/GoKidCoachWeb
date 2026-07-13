@@ -1,0 +1,73 @@
+{
+  "build": {
+    "productVersion": "1.0.0-rc1",
+    "engineVersion": "baseline-v3.6-frozen",
+    "serviceWorkerCache": "gokidcoach-web-v39-rc1"
+  },
+  "status": "manual-test-required",
+  "device": "",
+  "iPadOSVersion": "",
+  "SafariVersion": "",
+  "results": [
+    {
+      "mode": "入门陪练",
+      "testDate": "",
+      "device": "",
+      "iPadOSVersion": "",
+      "SafariVersion": "",
+      "gamesTested": 0,
+      "movesObserved": 0,
+      "coherentPlay": null,
+      "illegalMoveObserved": null,
+      "rejectedMoveObserved": null,
+      "randomMoveObserved": null,
+      "perceivedStrength": "",
+      "notes": "Play at least 20 AI moves; confirm no arbitrary random legal points and softer feel than 进阶陪练."
+    },
+    {
+      "mode": "基础陪练",
+      "testDate": "",
+      "device": "",
+      "iPadOSVersion": "",
+      "SafariVersion": "",
+      "gamesTested": 0,
+      "movesObserved": 0,
+      "coherentPlay": null,
+      "illegalMoveObserved": null,
+      "rejectedMoveObserved": null,
+      "randomMoveObserved": null,
+      "perceivedStrength": "",
+      "notes": "Play at least 20 AI moves; confirm generally coherent responses and more stability than 入门陪练."
+    },
+    {
+      "mode": "进阶陪练",
+      "testDate": "",
+      "device": "",
+      "iPadOSVersion": "",
+      "SafariVersion": "",
+      "gamesTested": 0,
+      "movesObserved": 0,
+      "coherentPlay": null,
+      "illegalMoveObserved": null,
+      "rejectedMoveObserved": null,
+      "randomMoveObserved": null,
+      "perceivedStrength": "",
+      "notes": "Play at least 20 AI moves; confirm strongest available release behavior and no unexpected weakening."
+    },
+    {
+      "mode": "自适应陪练",
+      "testDate": "",
+      "device": "",
+      "iPadOSVersion": "",
+      "SafariVersion": "",
+      "gamesTested": 0,
+      "movesObserved": 0,
+      "coherentPlay": null,
+      "illegalMoveObserved": null,
+      "rejectedMoveObserved": null,
+      "randomMoveObserved": null,
+      "perceivedStrength": "",
+      "notes": "Complete or simulate at least 3 games; confirm gradual adjustment, abandoned games have no major adjustment, restored adaptive state remains consistent."
+    }
+  ]
+}
