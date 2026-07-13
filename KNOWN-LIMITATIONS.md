@@ -17,7 +17,7 @@ The dominant verified defect is missing necessary-connection evidence before Con
 
 ## Shallow Verification
 
-A bounded shallow tactical verifier was tested for obvious captures, atari rescues, necessary connections and immediate refutations. It did not pass the release gates because profile variants worsened score loss and conflict frequency. The verifier remains diagnostic-only and is not used by browser move selection in V1.0.
+A bounded shallow tactical verifier is active for obvious captures, atari rescues, necessary connections and immediate refutations. It is limited to a small candidate set and direct opponent replies. It is not a full search engine, so longer ladders, multi-step semeai and whole-board timing can still be wrong.
 
 ## Endgame Value
 
@@ -40,3 +40,10 @@ Do not reopen engine scoring for isolated unusual moves. Reopen only for repeate
 - Endgame good-or-better remains 0.108 and is not a V1.0 release blocker.
 - Physical iPad Safari installation, offline reopening and rotation/touch accuracy still require manual device checks.
 - Runtime assets are large because the opening book and victory image are precached; this is acceptable for first release but should be watched on older iPads.
+
+## Cleanup Retained Items
+
+- Emergency fallback selection remains present, but tests require it to be unreachable when meaningful candidates exist.
+- Some local app rule helpers remain separate from RuleEngine helpers because consolidation could change legacy app-state behavior.
+- Historical evaluation reports remain in `evaluation/` for regression audits and are excluded from service-worker runtime caching.
+- Local reading remains bounded and does not attempt long ladders, complex semeai, full-board search, MCTS or neural evaluation.

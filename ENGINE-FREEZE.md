@@ -1,17 +1,17 @@
 # GoKidCoach Engine Freeze
 
-## V1.0 Release Engine State
+## V1.2 Coherent Core Engine State
 
-- Final engine version: GoKidCoach V1.0 baseline engine
+- Final engine version: bounded-local-reading-v1
 - Freeze date: 2026-07-13
 - Final Git commit: unavailable in this workspace; `git rev-parse --short HEAD` reports this directory is not a Git repository.
 - Benchmark seed: 20260710
 - Runtime baseline update: no
-- Browser runtime scoring changed in final stage: no
+- Browser runtime scoring changed in final stage: yes, coherent candidate filtering and phase-responsibility normalization
 - Raw urgent-source correction accepted: no
-- Shallow tactical verification accepted: no
+- Shallow tactical verification accepted: yes, as a bounded safety layer
 
-## Final Benchmark Metrics
+## Baseline Reference Metrics
 
 - exactMatchRate: 0.149
 - goodOrBetterRate: 0.216
@@ -23,11 +23,11 @@
 
 ## Final Engine Decision
 
-The final raw urgent-source analysis found the dominant defect to be missing necessary-connection evidence, but no tested profile passed all V1.0 release gates. The engine remains on the verified baseline runtime.
+V1.2 reopens the V1.0 frozen baseline to address real-play weakness: incoherent legal moves, weak difficulty separation, underprotected urgent tactics and low-value endgame selection.
 
-No V3.5 positionScore gate, V3.6 urgent protection profile, or V1.0 raw urgent-source profile is applied to browser move selection.
+V1.2 applies coherent candidate filtering, bounded shallow tactical verification, stronger difficulty policies, and source-responsibility normalization. It still does not add MCTS, neural networks, KataGo, backend services, or a second engine.
 
-The shallow tactical verification layer was implemented as a reusable diagnostic API and evaluated with bounded 1-2 ply profiles. No profile passed all V1.0 gates, so it is not active in browser move selection for the frozen V1.0 engine.
+The shallow tactical verification layer is active as a bounded safety layer before difficulty selection. It verifies obvious captures, atari rescues, necessary unsafe-group connections and immediate refutations with a 1-2 ply direct-reply limit. It does not add MCTS, neural networks, full-board deep search or broad score-weight changes.
 
 `product-support.js` is permitted as a product layer for persistence, SGF export, release difficulty labels and diagnostics. It is not an engine module and must not alter scoring, fusion or candidate ranking.
 
@@ -76,3 +76,13 @@ Reopen engine development only if real child games show a repeated serious issue
 - repeatable crash or illegal move
 
 A single unusual move is not sufficient to reopen engine work.
+
+## V1.5.1 Cleanup Checkpoint
+
+- Cleanup checkpoint branch: `v1.5.1-pre-cleanup-20260713-162431`
+- File backup: `/tmp/gokidcoach-pre-cleanup-20260713-162431/`
+- Functional intent: no playing-behavior change
+- Removed active duplicate metadata fallbacks from `sw.js`, `product-support.js` and `app.js`
+- BUILD_INFO remains the single active source for product version, engine version, buildId and cache namespace
+- Difficulty mappings, scoring weights, local-reading limits and candidate ranking remain unchanged
+- Cleanup validation uses `pre-cleanup-behavior-lock.json`, `post-cleanup-behavior-lock.json` and `cleanup-behavior-comparison.json`

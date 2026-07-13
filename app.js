@@ -10,10 +10,14 @@ const komi = 7;
 const supportedLanguages = ["zh", "yue", "en", "ja", "ko"];
 const defaultInitialAiLevel = 980;
 const minimumInitialAiLevel = 640;
+const detailedMoveDiagnosticCap = 100;
+const detailedCandidateDiagnosticCap = 20;
+const rawStageTimingCap = 100;
+const recoverySnapshotInterval = 20;
 const difficultyPresets = [
-  { value: "beginner", level: 640, key: "difficultyBeginner" },
-  { value: "basic", level: 760, key: "difficultyIntermediate" },
-  { value: "advanced", level: 880, key: "difficultyStrong" },
+  { value: "beginner", level: 720, key: "difficultyBeginner" },
+  { value: "basic", level: 840, key: "difficultyIntermediate" },
+  { value: "advanced", level: 980, key: "difficultyStrong" },
   { value: "adaptive", level: 880, key: "difficultyChallenge" }
 ];
 const compactLabels = {
@@ -182,6 +186,24 @@ let aiRejectedCandidateCount = 0;
 let aiThinkTimes = [];
 let gameStartTimestamp = Date.now();
 let currentGameId = `game-${Date.now()}`;
+let latestExportSnapshot = null;
+let buildBlocked = false;
+let pendingProductSave = null;
+const performanceDiagnostics = {
+  moveStages: [],
+  candidateDiagnostics: [],
+  aggregate: {
+    aiMoves: 0,
+    boardCopyCount: 0,
+    simulateMoveCount: 0,
+    groupAtCallCount: 0,
+    libertyPointsCallCount: 0,
+    fullBoardScanCount: 0,
+    JSONSerializeCount: 0,
+    persistencePayloadBytes: 0
+  },
+  lastMove: null
+};
 currentCompanionPlan = createCompanionPlanForCurrentChild();
 currentMoveQualityPlan = null;
 
@@ -306,6 +328,22 @@ function productSupportApi() {
   return window.GoKidCoachProductSupport;
 }
 
+function buildInfo() {
+  const info = window.GoKidCoachBuildInfo || productSupportApi()?.buildInfo;
+  if (!info) throw new Error("GoKidCoachBuildInfo must be loaded before app.js");
+  return info;
+}
+
+function checkBuildConsistency() {
+  const info = buildInfo();
+  const script = document.querySelector("script[src='build-info.js']");
+  const scriptBuildId = script?.dataset?.buildId || info.buildId;
+  buildBlocked = Boolean(scriptBuildId && info.buildId && scriptBuildId !== info.buildId);
+  document.documentElement.dataset.buildId = info.buildId || "";
+  if (buildBlocked) updateStatus("检测到应用版本混合，请刷新页面完成更新。");
+  return !buildBlocked;
+}
+
 function policyPatternApi() {
   return window.GoKidCoachPolicyPattern;
 }
@@ -406,6 +444,81 @@ function createCompanionPlanForCurrentChild() {
 function createMoveQualityPlanForCurrentChild(companionPlan = currentCompanionPlan || createCompanionPlanForCurrentChild()) {
   void companionPlan;
   return null;
+}
+
+function applyReleaseDifficultyMode(settings) {
+  const mode = productSupportApi()?.normalizeDifficultyMode?.(profile.difficultyMode) || profile.difficultyMode || "adaptive";
+  const adjusted = { ...settings, releaseDifficultyMode: mode };
+  if (mode === "beginner") {
+    adjusted.candidateTopK = Math.max(2, Math.min(3, Number(adjusted.candidateTopK) || 3));
+    adjusted.mistakeTolerance = Math.min(Number(adjusted.mistakeTolerance) || 18, 18);
+    adjusted.randomness = Math.min(Number(adjusted.randomness) || 0.04, 0.035);
+    adjusted.policyTemperature = Math.min(Number(adjusted.policyTemperature) || 0.25, 0.28);
+    adjusted.ruleEngineWeight = Math.max(Number(adjusted.ruleEngineWeight) || 1.1, 1.16);
+    adjusted.tacticalStrictness = Math.max(Number(adjusted.tacticalStrictness) || 1, 1.05);
+  } else if (mode === "basic") {
+    adjusted.candidateTopK = Math.max(1, Math.min(2, Number(adjusted.candidateTopK) || 2));
+    adjusted.mistakeTolerance = Math.min(Number(adjusted.mistakeTolerance) || 14, 12);
+    adjusted.randomness = Math.min(Number(adjusted.randomness) || 0.025, 0.02);
+    adjusted.policyTemperature = Math.min(Number(adjusted.policyTemperature) || 0.24, 0.24);
+    adjusted.ruleEngineWeight = Math.max(Number(adjusted.ruleEngineWeight) || 1.15, 1.22);
+    adjusted.tacticalStrictness = Math.max(Number(adjusted.tacticalStrictness) || 1.08, 1.14);
+    adjusted.endgamePrecision = Math.max(Number(adjusted.endgamePrecision) || 1, 1.02);
+  } else if (mode === "advanced") {
+    adjusted.candidateTopK = 1;
+    adjusted.mistakeTolerance = 6;
+    adjusted.randomness = 0.01;
+    adjusted.policyTemperature = 0.18;
+    adjusted.ruleEngineWeight = Math.max(Number(adjusted.ruleEngineWeight) || 1.25, 1.34);
+    adjusted.tacticalStrictness = Math.max(Number(adjusted.tacticalStrictness) || 1.18, 1.28);
+    adjusted.openingBookWeight = Math.max(Number(adjusted.openingBookWeight) || 1.2, 1.28);
+    adjusted.endgamePrecision = Math.max(Number(adjusted.endgamePrecision) || 1.04, 1.08);
+  } else {
+    adjusted.randomness = Math.min(Number(adjusted.randomness) || 0.04, 0.04);
+    adjusted.mistakeTolerance = Math.min(Number(adjusted.mistakeTolerance) || 16, 16);
+  }
+  return adjusted;
+}
+
+function phaseScaleForSource(source, moveNumber, point) {
+  const edge = point ? Math.min(point.x, point.y, size - 1 - point.x, size - 1 - point.y) : 9;
+  const smooth = (start, end, high, low) => {
+    if (moveNumber <= start) return high;
+    if (moveNumber >= end) return low;
+    const t = (moveNumber - start) / Math.max(1, end - start);
+    const eased = t * t * (3 - 2 * t);
+    return high + (low - high) * eased;
+  };
+  if (source === "fuseki") {
+    if (moveNumber <= 16) return 1;
+    if (moveNumber <= 35) return smooth(16, 35, 1, 0.52);
+    if (moveNumber <= 60) return smooth(35, 60, 0.52, 0.18);
+    if (moveNumber <= 90) return smooth(60, 90, 0.18, 0);
+    return 0;
+  }
+  if (source === "joseki") {
+    const cornerScale = edge <= 4 ? 1 : 0.35;
+    if (moveNumber <= 16) return cornerScale;
+    if (moveNumber <= 35) return smooth(16, 35, cornerScale, edge <= 4 ? 0.45 : 0.08);
+    if (moveNumber <= 70) return smooth(35, 70, edge <= 4 ? 0.45 : 0.08, edge <= 4 ? 0.18 : 0);
+    return edge <= 4 ? 0.08 : 0;
+  }
+  if (source === "shape") {
+    if (moveNumber >= 140) return 0.55;
+    if (moveNumber >= 100) return 0.75;
+    return 1;
+  }
+  return 1;
+}
+
+function classifyCoherentCandidate(candidate) {
+  if (!candidate || candidate.legal === false || candidate.ruleLegal === false) return "rejected";
+  if (candidate.immediatelyRefuted) return "immediatelyRefuted";
+  if (candidate.verifiedUrgent || candidate.verifiedCapture || candidate.verifiedRescue || candidate.verifiedNecessaryConnection) return "protectedUrgent";
+  if (candidate.lowValueCandidate || candidate.dameCandidate || candidate.redundantReinforcement || candidate.isMeaninglessFirstLine || candidate.isRandomFlyaway) return "lowValue";
+  if (Number(candidate.captures || 0) > 0 || Number(candidate.tacticalPressure || 0) > 0 || Number(candidate.rescueValue || 0) > 0 || Number(candidate.connectionValue || 0) > 0) return "coherentTactical";
+  if (Number(candidate.openingBookScore || 0) > 0 || Number(candidate.positionScore || 0) > 10 || Number(candidate.endgameScore || 0) > 8 || Number(candidate.territoryValue || 0) > 0) return "coherentStrategic";
+  return "meaningfulAlternative";
 }
 
 function observeChildMove(point, candidates) {
@@ -519,7 +632,8 @@ function applyLanguage() {
   setText("#parentFinishBtn", t("finish"));
   setText("#parentSgfBtn", t("exportSgf"));
   setText("#debugExportBtn", "导出调试摘要");
-  setText("#versionText", `版本 ${productSupportApi()?.appVersion || "1.0.0-rc1"} / 引擎 ${productSupportApi()?.engineVersion || "baseline-v3.6-frozen"}`);
+  const info = buildInfo();
+  setText("#versionText", `版本 ${info.appVersion} / 引擎 ${info.engineVersion}`);
   setText(".end-card h2", t("confirmEndTitle"));
   setText("#confirmEndBtn", t("confirmEnd"));
   setText("#continueGameBtn", t("continueGame"));
@@ -550,7 +664,67 @@ function updateRemoteAiStatus() {
   element.dataset.state = configured ? remoteAiState : "notConfigured";
 }
 
+function nowMs() {
+  return typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
+}
+
+function measureStage(record, key, fn) {
+  const started = nowMs();
+  try {
+    return fn();
+  } finally {
+    record[key] = (record[key] || 0) + Math.max(0, nowMs() - started);
+  }
+}
+
+function estimateBytes(value) {
+  try {
+    return JSON.stringify(value).length;
+  } catch {
+    return 0;
+  }
+}
+
+function trimDiagnosticArray(list, cap) {
+  if (!Array.isArray(list) || list.length <= cap) return list;
+  list.splice(0, list.length - cap);
+  return list;
+}
+
+function recordMovePerformance(record) {
+  if (!record) return;
+  performanceDiagnostics.lastMove = record;
+  performanceDiagnostics.moveStages.push(record);
+  trimDiagnosticArray(performanceDiagnostics.moveStages, rawStageTimingCap);
+  performanceDiagnostics.aggregate.aiMoves += 1;
+  for (const key of ["boardCopyCount", "simulateMoveCount", "groupAtCallCount", "libertyPointsCallCount", "fullBoardScanCount", "JSONSerializeCount", "persistencePayloadBytes"]) {
+    performanceDiagnostics.aggregate[key] += Number(record[key] || 0);
+  }
+}
+
+function scheduleProductCurrentGameSave(snapshotPayload) {
+  const product = productSupportApi();
+  if (!product || typeof product.saveCurrentGame !== "function") return;
+  const payload = snapshotPayload;
+  if (pendingProductSave && typeof window !== "undefined" && window.clearTimeout) {
+    window.clearTimeout(pendingProductSave);
+  }
+  const run = () => {
+    pendingProductSave = null;
+    product.saveCurrentGame(payload).catch(() => {});
+  };
+  if (typeof window !== "undefined" && window.setTimeout) {
+    pendingProductSave = window.setTimeout(run, 0);
+  } else {
+    run();
+  }
+}
+
 function saveCurrentGame() {
+  const exportSnapshot = latestExportSnapshot && Array.isArray(latestExportSnapshot.moveHistory)
+    ? latestExportSnapshot
+    : createExportSnapshot("active");
+  const info = buildInfo();
   const snapshotPayload = {
     id: currentGameKey(),
     gameId: currentGameId,
@@ -560,7 +734,12 @@ function saveCurrentGame() {
     lastMove: lastMove ? { ...lastMove } : null,
     blackCaptures,
     whiteCaptures,
-    moveHistory: moveHistory.map(item => ({ ...item })),
+    moveHistory: exportSnapshot.moveHistory.map(item => ({ ...item })),
+    exportSnapshot: exportSnapshot.moveHistory.length % recoverySnapshotInterval === 0 || finished
+      ? exportSnapshot
+      : null,
+    actualMoveCount: exportSnapshot.actualMoveCount,
+    finalBoardHash: exportSnapshot.finalBoardHash,
     undoStack: undoStack.slice(-20).map(item => ({
       ...item,
       board: item.board.map(row => row.slice()),
@@ -580,8 +759,11 @@ function saveCurrentGame() {
     },
     studentModelSummary: studentProfile || null,
     gameStartTimestamp,
-    appVersion: productSupportApi()?.appVersion || "1.0.0-rc1",
-    engineVersion: productSupportApi()?.engineVersion || "baseline-v3.6-frozen",
+    appVersion: info.appVersion,
+    engineVersion: info.engineVersion,
+    productVersion: info.productVersion,
+    buildId: info.buildId,
+    schemaVersion: info.schemaVersion,
     diagnostics: {
       restoreCount,
       childIllegalAttemptCount,
@@ -595,14 +777,13 @@ function saveCurrentGame() {
     savedAt: Date.now()
   };
   try {
+    performanceDiagnostics.aggregate.JSONSerializeCount += 1;
+    performanceDiagnostics.aggregate.persistencePayloadBytes += estimateBytes(snapshotPayload);
     localStorage.setItem(currentGameKey(), JSON.stringify(snapshotPayload));
   } catch {
     // Safari private mode or full storage can reject writes; the game still works.
   }
-  const product = productSupportApi();
-  if (product && typeof product.saveCurrentGame === "function") {
-    product.saveCurrentGame(snapshotPayload).catch(() => {});
-  }
+  scheduleProductCurrentGameSave(snapshotPayload);
 }
 
 function isValidBoard(value) {
@@ -648,6 +829,9 @@ function loadCurrentGame() {
     childIllegalAttemptCount = Number(saved.diagnostics?.childIllegalAttemptCount) || 0;
     aiRejectedCandidateCount = Number(saved.diagnostics?.aiRejectedCandidateCount) || 0;
     aiThinkTimes = Array.isArray(saved.diagnostics?.aiThinkTimes) ? saved.diagnostics.aiThinkTimes.slice(-250) : [];
+    latestExportSnapshot = saved.exportSnapshot && Array.isArray(saved.exportSnapshot.moveHistory)
+      ? saved.exportSnapshot
+      : createExportSnapshot("restored");
     return true;
   } catch {
     return false;
@@ -698,6 +882,7 @@ function neighbors(point) {
 }
 
 function groupAt(start, grid = board) {
+  performanceDiagnostics.aggregate.groupAtCallCount += 1;
   const color = grid[start.y][start.x];
   if (color === empty) return { stones: [], liberties: new Set() };
 
@@ -724,11 +909,108 @@ function groupAt(start, grid = board) {
 }
 
 function cloneBoard() {
+  performanceDiagnostics.aggregate.boardCopyCount += 1;
   return board.map(row => row.slice());
+}
+
+function cloneGrid(grid) {
+  performanceDiagnostics.aggregate.boardCopyCount += 1;
+  return (Array.isArray(grid) ? grid : board).map(row => row.slice());
 }
 
 function boardHash(grid = board) {
   return grid.map(row => row.join("")).join("|");
+}
+
+function createExportSnapshot(source = "active") {
+  const info = buildInfo();
+  return {
+    id: currentGameKey(),
+    gameId: currentGameId,
+    size,
+    board: cloneBoard(),
+    finalBoardHash: boardHash(),
+    turn,
+    lastMove: lastMove ? { ...lastMove } : null,
+    blackCaptures,
+    whiteCaptures,
+    moveHistory: moveHistory.map(item => ({ ...item })),
+    actualMoveCount: moveHistory.length,
+    aiMoveCount: moveHistory.filter(item => item.color === aiStoneColor()).length,
+    childMoveCount: moveHistory.filter(item => item.color === childStoneColor()).length,
+    positionHashes: positionHashes.slice(),
+    finished,
+    consecutivePasses,
+    childColor: profile.childColor || "black",
+    difficultyMode: profile.difficultyMode || "adaptive",
+    difficultyStart: profile.initialAiLevel,
+    difficultyEnd: profile.aiLevel,
+    diagnostics: {
+      restoreCount,
+      childIllegalAttemptCount,
+      aiRejectedCandidateCount,
+      aiThinkTimes: aiThinkTimes.slice(-250)
+    },
+    gameStartTimestamp,
+    appVersion: info.appVersion,
+    engineVersion: info.engineVersion,
+    productVersion: info.productVersion,
+    buildId: info.buildId,
+    schemaVersion: info.schemaVersion,
+    exportSnapshotSource: source,
+    savedAt: Date.now()
+  };
+}
+
+function updateExportSnapshot(source = "active", options = {}) {
+  latestExportSnapshot = createExportSnapshot(source);
+  const shouldPersist = Boolean(options.persist)
+    || source !== "active"
+    || finished
+    || latestExportSnapshot.moveHistory.length % recoverySnapshotInterval === 0;
+  if (shouldPersist) {
+    try {
+      performanceDiagnostics.aggregate.JSONSerializeCount += 1;
+      performanceDiagnostics.aggregate.persistencePayloadBytes += estimateBytes(latestExportSnapshot);
+      localStorage.setItem(`${currentGameKey()}-export-snapshot`, JSON.stringify(latestExportSnapshot));
+      if (latestExportSnapshot.moveHistory.length > 0) {
+        localStorage.setItem("gokidcoach-web-latest-export-snapshot", JSON.stringify(latestExportSnapshot));
+      }
+    } catch {
+      // Export snapshot is best effort; active memory copy remains available.
+    }
+  }
+  return latestExportSnapshot;
+}
+
+function preserveExportSnapshot(source = "abandoned") {
+  if (moveHistory.length || !latestExportSnapshot) updateExportSnapshot(source, { persist: true });
+  else latestExportSnapshot = { ...latestExportSnapshot, exportSnapshotSource: source };
+  return latestExportSnapshot;
+}
+
+function loadLatestExportSnapshot() {
+  if (latestExportSnapshot && Array.isArray(latestExportSnapshot.moveHistory)) return latestExportSnapshot;
+  try {
+    const saved = JSON.parse(localStorage.getItem(`${currentGameKey()}-export-snapshot`) || "null");
+    if (saved && Array.isArray(saved.moveHistory)) {
+      latestExportSnapshot = saved;
+      return saved;
+    }
+    const latest = JSON.parse(localStorage.getItem("gokidcoach-web-latest-export-snapshot") || "null");
+    if (latest && Array.isArray(latest.moveHistory)) {
+      latestExportSnapshot = latest;
+      return latest;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+function exportSnapshotForCurrentAction() {
+  if (moveHistory.length || finished) return updateExportSnapshot("active", { persist: true });
+  return loadLatestExportSnapshot() || updateExportSnapshot("active_empty");
 }
 
 function snapshot() {
@@ -758,6 +1040,7 @@ function restore(state) {
 }
 
 function playMove(point, color) {
+  performanceDiagnostics.aggregate.simulateMoveCount += 1;
   if (finished || board[point.y][point.x] !== empty) return false;
 
   const boardSnapshot = cloneBoard();
@@ -796,6 +1079,7 @@ function playMove(point, color) {
 }
 
 function legalMoves(color) {
+  performanceDiagnostics.aggregate.fullBoardScanCount += 1;
   const moves = [];
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
@@ -813,7 +1097,186 @@ function groupKey(group) {
   return anchor ? `${anchor.x},${anchor.y}` : "";
 }
 
+function analyzeGroupsForMove(color) {
+  const own = collectGroups(color).map(group => {
+    const anchor = groupAnchor(group);
+    const ruleEvidence = window.GoKidCoachRuleEngine?.groupSafetyEvidence
+      ? window.GoKidCoachRuleEngine.groupSafetyEvidence(board, group, color)
+      : null;
+    const liberties = Array.from(group.liberties).map(value => {
+      const [x, y] = value.split(",").map(Number);
+      return { x, y };
+    });
+    const nearbySupport = group.stones.reduce((sum, stone) => sum + neighbors(stone).filter(next => board[next.y][next.x] === color).length, 0);
+    const nearbyPressure = group.stones.reduce((sum, stone) => sum + neighbors(stone).filter(next => board[next.y][next.x] === opponent(color)).length, 0);
+    const strategicSize = group.stones.length + liberties.length * 0.7 + nearbySupport * 0.4;
+    const tacticalRisk = Math.max(0, 4 - liberties.length) * group.stones.length + nearbyPressure;
+    const eyePotential = liberties.filter(liberty => neighbors(liberty).filter(next => board[next.y][next.x] === color).length >= 2).length;
+    const boardRegionName = anchor ? (Math.min(anchor.x, anchor.y, size - 1 - anchor.x, size - 1 - anchor.y) <= 3 ? "edge" : "center") : "unknown";
+    let classification = ruleEvidence?.classification || "stable";
+    if (!ruleEvidence) {
+      if (liberties.length <= 1 && group.stones.length >= 2) classification = "critical";
+      else if (liberties.length <= 2 && strategicSize >= 4) classification = "weak";
+      else if (liberties.length <= 3) classification = "unsettled";
+      else if (group.stones.length <= 2 && liberties.length <= 2) classification = "disposable_small_group";
+    }
+    return {
+      anchor,
+      stones: group.stones.map(stone => ({ ...stone })),
+      stoneCount: group.stones.length,
+      liberties: liberties.length,
+      libertyQuality: ruleEvidence?.libertyQuality ?? Number(liberties.length.toFixed(3)),
+      libertyPoints: liberties,
+      eyePotential: ruleEvidence?.eyePotential ?? eyePotential,
+      falseEyeRisk: ruleEvidence?.falseEyeRisk ?? 0,
+      connectionOptions: ruleEvidence?.connectionOptions ?? liberties.length,
+      cutRisk: ruleEvidence?.cutRisk ?? 0,
+      escapeOptions: ruleEvidence?.escapeRoutes ?? liberties.length,
+      nearbySupport,
+      nearbyPressure,
+      nearbyFriendlySupport: ruleEvidence?.nearbyFriendlySupport ?? nearbySupport,
+      nearbyOpponentPressure: ruleEvidence?.nearbyOpponentPressure ?? nearbyPressure,
+      surroundingEnemyStrength: ruleEvidence?.surroundingEnemyStrength ?? 0,
+      strategicSize: ruleEvidence?.strategicSize ?? Number(strategicSize.toFixed(3)),
+      tacticalRisk: ruleEvidence?.tacticalCaptureRisk ?? Number(tacticalRisk.toFixed(3)),
+      tacticalCaptureRisk: ruleEvidence?.tacticalCaptureRisk ?? Number(tacticalRisk.toFixed(3)),
+      distanceToEdge: ruleEvidence?.distanceToEdge ?? (anchor ? Math.min(anchor.x, anchor.y, size - 1 - anchor.x, size - 1 - anchor.y) : 0),
+      externalLiberties: ruleEvidence?.externalLiberties ?? liberties.length,
+      groupExtent: ruleEvidence?.groupExtent ?? group.stones.length,
+      boardRegion: boardRegionName,
+      classification
+    };
+  });
+  return own;
+}
+
+function addCandidatePoint(map, point, reason, priority, color) {
+  if (!point || point.x < 0 || point.y < 0 || point.x >= size || point.y >= size || board[point.y][point.x] !== empty) return;
+  const rule = window.GoKidCoachRuleEngine?.evaluateMove?.({ board, point, color, moveHistory, positionHashes });
+  if (rule && !rule.legal) return;
+  const key = `${point.x},${point.y}`;
+  const previous = map.get(key);
+  const sourceTags = new Set([...(previous?.sourceTags || []), reason]);
+  const urgent = /capture|rescue|critical|necessary|urgent/.test(reason) || Boolean(previous?.urgent);
+  const weakGroup = /weak_group|escape|connection_toward_support|defense/.test(reason) || Boolean(previous?.weakGroup);
+  const global = /whole_board|invasion|reduction|policy_probe|position_probe/.test(reason) || Boolean(previous?.global);
+  if (!previous || priority > previous.priority) {
+    map.set(key, {
+      point: { x: point.x, y: point.y },
+      reason,
+      priority,
+      source: reason,
+      sourceTags: Array.from(sourceTags),
+      urgent,
+      weakGroup,
+      global
+    });
+  } else {
+    previous.sourceTags = Array.from(sourceTags);
+    previous.urgent = urgent;
+    previous.weakGroup = weakGroup;
+    previous.global = global;
+  }
+}
+
+function prioritizedCandidateList(candidates, maxCount = 12) {
+  const sorted = Array.from(candidates.values())
+    .sort((a, b) => b.priority - a.priority || a.point.y - b.point.y || a.point.x - b.point.x);
+  const selected = [];
+  const used = new Set();
+  function take(predicate) {
+    const item = sorted.find(candidate => predicate(candidate) && !used.has(`${candidate.point.x},${candidate.point.y}`));
+    if (!item) return;
+    used.add(`${item.point.x},${item.point.y}`);
+    selected.push(item);
+  }
+  take(item => /capture|rescue|critical|necessary/.test(item.source));
+  take(item => /weak_group|escape|connection_toward_support|defense/.test(item.source));
+  take(item => /whole_board|invasion|reduction|policy_probe|position_probe/.test(item.source));
+  for (const item of sorted) {
+    if (selected.length >= maxCount) break;
+    const key = `${item.point.x},${item.point.y}`;
+    if (used.has(key)) continue;
+    used.add(key);
+    selected.push(item);
+  }
+  return selected.slice(0, maxCount).map(item => ({
+    ...item.point,
+    sourceTags: item.sourceTags || [item.source],
+    candidateSource: item.source,
+    urgentCandidate: Boolean(item.urgent),
+    weakGroupCandidate: Boolean(item.weakGroup),
+    globalCandidate: Boolean(item.global)
+  }));
+}
+
+function generateMiddlegameCandidateMoves(color) {
+  if (moveHistory.length <= 16) return legalMoves(color);
+  performanceDiagnostics.aggregate.fullBoardScanCount += 1;
+  const candidates = new Map();
+  const opponentColor = opponent(color);
+  const ownGroups = analyzeGroupsForMove(color);
+  const enemyGroups = collectGroups(opponentColor);
+  for (const group of enemyGroups) {
+    const liberties = Array.from(group.liberties).map(value => {
+      const [x, y] = value.split(",").map(Number);
+      return { x, y };
+    });
+    if (liberties.length === 1) addCandidatePoint(candidates, liberties[0], "immediate_profitable_capture", 1200, color);
+    else if (liberties.length === 2 && group.stones.length >= 2) liberties.forEach(point => addCandidatePoint(candidates, point, "attack_critical_opponent_group", 620, color));
+  }
+  for (const group of ownGroups) {
+    if (group.classification === "critical" || group.classification === "weak" || group.classification === "unsettled") {
+      const basePriority = group.classification === "critical"
+        ? 1180 + Math.min(180, group.stoneCount * 18)
+        : group.classification === "weak"
+          ? 790 + Math.min(120, group.stoneCount * 12)
+          : 520;
+      group.libertyPoints.forEach(point => addCandidatePoint(candidates, point, group.classification === "critical" ? "critical_own_group_defense" : "weak_group_escape_extension", basePriority, color));
+      for (const stone of group.stones) {
+        for (const next of neighbors(stone)) {
+          if (board[next.y][next.x] === empty) addCandidatePoint(candidates, next, "extension_escape_from_weak_group", Math.max(560, basePriority - 170), color);
+          if (board[next.y][next.x] === color) {
+            const support = groupAt(next);
+            for (const liberty of group.libertyPoints) addCandidatePoint(candidates, liberty, "connection_toward_support", support.liberties.size <= 3 ? Math.max(760, basePriority - 100) : 560, color);
+          }
+        }
+      }
+    }
+  }
+  for (let y = 0; y < size; y += 1) {
+    for (let x = 0; x < size; x += 1) {
+      const point = { x, y };
+      if (board[y][x] !== empty) continue;
+      const ownNear = uniqueGroupsNear(point, color);
+      const oppNear = uniqueGroupsNear(point, opponentColor);
+      if (ownNear.length >= 2 && ownNear.some(group => group.liberties.size <= 3)) addCandidatePoint(candidates, point, "strict_necessary_connection", 780, color);
+      if (oppNear.length >= 2) addCandidatePoint(candidates, point, "cut", 680, color);
+    }
+  }
+  const globalPoints = [
+    { x: 3, y: 3 }, { x: 15, y: 3 }, { x: 3, y: 15 }, { x: 15, y: 15 },
+    { x: 9, y: 3 }, { x: 9, y: 15 }, { x: 3, y: 9 }, { x: 15, y: 9 },
+    { x: 9, y: 9 }, { x: 6, y: 6 }, { x: 12, y: 12 }, { x: 6, y: 12 }, { x: 12, y: 6 }
+  ];
+  for (const point of globalPoints) {
+    const near = nearestStoneDistance(point);
+    addCandidatePoint(candidates, point, near <= 4 ? "invasion_reduction_with_support" : "large_whole_board_move", near <= 4 ? 430 : 520, color);
+  }
+  if (lastMove) {
+    for (let y = Math.max(0, lastMove.y - 3); y <= Math.min(size - 1, lastMove.y + 3); y += 1) {
+      for (let x = Math.max(0, lastMove.x - 3); x <= Math.min(size - 1, lastMove.x + 3); x += 1) {
+        if ((Math.abs(x - lastMove.x) + Math.abs(y - lastMove.y)) <= 3) {
+          addCandidatePoint(candidates, { x, y }, "policy_probe_local", 360, color);
+        }
+      }
+    }
+  }
+  return prioritizedCandidateList(candidates, 12);
+}
+
 function groupLibertyPoints(group) {
+  performanceDiagnostics.aggregate.libertyPointsCallCount += 1;
   return Array.from(group.liberties).map(value => {
     const [x, y] = value.split(",").map(Number);
     return { x, y };
@@ -950,6 +1413,7 @@ function openingBookScore(point, color) {
 }
 
 function nearestStoneDistance(point, grid = board) {
+  performanceDiagnostics.aggregate.fullBoardScanCount += 1;
   let best = Infinity;
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
@@ -1070,6 +1534,11 @@ function evaluateMoveCandidate(point, color) {
     ladderValue: Math.max(0, attacksOpponent.length >= 1 && nearestDistance <= 4 ? attacksOpponent.length : 0),
     territoryValue,
     endgameValue: moveNumber >= 120 ? Math.max(1, captures + connectedFriendlyGroups + ownLiberties) : 0,
+    sourceTags: Array.isArray(point.sourceTags) ? point.sourceTags.slice() : (point.candidateSource ? [point.candidateSource] : []),
+    candidateSource: point.candidateSource || "",
+    urgentCandidate: Boolean(point.urgentCandidate),
+    weakGroupCandidate: Boolean(point.weakGroupCandidate),
+    globalCandidate: Boolean(point.globalCandidate),
     obviousGiveaway: ruleEval.reasons?.includes("obvious_giveaway") || (ownLiberties <= 1 && captures === 0),
     isSuicide: false,
     isMeaninglessFirstLine: before.moveHistory.length < 30 && edge === 0 && captures === 0 && bookScore <= 0,
@@ -1100,17 +1569,17 @@ function evaluateMoveCandidate(point, color) {
   const confidence = Number(patternLookup?.confidence || 0);
   const shapeScore = Number(shapeLookup?.shapeScore || 0);
   const shapeConfidence = Number(shapeLookup?.confidence || 0);
-  const fusekiScore = Number(fusekiLookup?.fusekiScore || 0);
+  const fusekiScore = Number(fusekiLookup?.fusekiScore || 0) * phaseScaleForSource("fuseki", moveNumber, point);
   const fusekiConfidence = Number(fusekiLookup?.confidence || 0);
   const tacticalScore = Number(tacticalLookup?.tacticalScore || 0);
   const tacticalConfidence = Number(tacticalLookup?.confidence || 0);
-  const josekiScore = Number(josekiLookup?.josekiScore || 0);
+  const josekiScore = Number(josekiLookup?.josekiScore || 0) * phaseScaleForSource("joseki", moveNumber, point);
   const josekiConfidence = Number(josekiLookup?.confidence || 0);
   const endgameScore = Number(endgameLookup?.endgameScore || 0);
   const endgameConfidence = Number(endgameLookup?.confidence || 0);
   const safePositionScore = Number.isFinite(positionScore) ? positionScore : 0;
   const safePatternScore = Number.isFinite(patternScore) ? patternScore : 0;
-  const safeShapeScore = Number.isFinite(shapeScore) ? shapeScore : 0;
+  const safeShapeScore = Number.isFinite(shapeScore) ? shapeScore * phaseScaleForSource("shape", moveNumber, point) : 0;
   const safeFusekiScore = Number.isFinite(fusekiScore) ? fusekiScore : 0;
   const safeTacticalScore = Number.isFinite(tacticalScore) ? tacticalScore : 0;
   const safeJosekiScore = Number.isFinite(josekiScore) ? josekiScore : 0;
@@ -1122,6 +1591,12 @@ function evaluateMoveCandidate(point, color) {
   const safeJosekiConfidence = Number.isFinite(josekiConfidence) ? josekiConfidence : 0;
   const safeEndgameConfidence = Number.isFinite(endgameConfidence) ? endgameConfidence : 0;
   const detectedEndgame = endgameLookup?.detectedPattern || {};
+  const endgameClassification = positionEvaluator && typeof positionEvaluator.classifyEndgameMove === "function"
+    ? positionEvaluator.classifyEndgameMove(baseCandidate, before.board, color)
+    : {};
+  const lowValueEvidence = positionEvaluator && typeof positionEvaluator.lowValueEndgameEvidence === "function"
+    ? positionEvaluator.lowValueEndgameEvidence(before.board, baseCandidate, color, { moveNumber })
+    : {};
   const combinedScore = bookScore + (ruleEval.ruleScore || 0) + policyScore + safePatternScore + safeShapeScore + safeFusekiScore + safeTacticalScore + safeJosekiScore + safeEndgameScore + safePositionScore;
   const rawCandidate = {
     ...baseCandidate,
@@ -1134,6 +1609,11 @@ function evaluateMoveCandidate(point, color) {
     endgameScore: safeEndgameScore,
     endgameConfidence: safeEndgameConfidence,
     endgamePattern: detectedEndgame,
+    endgameCategory: endgameClassification.category || detectedEndgame.category || "",
+    dameCandidate: Boolean(endgameClassification.dame || detectedEndgame.dame),
+    redundantReinforcement: Boolean(endgameClassification.redundantReinforcement),
+    lowValueCandidate: Boolean(lowValueEvidence.eligible),
+    lowValueEvidence,
     confidence: Math.max(safeConfidence, safeShapeConfidence, safeFusekiConfidence, safeTacticalConfidence, safeJosekiConfidence, safeEndgameConfidence),
     positionScore: safePositionScore,
     combinedScore,
@@ -1142,9 +1622,13 @@ function evaluateMoveCandidate(point, color) {
       : ""
   };
   const fusion = contextFusionApi();
-  const candidate = fusion && typeof fusion.fuseCandidate === "function"
+  const fusedCandidate = fusion && typeof fusion.fuseCandidate === "function"
     ? fusion.fuseCandidate(rawCandidate, { moveNumber })
     : rawCandidate;
+  const candidate = {
+    ...fusedCandidate,
+    coherentClass: classifyCoherentCandidate(fusedCandidate)
+  };
   restore(before);
   return candidate;
 }
@@ -1154,10 +1638,10 @@ function scoreMove(point, color) {
   return candidate ? candidate.combinedScore : -Infinity;
 }
 
-function chooseLocalAIMove(moves, color = aiStoneColor()) {
-  const evaluated = moves
+function chooseLocalAIMove(moves, color = aiStoneColor(), perfRecord = null) {
+  const evaluated = measureStage(perfRecord || {}, "positionEvaluationMs", () => moves
     .map(point => evaluateMoveCandidate(point, color))
-    .filter(Boolean);
+    .filter(Boolean));
   if (!evaluated.length) return null;
 
   const difficulty = difficultyControllerApi();
@@ -1169,15 +1653,21 @@ function chooseLocalAIMove(moves, color = aiStoneColor()) {
   const positionEvaluator = positionEvaluatorApi();
   const midgameStability = midgameStabilityApi();
   const companionPlan = createCompanionPlanForCurrentChild();
-  const settings = difficulty.getDifficultySettings(studentProfile || loadStudentProfileForChild(), recentChildResults(), companionPlan);
-  const currentPositionEval = positionEvaluator && typeof positionEvaluator.evaluatePosition === "function"
-    ? positionEvaluator.evaluatePosition(board, color)
-    : null;
-  const smoothedPositionEval = midgameStability && typeof midgameStability.smoothPositionEvaluation === "function"
-    ? midgameStability.smoothPositionEvaluation(currentPositionEval, previousPositionEval)
-    : currentPositionEval;
+  const settings = applyReleaseDifficultyMode(
+    difficulty.getDifficultySettings(studentProfile || loadStudentProfileForChild(), recentChildResults(), companionPlan)
+  );
+  const currentPositionEval = measureStage(perfRecord || {}, "boardAnalysisMs", () => (
+    positionEvaluator && typeof positionEvaluator.evaluatePosition === "function"
+      ? positionEvaluator.evaluatePosition(board, color)
+      : null
+  ));
+  const smoothedPositionEval = measureStage(perfRecord || {}, "weakGroupAnalysisMs", () => (
+    midgameStability && typeof midgameStability.smoothPositionEvaluation === "function"
+      ? midgameStability.smoothPositionEvaluation(currentPositionEval, previousPositionEval)
+      : currentPositionEval
+  ));
   const fusion = contextFusionApi();
-  const stabilized = evaluated.map(candidate => {
+  const stabilized = measureStage(perfRecord || {}, "contextFusionMs", () => evaluated.map(candidate => {
     const midgameScore = midgameStability && typeof midgameStability.scoreMidgameMove === "function"
       ? Number(midgameStability.scoreMidgameMove(candidate, board, { positionEval: smoothedPositionEval }))
       : 0;
@@ -1199,8 +1689,42 @@ function chooseLocalAIMove(moves, color = aiStoneColor()) {
         aiCalibrationLevel: settings?.suggestedAiStrength
       })
       : prepared;
-  });
-  const adjusted = difficulty.adjustMoveCandidates(stabilized, settings);
+  }));
+  const ruleEngine = window.GoKidCoachRuleEngine;
+  const verificationResult = measureStage(perfRecord || {}, "localReadingMs", () => (
+    ruleEngine && typeof ruleEngine.applyShallowTacticalVerification === "function"
+      ? ruleEngine.applyShallowTacticalVerification(stabilized, board, color, {
+      positionHashes,
+      moveNumber: moveHistory.length,
+      normalMaxCandidates: 12,
+      absoluteMaxCandidates: 16,
+      maxReplies: 5,
+      timeBudgetMs: 80
+      })
+      : { candidates: stabilized, diagnostics: null }
+  ));
+  const shallowCandidates = verificationResult.candidates || stabilized;
+  const localReadingResult = measureStage(perfRecord || {}, "localReadingMs", () => (
+    ruleEngine && typeof ruleEngine.applyLocalReading === "function"
+      ? ruleEngine.applyLocalReading(shallowCandidates, board, color, {
+        positionHashes,
+        moveNumber: moveHistory.length,
+        maxDepth: 3,
+        maxCandidates: 8,
+        maxOpponentReplies: 4,
+        maxAiContinuations: 3,
+        localRadius: 4,
+        regionCap: 48,
+        timeBudgetMs: 120
+      })
+      : { candidates: shallowCandidates, diagnostics: null }
+  ));
+  if (perfRecord && localReadingResult?.diagnostics) perfRecord.candidatesRead = localReadingResult.diagnostics.candidatesRead || perfRecord.candidatesRead || 0;
+  const verifiedCandidates = (localReadingResult.candidates || shallowCandidates).map(candidate => ({
+    ...candidate,
+    coherentClass: classifyCoherentCandidate(candidate)
+  }));
+  const adjusted = measureStage(perfRecord || {}, "candidateSortingMs", () => difficulty.adjustMoveCandidates(verifiedCandidates, settings));
   const moveQualityContext = {
     companionState,
     recentMoveAssessments: companionState?.moveAssessments || [],
@@ -1209,12 +1733,16 @@ function chooseLocalAIMove(moves, color = aiStoneColor()) {
     positionEval: smoothedPositionEval,
     moveNumber: moveHistory.length
   };
-  const ranked = moveQuality && typeof moveQuality.rankCandidates === "function"
-    ? moveQuality.rankCandidates(adjusted, moveQualityContext)
-    : { ranked: adjusted, groups: {}, context: moveQualityContext };
-  const preferred = moveQuality && typeof moveQuality.chooseMoveByQuality === "function"
-    ? moveQuality.chooseMoveByQuality(ranked, moveQualityContext)
-    : difficulty.chooseAdaptiveMove(ranked.ranked || adjusted, settings);
+  const ranked = measureStage(perfRecord || {}, "candidateSortingMs", () => (
+    moveQuality && typeof moveQuality.rankCandidates === "function"
+      ? moveQuality.rankCandidates(adjusted, moveQualityContext)
+      : { ranked: adjusted, groups: {}, context: moveQualityContext }
+  ));
+  const preferred = measureStage(perfRecord || {}, "finalSelectionMs", () => (
+    moveQuality && typeof moveQuality.chooseMoveByQuality === "function"
+      ? moveQuality.chooseMoveByQuality(ranked, moveQualityContext)
+      : difficulty.chooseAdaptiveMove(ranked.ranked || adjusted, settings)
+  ));
   const choice = preferred
     || ranked.ranked?.[0]
     || adjusted[0]
@@ -1305,7 +1833,7 @@ function parseMoveText(text) {
 }
 
 function aiMove() {
-  if (finished) return;
+  if (finished || !checkBuildConsistency()) return;
   const aiColor = aiStoneColor();
   thinking.classList.remove("hidden");
   updateStatus(t("thinking"));
@@ -1313,29 +1841,66 @@ function aiMove() {
 
   aiTimer = window.setTimeout(async () => {
     aiTimer = null;
-    const moves = legalMoves(aiColor);
+    const counterStart = { ...performanceDiagnostics.aggregate };
+    const perfRecord = {
+      moveNumber: moveHistory.length + 1,
+      phase: moveHistory.length <= 16 ? "opening" : moveHistory.length <= 35 ? "transition" : moveHistory.length < 200 ? "middlegame" : "late_game",
+      legalPointCount: board.flat().filter(value => value === empty).length,
+      rawCandidateCount: 0,
+      deduplicatedCandidateCount: 0,
+      candidatesRead: 0,
+      boardCopyCount: 0,
+      simulateMoveCount: 0,
+      groupAtCallCount: 0,
+      libertyPointsCallCount: 0,
+      fullBoardScanCount: 0,
+      JSONSerializeCount: 0,
+      persistencePayloadBytes: 0,
+      diagnosticEntryCount: performanceDiagnostics.moveStages.length,
+      estimatedMemoryBytes: 0
+    };
+    const moves = measureStage(perfRecord, "candidateGenerationMs", () => generateMiddlegameCandidateMoves(aiColor));
+    perfRecord.rawCandidateCount = moves.length;
+    perfRecord.deduplicatedCandidateCount = new Set(moves.map(point => `${point.x},${point.y}`)).size;
     if (!moves.length) {
       thinking.classList.add("hidden");
       pass();
       return;
     }
 
-    const remoteMove = await requestRemoteAIMove();
-    if (remoteMove && moves.some(item => item.x === remoteMove.x && item.y === remoteMove.y)) {
+    const remoteMove = await measureStage(perfRecord, "diagnosticsMs", () => requestRemoteAIMove());
+    const remoteLegal = remoteMove && window.GoKidCoachRuleEngine?.evaluateMove?.({ board, point: remoteMove, color: aiColor, moveHistory, positionHashes })?.legal;
+    if (remoteMove && remoteLegal) {
       undoStack.push(snapshot());
       playMove(remoteMove, aiColor);
       aiThinkTimes.push((typeof performance !== "undefined" && performance.now ? performance.now() : Date.now()) - started);
+      updateExportSnapshot("active");
+      measureStage(perfRecord, "persistenceMs", () => saveCurrentGame());
       thinking.classList.add("hidden");
-      update();
+      measureStage(perfRecord, "renderingMs", () => update());
+      perfRecord.totalAiThinkTimeMs = Math.max(0, nowMs() - started);
+      for (const key of ["boardCopyCount", "simulateMoveCount", "groupAtCallCount", "libertyPointsCallCount", "fullBoardScanCount", "JSONSerializeCount", "persistencePayloadBytes"]) {
+        perfRecord[key] = Math.max(0, Number(performanceDiagnostics.aggregate[key] || 0) - Number(counterStart[key] || 0));
+      }
+      perfRecord.estimatedMemoryBytes = estimateBytes({ moveHistory, undoStack, diagnostics: performanceDiagnostics.moveStages });
+      recordMovePerformance(perfRecord);
       return;
     }
 
-    const choice = chooseLocalAIMove(moves, aiColor) || moves[0];
+    const choice = chooseLocalAIMove(moves, aiColor, perfRecord) || moves[0];
     undoStack.push(snapshot());
     playMove(choice, aiColor);
     aiThinkTimes.push((typeof performance !== "undefined" && performance.now ? performance.now() : Date.now()) - started);
+    updateExportSnapshot("active");
+    measureStage(perfRecord, "persistenceMs", () => saveCurrentGame());
     thinking.classList.add("hidden");
-    update();
+    measureStage(perfRecord, "renderingMs", () => update());
+    perfRecord.totalAiThinkTimeMs = Math.max(0, nowMs() - started);
+    for (const key of ["boardCopyCount", "simulateMoveCount", "groupAtCallCount", "libertyPointsCallCount", "fullBoardScanCount", "JSONSerializeCount", "persistencePayloadBytes"]) {
+      perfRecord[key] = Math.max(0, Number(performanceDiagnostics.aggregate[key] || 0) - Number(counterStart[key] || 0));
+    }
+    perfRecord.estimatedMemoryBytes = estimateBytes({ moveHistory, undoStack, diagnostics: performanceDiagnostics.moveStages });
+    recordMovePerformance(perfRecord);
   }, 350);
 }
 
@@ -1514,12 +2079,14 @@ function clamp(value, min, max) {
 }
 
 function pass() {
-  if (finished) return;
+  if (finished || !checkBuildConsistency()) return;
   undoStack.push(snapshot());
   moveHistory.push({ pass: true, color: turn, captures: 0 });
   positionHashes.push(boardHash());
   consecutivePasses += 1;
   turn = opponent(turn);
+  updateExportSnapshot("active");
+  saveCurrentGame();
   if (consecutivePasses >= 2) {
     showEndConfirm();
     return;
@@ -1545,7 +2112,11 @@ function undoMove() {
 }
 
 function newGame() {
-  if (!finished && moveHistory.length > 0) saveGameDiagnostic("abandoned", null);
+  if (!checkBuildConsistency()) return;
+  if (!finished && moveHistory.length > 0) {
+    preserveExportSnapshot("abandoned");
+    saveGameDiagnostic("abandoned", null);
+  }
   size = fixedBoardSize;
   profile.boardSize = fixedBoardSize;
   board = freshBoard();
@@ -1568,6 +2139,7 @@ function newGame() {
   companionState = createCompanionStateForChild();
   currentCompanionPlan = createCompanionPlanForCurrentChild();
   currentMoveQualityPlan = null;
+  latestExportSnapshot = null;
   previousPositionEval = null;
   lastAdaptiveSummary = null;
   if (aiTimer) {
@@ -1586,6 +2158,7 @@ function newGame() {
 function continueLastGame() {
   if (loadCurrentGame()) {
     saveProfile();
+    saveCurrentGame();
     update();
     if (!finished && turn === aiStoneColor()) aiMove();
   } else {
@@ -1808,13 +2381,21 @@ function updateCompanionResultFromGame(result, analysis) {
 function saveGameDiagnostic(status, result = null) {
   const product = productSupportApi();
   if (!product || typeof product.diagnosticSummary !== "function") return null;
+  const exportSnapshot = status === "abandoned" || status === "completed"
+    ? preserveExportSnapshot(status)
+    : exportSnapshotForCurrentAction();
+  const sgf = buildSGF(exportSnapshot);
+  const integrity = product.exportIntegrity && window.GoKidCoachRuleEngine
+    ? product.exportIntegrity(exportSnapshot, sgf, window.GoKidCoachRuleEngine.simulateMove)
+    : {};
   const summary = product.diagnosticSummary({
     gameId: currentGameId,
     childColor: profile.childColor || "black",
     result: result ? (result.childWon ? "childWin" : "aiWin") : status,
     completed: status === "completed",
     abandoned: status === "abandoned",
-    moveCount: moveHistory.length,
+    moveCount: exportSnapshot.actualMoveCount,
+    ...integrity,
     difficultyMode: profile.difficultyMode || "adaptive",
     difficultyStart: profile.initialAiLevel,
     difficultyEnd: profile.aiLevel,
@@ -1829,21 +2410,31 @@ function saveGameDiagnostic(status, result = null) {
 }
 
 function exportDebugSummary() {
+  const snapshot = exportSnapshotForCurrentAction();
+  const sgf = buildSGF(snapshot);
+  const product = productSupportApi();
+  const integrity = product?.exportIntegrity && window.GoKidCoachRuleEngine
+    ? product.exportIntegrity(snapshot, sgf, window.GoKidCoachRuleEngine.simulateMove)
+    : {};
   const summary = saveGameDiagnostic(finished ? "completed" : "abandoned", finished ? estimateWinner() : null);
+  const info = buildInfo();
   const payload = {
     app: "GoKidCoachWeb",
-    appVersion: productSupportApi()?.appVersion || "1.0.0-rc1",
-    engineVersion: productSupportApi()?.engineVersion || "baseline-v3.6-frozen",
-    summary,
-    sgf: buildSGF(),
-    moveDiagnostics: moveHistory.map((move, index) => ({
+    appVersion: info.appVersion,
+    engineVersion: info.engineVersion,
+    productVersion: info.productVersion,
+    buildId: info.buildId,
+    summary: { ...summary, ...integrity },
+    sgf,
+    ...integrity,
+    moveDiagnostics: snapshot.moveHistory.map((move, index) => ({
       index: index + 1,
       color: colorName(move.color),
       pass: Boolean(move.pass),
       move: move.pass ? "pass" : coordinateName(move),
       captures: move.captures || 0
     })),
-    shallowTacticalVerifierActive: false
+    shallowTacticalVerifierActive: true
   };
   productSupportApi()?.saveDebugExport?.({ gameId: currentGameId, payload }).catch(() => {});
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" });
@@ -1920,6 +2511,7 @@ function explainPosition() {
 }
 
 function collectGroups(color) {
+  performanceDiagnostics.aggregate.fullBoardScanCount += 1;
   const groups = [];
   const seen = new Set();
   for (let y = 0; y < size; y++) {
@@ -1952,7 +2544,8 @@ function sgfCoord(value) {
   return "abcdefghijklmnopqrstuvwxyz"[value];
 }
 
-function buildSGF() {
+function buildSGF(snapshot = null) {
+  const exportSnapshot = snapshot && Array.isArray(snapshot.moveHistory) ? snapshot : exportSnapshotForCurrentAction();
   const result = finished ? estimateWinner() : null;
   const resultText = result
     ? result.childWon
@@ -1964,21 +2557,23 @@ function buildSGF() {
     return product.buildSGF({
       size,
       komi,
-      moveHistory,
+      moveHistory: exportSnapshot.moveHistory,
       childName: profile.name || t("child"),
       childColor: childStoneColor(),
       resultText,
       difficultyMode: profile.difficultyMode || "adaptive",
       difficultyStart: profile.initialAiLevel,
-      difficultyEnd: profile.aiLevel
+      difficultyEnd: profile.aiLevel,
+      buildId: exportSnapshot.buildId || buildInfo().buildId
     });
   }
-  const moves = moveHistory.map(item => item.pass ? `;${colorName(item.color)}[]` : `;${colorName(item.color)}[${sgfCoord(item.x)}${sgfCoord(item.y)}]`).join("");
+  const moves = exportSnapshot.moveHistory.map(item => item.pass ? `;${colorName(item.color)}[]` : `;${colorName(item.color)}[${sgfCoord(item.x)}${sgfCoord(item.y)}]`).join("");
   return `(;GM[1]FF[4]CA[UTF-8]AP[GoKidCoachWeb]SZ[${size}]KM[${komi}]PB[${profile.name || t("child")}]PW[AI]RE[${resultText}]${moves})`;
 }
 
 function exportSGF() {
-  const blob = new Blob([buildSGF()], { type: "application/x-go-sgf;charset=utf-8" });
+  const snapshot = exportSnapshotForCurrentAction();
+  const blob = new Blob([buildSGF(snapshot)], { type: "application/x-go-sgf;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   const date = new Date().toISOString().slice(0, 10);
@@ -2177,7 +2772,6 @@ function setInterfaceMode(mode) {
 }
 
 function update() {
-  saveCurrentGame();
   const stage = learningStage();
   profile.stage = stage.key;
   applyLanguage();
@@ -2455,7 +3049,7 @@ function drawStone(x, y, radius, color) {
 
 canvas.addEventListener("pointerdown", event => {
   const childColor = childStoneColor();
-  if (turn !== childColor || finished) return;
+  if (turn !== childColor || finished || !checkBuildConsistency()) return;
   const rect = canvas.getBoundingClientRect();
   const px = (event.clientX - rect.left) / rect.width * canvas.width;
   const py = (event.clientY - rect.top) / rect.height * canvas.height;
@@ -2470,6 +3064,8 @@ canvas.addEventListener("pointerdown", event => {
   undoStack.push(snapshot());
   if (playMove({ x, y }, childColor)) {
     observeChildMove({ x, y }, childCandidates);
+    updateExportSnapshot("active");
+    saveCurrentGame();
     update();
     aiMove();
   } else {
@@ -2568,6 +3164,22 @@ document.getElementById("resetBtn").addEventListener("click", () => {
   newGame();
 });
 window.addEventListener("resize", drawBoard);
+
+window.GoKidCoachPerformanceDiagnostics = {
+  caps: {
+    detailedMoveDiagnostics: detailedMoveDiagnosticCap,
+    detailedCandidateDiagnostics: detailedCandidateDiagnosticCap,
+    rawStageTimings: rawStageTimingCap
+  },
+  snapshot() {
+    return {
+      lastMove: performanceDiagnostics.lastMove ? { ...performanceDiagnostics.lastMove } : null,
+      aggregate: { ...performanceDiagnostics.aggregate },
+      moveStages: performanceDiagnostics.moveStages.map(item => ({ ...item })),
+      candidateDiagnostics: performanceDiagnostics.candidateDiagnostics.map(item => ({ ...item }))
+    };
+  }
+};
 
 if (new URLSearchParams(window.location.search).get("demo") === "1") {
   setupDemoPosition();

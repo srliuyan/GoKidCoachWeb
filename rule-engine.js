@@ -90,6 +90,88 @@
     });
   }
 
+  function createAnalysisContext(board, options = {}) {
+    const hash = boardHash(board);
+    const limits = {
+      maxGroups: Number(options.maxGroups) || 160,
+      maxSimulations: Number(options.maxSimulations) || 80,
+      maxComponentScores: Number(options.maxComponentScores) || 80
+    };
+    const context = {
+      boardHash: hash,
+      groupMap: new Map(),
+      groupInfo: new Map(),
+      libertyMap: new Map(),
+      legalMoveResults: new Map(),
+      simulationResults: new Map(),
+      ownershipEstimate: null,
+      weakGroupClassifications: new Map(),
+      localPatternResults: new Map(),
+      componentScores: new Map(),
+      candidateScores: new Map(),
+      counters: {
+        groupAtCallCount: 0,
+        libertyPointsCallCount: 0,
+        simulateMoveCount: 0,
+        fullBoardScanCount: 0
+      },
+      valid: true,
+      limits
+    };
+    context.invalidate = () => {
+      context.valid = false;
+      context.groupMap.clear();
+      context.groupInfo.clear();
+      context.libertyMap.clear();
+      context.legalMoveResults.clear();
+      context.simulationResults.clear();
+      context.weakGroupClassifications.clear();
+      context.localPatternResults.clear();
+      context.componentScores.clear();
+      context.candidateScores.clear();
+    };
+    return context;
+  }
+
+  function contextMatches(context, board) {
+    return Boolean(context?.valid && context.boardHash === boardHash(board));
+  }
+
+  function cachedGroupAt(board, start, context) {
+    if (!contextMatches(context, board)) return groupAt(board, start);
+    const key = pointKey(start);
+    const cachedKey = context.groupMap.get(key);
+    if (cachedKey && context.groupInfo.has(cachedKey)) return context.groupInfo.get(cachedKey);
+    context.counters.groupAtCallCount += 1;
+    const group = groupAt(board, start);
+    const groupKey = groupSignature(group) || key;
+    if (context.groupInfo.size < context.limits.maxGroups) {
+      context.groupInfo.set(groupKey, group);
+      for (const stone of group.stones) context.groupMap.set(pointKey(stone), groupKey);
+    }
+    return group;
+  }
+
+  function cachedLibertyPoints(group, context) {
+    if (!context?.valid) return libertyPoints(group);
+    const key = groupSignature(group);
+    if (key && context.libertyMap.has(key)) return context.libertyMap.get(key);
+    context.counters.libertyPointsCallCount += 1;
+    const liberties = libertyPoints(group);
+    if (key && context.libertyMap.size < context.limits.maxGroups) context.libertyMap.set(key, liberties);
+    return liberties;
+  }
+
+  function cachedSimulateMove(board, point, color, positionHashes, context) {
+    if (!contextMatches(context, board)) return simulateMove(board, point, color, positionHashes);
+    const key = `${pointKey(point)}:${color}:${Array.isArray(positionHashes) ? positionHashes.length : 0}`;
+    if (context.simulationResults.has(key)) return context.simulationResults.get(key);
+    context.counters.simulateMoveCount += 1;
+    const result = simulateMove(board, point, color, positionHashes);
+    if (context.simulationResults.size < context.limits.maxSimulations) context.simulationResults.set(key, result);
+    return result;
+  }
+
   function simulateMove(board, point, color, positionHashes) {
     const size = board.length;
     if (point.x < 0 || point.y < 0 || point.x >= size || point.y >= size) {
@@ -136,12 +218,94 @@
     return a && b && a.x === b.x && a.y === b.y;
   }
 
+  function groupSignature(group) {
+    return (group?.stones || []).map(pointKey).sort().join(";");
+  }
+
+  function groupsIntersect(a, b) {
+    const stones = new Set((a?.stones || []).map(pointKey));
+    return (b?.stones || []).some(stone => stones.has(pointKey(stone)));
+  }
+
+  function groupStillPresent(board, group, color) {
+    return (group?.stones || []).some(stone => board[stone.y]?.[stone.x] === color);
+  }
+
+  function groupContainingAny(board, group, color) {
+    for (const stone of group?.stones || []) {
+      if (board[stone.y]?.[stone.x] === color) return groupAt(board, stone);
+    }
+    return null;
+  }
+
   function groupContains(group, point) {
     return Boolean(group?.stones?.some(stone => samePoint(stone, point)));
   }
 
   function stableGroup(group) {
     return Boolean(group && (group.liberties.size >= 4 || (group.liberties.size >= 3 && group.stones.length >= 4)));
+  }
+
+  function groupSafetyEvidence(board, group, color) {
+    const stones = group?.stones || [];
+    const liberties = libertyPoints(group || { liberties: new Set() });
+    const stoneCount = stones.length;
+    const libertyQuality = liberties.reduce((sum, liberty) => {
+      const adjacent = neighbors(liberty, board.length);
+      const friendly = adjacent.filter(point => board[point.y][point.x] === color).length;
+      const enemy = adjacent.filter(point => board[point.y][point.x] === opponent(color)).length;
+      return sum + Math.max(0, 1 + friendly * 0.45 - enemy * 0.65);
+    }, 0);
+    const nearbyFriendlySupport = stones.reduce((sum, stone) => sum + neighbors(stone, board.length).filter(point => board[point.y][point.x] === color).length, 0);
+    const nearbyOpponentPressure = stones.reduce((sum, stone) => sum + neighbors(stone, board.length).filter(point => board[point.y][point.x] === opponent(color)).length, 0);
+    const eyePotential = liberties.filter(liberty => neighbors(liberty, board.length).filter(point => board[point.y][point.x] === color).length >= 2).length;
+    const falseEyeRisk = liberties.filter(liberty => neighbors(liberty, board.length).filter(point => board[point.y][point.x] === opponent(color)).length >= 2).length;
+    const connectionOptions = liberties.filter(liberty => adjacentGroups(board, liberty, color).length >= 1).length;
+    const cutRisk = stones.reduce((sum, stone) => sum + neighbors(stone, board.length).filter(point => {
+      if (board[point.y][point.x] !== empty) return false;
+      return adjacentGroups(board, point, opponent(color)).length >= 2;
+    }).length, 0);
+    const escapeRoutes = liberties.filter(liberty => {
+      const adjacent = neighbors(liberty, board.length);
+      return adjacent.some(point => board[point.y][point.x] === empty) || adjacent.some(point => board[point.y][point.x] === color);
+    }).length;
+    const surroundingEnemyStrength = stones.reduce((sum, stone) => sum + neighbors(stone, board.length).reduce((inner, point) => {
+      if (board[point.y][point.x] !== opponent(color)) return inner;
+      return inner + groupAt(board, point).liberties.size;
+    }, 0), 0);
+    const distanceToEdge = stones.length
+      ? Math.min(...stones.map(stone => Math.min(stone.x, stone.y, board.length - 1 - stone.x, board.length - 1 - stone.y)))
+      : 0;
+    const xs = stones.map(stone => stone.x);
+    const ys = stones.map(stone => stone.y);
+    const groupExtent = stones.length ? (Math.max(...xs) - Math.min(...xs) + 1) * (Math.max(...ys) - Math.min(...ys) + 1) : 0;
+    const externalLiberties = liberties.filter(liberty => neighbors(liberty, board.length).some(point => board[point.y][point.x] === empty)).length;
+    const strategicSize = stoneCount * 1.4 + Math.min(8, liberties.length) * 0.8 + connectionOptions * 0.9 + escapeRoutes * 0.7;
+    const tacticalCaptureRisk = Math.max(0, 3 - liberties.length) * Math.max(1, stoneCount) + nearbyOpponentPressure + cutRisk * 0.7 + falseEyeRisk * 1.4;
+    let classification = "unsettled";
+    if (stoneCount <= 2 && liberties.length <= 2 && strategicSize < 5 && nearbyFriendlySupport <= 1) classification = "disposable_small_group";
+    else if ((liberties.length <= 1 && (stoneCount >= 2 || tacticalCaptureRisk >= 4)) || (stoneCount >= 4 && tacticalCaptureRisk >= strategicSize)) classification = "critical";
+    else if (libertyQuality < 2.2 || (liberties.length <= 3 && nearbyOpponentPressure > nearbyFriendlySupport) || falseEyeRisk > eyePotential) classification = "weak";
+    else if (liberties.length >= 5 || eyePotential >= 2 || (nearbyFriendlySupport >= nearbyOpponentPressure + 2 && escapeRoutes >= 2)) classification = "stable";
+    return {
+      stoneCount,
+      liberties: liberties.length,
+      libertyQuality: Number(libertyQuality.toFixed(3)),
+      eyePotential,
+      falseEyeRisk,
+      connectionOptions,
+      cutRisk,
+      escapeRoutes,
+      nearbyFriendlySupport,
+      nearbyOpponentPressure,
+      surroundingEnemyStrength,
+      strategicSize: Number(strategicSize.toFixed(3)),
+      tacticalCaptureRisk: Number(tacticalCaptureRisk.toFixed(3)),
+      distanceToEdge,
+      externalLiberties,
+      groupExtent,
+      classification
+    };
   }
 
   function simulateMoveDetailed(board, move, color, context = {}) {
@@ -191,7 +355,7 @@
     };
   }
 
-  function directOpponentReplies(boardAfter, point, color, simulation, limit = 5) {
+  function directOpponentReplies(boardAfter, point, color, simulation, limit = 5, context = {}) {
     if (!simulation?.legal) return [];
     const replyColor = opponent(color);
     const candidates = new Map();
@@ -205,24 +369,369 @@
       }
     }
 
-    for (const liberty of libertyPoints(simulation.ownGroupAfter || simulation.ownGroup || { liberties: new Set() })) {
-      add(liberty, "immediate_recapture", 100);
+    const affectedOwn = simulation.ownGroupAfter || simulation.ownGroup || { liberties: new Set(), stones: [] };
+    for (const liberty of libertyPoints(affectedOwn)) {
+      add(liberty, "direct_capture", 150);
+    }
+    for (const captured of simulation.capturedStones || []) {
+      for (const next of neighbors(captured, boardAfter.length)) {
+        if (boardAfter[next.y][next.x] === empty) add(next, "recapture", 142);
+      }
+    }
+    const anchors = [
+      point,
+      ...(simulation.capturedStones || []),
+      ...(affectedOwn.stones || []),
+      ...((context.affectedOwnBefore || []).flatMap(group => group.stones || []))
+    ];
+    const region = localRegionPoints(boardAfter, anchors, Number(context.localRadius) || 4, Number(context.regionCap) || 48);
+    const regionKeys = new Set(region.map(pointKey));
+    for (const group of allGroups(boardAfter, color)) {
+      if (!group.stones.some(stone => regionKeys.has(pointKey(stone)))) continue;
+      if (group.liberties.size <= 2) {
+        for (const liberty of libertyPoints(group)) add(liberty, group.liberties.size === 1 ? "capture_atari_group" : "atari", group.liberties.size === 1 ? 148 : 124);
+      }
     }
     for (const next of neighbors(point, boardAfter.length)) {
-      if (boardAfter[next.y][next.x] === empty) add(next, "local_atari", 70);
+      if (boardAfter[next.y][next.x] === empty) add(next, "local_forcing_reply", 42);
       if (boardAfter[next.y][next.x] === color) {
         const group = groupAt(boardAfter, next);
-        for (const liberty of libertyPoints(group)) add(liberty, "capture_or_cut", group.liberties.size <= 2 ? 90 : 45);
+        for (const liberty of libertyPoints(group)) add(liberty, group.liberties.size <= 2 ? "critical_liberty" : "local_forcing_reply", group.liberties.size <= 2 ? 118 : 40);
       }
       if (boardAfter[next.y][next.x] === replyColor) {
         const group = groupAt(boardAfter, next);
-        for (const liberty of libertyPoints(group)) add(liberty, "extension_from_atari", group.liberties.size <= 1 ? 80 : 35);
+        for (const liberty of libertyPoints(group)) add(liberty, group.liberties.size <= 1 ? "rescue_refutation" : "local_forcing_reply", group.liberties.size <= 1 ? 108 : 35);
+      }
+    }
+    for (const group of context.affectedOwnBefore || []) {
+      const after = groupContainingAny(boardAfter, group, color);
+      if (!after || after.liberties.size > 3) continue;
+      for (const liberty of libertyPoints(after)) add(liberty, "rescue_refutation", after.liberties.size <= 2 ? 118 : 80);
+    }
+    if ((context.affectedOwnBefore || []).length >= 2) {
+      for (const liberty of libertyPoints(affectedOwn)) add(liberty, "connection_cut", 118);
+      for (const next of neighbors(point, boardAfter.length)) {
+        if (boardAfter[next.y][next.x] === empty) add(next, "connection_cut", 122);
       }
     }
 
     return Array.from(candidates.values())
       .sort((a, b) => b.priority - a.priority || b.captures - a.captures || a.point.y - b.point.y || a.point.x - b.point.x)
       .slice(0, limit);
+  }
+
+  function localRegionPoints(board, anchors, radius = 4, cap = 48) {
+    const points = new Map();
+    function add(point, priority = 0) {
+      if (!point) return;
+      if (point.x < 0 || point.y < 0 || point.x >= board.length || point.y >= board.length) return;
+      const key = pointKey(point);
+      const previous = points.get(key);
+      if (!previous || priority > previous.priority) points.set(key, { point: { x: point.x, y: point.y }, priority });
+    }
+    for (const anchor of anchors.filter(Boolean)) {
+      add(anchor, 100);
+      for (let y = Math.max(0, anchor.y - radius); y <= Math.min(board.length - 1, anchor.y + radius); y += 1) {
+        for (let x = Math.max(0, anchor.x - radius); x <= Math.min(board.length - 1, anchor.x + radius); x += 1) {
+          const distance = Math.abs(anchor.x - x) + Math.abs(anchor.y - y);
+          if (distance <= radius) add({ x, y }, radius - distance);
+        }
+      }
+    }
+    return Array.from(points.values())
+      .sort((a, b) => b.priority - a.priority || a.point.y - b.point.y || a.point.x - b.point.x)
+      .slice(0, cap)
+      .map(item => item.point);
+  }
+
+  function localTacticalMoves(board, color, anchors, context = {}, limit = 6) {
+    const region = localRegionPoints(board, anchors, Number(context.localRadius) || 4, Number(context.regionCap) || 48);
+    const moves = new Map();
+    function add(point, reason, priority) {
+      const result = simulateMove(board, point, color, context.positionHashes || []);
+      if (!result.legal) return;
+      const key = pointKey(point);
+      const previous = moves.get(key);
+      const ownBefore = adjacentGroups(board, point, color);
+      const oppBefore = adjacentGroups(board, point, opponent(color));
+      const atariRescue = ownBefore.some(group => group.liberties.size <= 1 && group.liberties.has(key));
+      const connection = ownBefore.length >= 2;
+      const cut = oppBefore.length >= 2;
+      const tacticalPriority = priority
+        + result.captures * 80
+        + (atariRescue ? 70 : 0)
+        + (connection ? 42 : 0)
+        + (cut ? 36 : 0)
+        + Math.max(0, 4 - result.ownGroup.liberties.size) * -8;
+      if (!previous || tacticalPriority > previous.priority) {
+        moves.set(key, {
+          point: { x: point.x, y: point.y },
+          reason: context.continuationMode ? continuationReason(reason, result, ownBefore, oppBefore) : reason,
+          priority: tacticalPriority,
+          captures: result.captures,
+          ownLibertiesAfter: result.ownGroup.liberties.size,
+          atariRescue,
+          connection,
+          cut
+        });
+      }
+    }
+
+    for (const point of region) {
+      if (board[point.y][point.x] !== empty) continue;
+      const own = adjacentGroups(board, point, color);
+      const opp = adjacentGroups(board, point, opponent(color));
+      const nearTactical = own.some(group => group.liberties.size <= 2)
+        || opp.some(group => group.liberties.size <= 2)
+        || own.length >= 2
+        || opp.length >= 2;
+      if (!nearTactical) continue;
+      add(point, "local_tactical", 10);
+    }
+
+    for (const group of allGroups(board, opponent(color))) {
+      if (group.liberties.size > 2) continue;
+      if (!group.stones.some(stone => region.some(point => point.x === stone.x && point.y === stone.y))) continue;
+      for (const liberty of libertyPoints(group)) add(liberty, group.liberties.size === 1 ? "counter_capture" : "liberty_gain", group.liberties.size === 1 ? 120 : 80);
+    }
+    for (const group of allGroups(board, color)) {
+      if (group.liberties.size > 2) continue;
+      if (!group.stones.some(stone => region.some(point => point.x === stone.x && point.y === stone.y))) continue;
+      for (const liberty of libertyPoints(group)) add(liberty, group.liberties.size === 1 ? "escape" : "stabilization", group.liberties.size === 1 ? 110 : 70);
+    }
+
+    return Array.from(moves.values())
+      .sort((a, b) => b.priority - a.priority || b.captures - a.captures || a.point.y - b.point.y || a.point.x - b.point.x)
+      .slice(0, limit);
+  }
+
+  function continuationReason(reason, result, ownBefore, oppBefore) {
+    if (result.captures > 0) return oppBefore.some(group => group.liberties.size <= 1) ? "recapture" : "counter_capture";
+    if (ownBefore.some(group => group.liberties.size <= 1)) return "rescue_completion";
+    if (result.ownGroup.liberties.size > 2 && ownBefore.some(group => group.liberties.size <= 2)) return "escape";
+    if (ownBefore.length >= 2) return "reconnect";
+    if (result.ownGroup.liberties.size >= 3) return "liberty_gain";
+    return reason === "local_tactical" ? "stabilization" : reason;
+  }
+
+  function localOutcome(boardBefore, boardAfter, point, color) {
+    const beforeOwn = adjacentGroups(boardBefore, point, color);
+    const beforeOpp = adjacentGroups(boardBefore, point, opponent(color));
+    const afterOwn = adjacentGroups(boardAfter, point, color);
+    const ownAfterGroup = boardAfter[point.y]?.[point.x] === color ? groupAt(boardAfter, point) : null;
+    const minOwnBefore = beforeOwn.length ? Math.min(...beforeOwn.map(group => group.liberties.size)) : 0;
+    const minOwnAfter = ownAfterGroup ? ownAfterGroup.liberties.size : afterOwn.length ? Math.min(...afterOwn.map(group => group.liberties.size)) : 0;
+    return {
+      libertyDelta: minOwnAfter - minOwnBefore,
+      ownStonesBefore: beforeOwn.reduce((sum, group) => sum + group.stones.length, 0),
+      opponentStonesBefore: beforeOpp.reduce((sum, group) => sum + group.stones.length, 0),
+      ownGroupAfter: ownAfterGroup,
+      ownUnsafeAfter: ownAfterGroup ? ownAfterGroup.liberties.size <= 1 : false,
+      connectedBefore: beforeOwn.length,
+      connectedAfter: ownAfterGroup ? ownAfterGroup.stones.length : 0
+    };
+  }
+
+  function evaluateLocalSequence(board, move, player, context = {}) {
+    const started = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
+    const point = move?.point || move;
+    const depthLimit = Math.min(3, Math.max(1, Number(context.maxDepth) || 3));
+    const base = {
+      legal: false,
+      candidateMove: point ? { x: point.x, y: point.y } : null,
+      opponentBestReply: null,
+      aiBestContinuation: null,
+      sequence: [],
+      sequenceDepth: 0,
+      captureDelta: 0,
+      libertyDelta: 0,
+      groupSafetyDelta: 0,
+      connectionResult: "unresolved",
+      cutResult: "unresolved",
+      selfAtariRisk: false,
+      koResult: null,
+      netLocalValue: 0,
+      confidence: 0,
+      refuted: false,
+      unresolved: true,
+      hardOutcome: "unresolved",
+      confidenceLevel: "low",
+      generatedOpponentReplies: [],
+      generatedAiContinuations: [],
+      terminalState: {},
+      repliesConsidered: 0,
+      continuationsConsidered: 0,
+      latencyMs: 0,
+      fallback: false
+    };
+    const first = simulateMoveDetailed(board, point, player, context);
+    if (!first.legal) return { ...base, legal: false, unresolved: false, refuted: true, hardOutcome: "illegal", confidence: 1, confidenceLevel: "high", reason: first.reason };
+
+    const ownBefore = adjacentGroups(board, point, player);
+    const oppBefore = adjacentGroups(board, point, opponent(player));
+    const endangeredOwnBefore = ownBefore.filter(group => group.liberties.size <= 2);
+    const atariOwnBefore = ownBefore.filter(group => group.liberties.size === 1 && group.liberties.has(pointKey(point)));
+    const connectsGroups = ownBefore.length >= 2;
+    const cutsGroups = oppBefore.length >= 2;
+    const firstOutcome = localOutcome(board, first.boardAfter, point, player);
+    const anchors = [
+      point,
+      ...first.capturedStones,
+      ...first.ownGroupAfter.stones,
+      ...ownBefore.flatMap(group => group.stones),
+      ...oppBefore.flatMap(group => group.stones)
+    ];
+    let replies = depthLimit >= 2
+      ? directOpponentReplies(first.boardAfter, point, player, first, Math.min(4, Number(context.maxOpponentReplies) || 4), { ...context, affectedOwnBefore: ownBefore })
+      : [];
+    if (depthLimit >= 2 && replies.length < 4) {
+      for (const reply of localTacticalMoves(first.boardAfter, opponent(player), anchors, context, 4)) {
+        if (!replies.some(item => samePoint(item.point, reply.point))) replies.push(reply);
+      }
+      replies = replies
+        .sort((a, b) => (b.priority || 0) - (a.priority || 0) || (b.captures || 0) - (a.captures || 0) || a.point.y - b.point.y || a.point.x - b.point.x)
+        .slice(0, 4);
+    }
+
+    let worstLine = null;
+    let bestFinalValue = -Infinity;
+    let continuationsConsidered = 0;
+    const firstValue = first.capturedStoneCount * 28
+      + Math.max(0, firstOutcome.libertyDelta) * 6
+      + (connectsGroups ? 22 : 0)
+      + (cutsGroups ? 16 : 0)
+      - (first.selfAtari && first.capturedStoneCount === 0 ? 45 : 0);
+
+    if (!replies.length || depthLimit < 2) {
+      bestFinalValue = firstValue;
+      worstLine = { reply: null, continuation: null, value: firstValue, replyLoss: 0, finalBoard: first.boardAfter };
+    }
+
+    for (const reply of replies) {
+      const replySim = simulateMoveDetailed(first.boardAfter, reply.point, opponent(player), {});
+      if (!replySim.legal) continue;
+      let replyLoss = replySim.capturedStoneCount * 30;
+      if (reply.reason === "recapture") replyLoss += 18;
+      if (endangeredOwnBefore.length && replySim.capturedStoneCount >= Math.min(...endangeredOwnBefore.map(group => group.stones.length))) replyLoss += 34;
+      let bestContinuation = null;
+      let bestReplyLineValue = firstValue - replyLoss;
+      if (depthLimit >= 3) {
+        const continuationAnchors = [
+          point,
+          reply.point,
+          ...replySim.capturedStones,
+          ...(replySim.ownGroupAfter?.stones || [])
+        ];
+        const continuations = localTacticalMoves(replySim.boardAfter, player, continuationAnchors, { ...context, continuationMode: true }, Math.min(3, Number(context.maxAiContinuations) || 3));
+        for (const continuation of continuations) {
+          continuationsConsidered += 1;
+          const contSim = simulateMoveDetailed(replySim.boardAfter, continuation.point, player, {});
+          if (!contSim.legal) continue;
+          const contOutcome = localOutcome(replySim.boardAfter, contSim.boardAfter, continuation.point, player);
+          const continuationValue = firstValue
+            - replyLoss
+            + contSim.capturedStoneCount * 26
+            + Math.max(0, contOutcome.libertyDelta) * 5
+            + (continuation.connection ? 14 : 0)
+            + (contSim.selfAtari && contSim.capturedStoneCount === 0 ? -28 : 0);
+          if (!bestContinuation || continuationValue > bestReplyLineValue) {
+            bestContinuation = { ...continuation, boardAfter: contSim.boardAfter };
+            bestReplyLineValue = continuationValue;
+          }
+        }
+      }
+      const line = { reply, continuation: bestContinuation, value: bestReplyLineValue, replyLoss, finalBoard: bestContinuation?.boardAfter || replySim.boardAfter };
+      if (!worstLine || line.value < worstLine.value) worstLine = line;
+      if (bestReplyLineValue > bestFinalValue) bestFinalValue = bestReplyLineValue;
+    }
+
+    const elapsed = (typeof performance !== "undefined" && performance.now ? performance.now() : Date.now()) - started;
+    const finalValue = Number((worstLine?.value ?? firstValue).toFixed(3));
+    const finalBoard = worstLine?.finalBoard || first.boardAfter;
+    const affectedOwnAfter = ownBefore.map(group => groupContainingAny(finalBoard, group, player)).filter(Boolean);
+    const affectedOppAfter = oppBefore.map(group => groupContainingAny(finalBoard, group, opponent(player))).filter(Boolean);
+    const rescuedGroupStillExists = atariOwnBefore.every(group => groupStillPresent(finalBoard, group, player));
+    const rescuedGroupLibertyCount = affectedOwnAfter.length ? Math.min(...affectedOwnAfter.map(group => group.liberties.size)) : 0;
+    const connectedGroupsStillConnected = connectsGroups && ownBefore.every(group => groupStillPresent(finalBoard, group, player))
+      && affectedOwnAfter.some(group => ownBefore.every(before => groupsIntersect(group, before)));
+    const ownStonesCaptured = ownBefore.reduce((sum, group) => sum + (groupStillPresent(finalBoard, group, player) ? 0 : group.stones.length), 0);
+    const opponentStonesCaptured = oppBefore.reduce((sum, group) => sum + (groupStillPresent(finalBoard, group, opponent(player)) ? 0 : group.stones.length), 0) + first.capturedStoneCount;
+    const directRecaptureLoss = Math.max(0, ...(replies || []).map(reply => reply.captures || 0));
+    const immediateRecaptureRefutes = first.capturedStoneCount > 0 && directRecaptureLoss >= first.capturedStoneCount;
+    const uncompensatedSelfAtari = first.selfAtari && first.capturedStoneCount === 0 && directRecaptureLoss > 0;
+    const compensatedSacrifice = first.selfAtari && first.capturedStoneCount > 0 && first.capturedStoneCount >= Math.max(1, first.ownGroupAfter.stones.length);
+    const failedRescue = atariOwnBefore.length > 0 && (!rescuedGroupStillExists || rescuedGroupLibertyCount <= 1 || ownStonesCaptured > 0);
+    const verifiedRescue = atariOwnBefore.length > 0 && rescuedGroupStillExists && rescuedGroupLibertyCount >= 2 && ownStonesCaptured === 0;
+    const verifiedCapture = first.capturedStoneCount > 0 && !immediateRecaptureRefutes && !uncompensatedSelfAtari;
+    const failedCapture = first.capturedStoneCount > 0 && immediateRecaptureRefutes && !compensatedSacrifice;
+    const failedConnection = connectsGroups && (!connectedGroupsStillConnected || finalValue < 4);
+    const unsafeConnectionBefore = ownBefore.some(group => group.liberties.size <= 2) && !ownBefore.every(stableGroup);
+    const verifiedConnection = connectsGroups && unsafeConnectionBefore && connectedGroupsStillConnected && firstOutcome.libertyDelta > 0 && !failedConnection;
+    const immediatelyRefuted = failedCapture || uncompensatedSelfAtari || failedRescue || failedConnection || finalValue <= -18;
+    let hardOutcome = "unresolved";
+    if (verifiedCapture) hardOutcome = "verified_capture";
+    if (failedCapture) hardOutcome = "failed_capture";
+    if (verifiedRescue) hardOutcome = "verified_rescue";
+    if (verifiedConnection) hardOutcome = "verified_connection";
+    if (failedRescue) hardOutcome = "failed_rescue";
+    if (failedConnection) hardOutcome = "failed_connection";
+    if (uncompensatedSelfAtari) hardOutcome = "uncompensated_self_atari";
+    if (failedRescue) hardOutcome = "failed_rescue";
+    if (compensatedSacrifice && hardOutcome === "unresolved") hardOutcome = "compensated_sacrifice";
+    if (immediatelyRefuted && hardOutcome === "unresolved") hardOutcome = "immediately_refuted";
+    const concreteOutcome = hardOutcome !== "unresolved" && !first.koStateAfter && elapsed <= Number(context.timeBudgetMs || 120);
+    const confidenceLevel = concreteOutcome && replies.length ? "high" : concreteOutcome ? "medium" : "low";
+    const connectionResult = connectsGroups ? failedConnection ? "failed" : "connected" : "not_applicable";
+    const cutResult = cutsGroups ? finalValue > 10 ? "cut_works" : "unresolved" : "not_applicable";
+    return {
+      ...base,
+      legal: true,
+      opponentBestReply: worstLine?.reply?.point || null,
+      aiBestContinuation: worstLine?.continuation?.point || null,
+      sequence: [
+        { color: player, point: { x: point.x, y: point.y } },
+        ...(worstLine?.reply ? [{ color: opponent(player), point: worstLine.reply.point }] : []),
+        ...(worstLine?.continuation ? [{ color: player, point: worstLine.continuation.point }] : [])
+      ],
+      sequenceDepth: 1 + (worstLine?.reply ? 1 : 0) + (worstLine?.continuation ? 1 : 0),
+      captureDelta: first.capturedStoneCount - (worstLine?.replyLoss ? Math.round(worstLine.replyLoss / 30) : 0),
+      libertyDelta: firstOutcome.libertyDelta,
+      groupSafetyDelta: (firstOutcome.ownUnsafeAfter ? -1 : 1) + Math.max(0, firstOutcome.libertyDelta),
+      connectionResult,
+      cutResult,
+      selfAtariRisk: Boolean(first.selfAtari && first.capturedStoneCount === 0),
+      koResult: first.koStateAfter ? "ko_capture" : null,
+      netLocalValue: Math.max(-120, Math.min(160, finalValue)),
+      confidence: Number((confidenceLevel === "high" ? 0.88 : confidenceLevel === "medium" ? 0.62 : 0.34).toFixed(3)),
+      confidenceLevel,
+      refuted: immediatelyRefuted,
+      hardOutcome,
+      generatedOpponentReplies: replies.map(reply => ({ point: reply.point, reason: reply.reason, captures: reply.captures, priority: reply.priority })),
+      generatedAiContinuations: worstLine?.continuation ? [{ point: worstLine.continuation.point, reason: worstLine.continuation.reason, captures: worstLine.continuation.captures }] : [],
+      terminalState: {
+        ownStonesCaptured,
+        opponentStonesCaptured,
+        ownAffectedGroupsAlive: affectedOwnAfter.length,
+        ownAffectedGroupsInAtari: affectedOwnAfter.filter(group => group.liberties.size === 1).length,
+        ownAffectedGroupsLiberties: affectedOwnAfter.map(group => group.liberties.size),
+        opponentAffectedGroupsAlive: affectedOppAfter.length,
+        opponentAffectedGroupsInAtari: affectedOppAfter.filter(group => group.liberties.size === 1).length,
+        opponentAffectedGroupsLiberties: affectedOppAfter.map(group => group.liberties.size),
+        rescuedGroupStillExists,
+        rescuedGroupLibertyCount,
+        connectedGroupsStillConnected,
+        connectionCutAgain: connectsGroups && !connectedGroupsStillConnected,
+        candidateStoneSurvives: finalBoard[point.y]?.[point.x] === player,
+        immediateRecaptureAvailable: first.immediateRecaptureAvailable,
+        localKoCreated: Boolean(first.koStateAfter),
+        unresolvedLongSequence: confidenceLevel === "low"
+      },
+      unresolved: false,
+      repliesConsidered: replies.length,
+      continuationsConsidered,
+      latencyMs: Number(elapsed.toFixed(4)),
+      fallback: elapsed > Number(context.timeBudgetMs || 120)
+    };
   }
 
   function verifyShallowTacticalCandidate(board, candidate, color, context = {}) {
@@ -331,10 +840,32 @@
   }
 
   function verificationPriority(candidate, verification) {
+    const tags = Array.isArray(candidate?.sourceTags) ? candidate.sourceTags.join(" ") : "";
+    if (candidate?.urgentCandidate || /urgent|capture|rescue|critical|necessary/.test(tags)) return 650;
     if (verification?.verifiedCapture || Number(candidate?.captures) > 0) return 500;
     if (verification?.verifiedRescue || Number(candidate?.rescueValue) > 0) return 400;
     if (verification?.verifiedNecessaryConnection || Number(candidate?.connectionValue) >= 2) return 300;
+    if (candidate?.weakGroupCandidate || /weak_group|escape|connection_toward_support/.test(tags)) return 260;
+    if (candidate?.globalCandidate || /whole_board|invasion|reduction/.test(tags)) return 180;
     return Number(candidate?.fusedPolicyScore ?? candidate?.combinedScore ?? candidate?.policyScore ?? 0);
+  }
+
+  function localReadingRankAction(reading) {
+    if (!reading || reading.unresolved || reading.confidenceLevel !== "high") return { type: "none", ranks: 0, score: 0 };
+    if (["failed_capture", "failed_rescue", "uncompensated_self_atari", "immediately_refuted", "failed_connection", "illegal"].includes(reading.hardOutcome)) {
+      return { type: "hard_demote", ranks: 99, score: -260 };
+    }
+    if (["verified_capture", "verified_rescue"].includes(reading.hardOutcome)) {
+      return { type: "promote", ranks: 2, score: 240 };
+    }
+    return { type: "none", ranks: 0, score: 0 };
+  }
+
+  function adjustedTierForLocalReading(candidate, action) {
+    const tier = candidate.tier || candidate.qualityTier || "good";
+    if (action.type === "hard_demote") return "weak";
+    if (action.type === "promote" && action.ranks >= 2) return tier === "acceptable" ? "good" : tier;
+    return tier;
   }
 
   function applyShallowTacticalVerification(candidates, board, color, context = {}) {
@@ -368,7 +899,14 @@
       repliesSimulated += verification.repliesSimulated || 0;
       const protectedUrgent = verification.verifiedUrgent && !verification.immediatelyRefuted;
       const refuted = verification.immediatelyRefuted && !protectedUrgent;
-      const adjustment = protectedUrgent ? 18 : refuted ? -36 : 0;
+      let adjustment = 0;
+      if (protectedUrgent) {
+        if (verification.verifiedCapture) adjustment = 220;
+        else if (verification.verifiedRescue) adjustment = 180;
+        else if (verification.verifiedNecessaryConnection) adjustment = 150;
+      } else if (refuted) {
+        adjustment = -260;
+      }
       return {
         ...candidate,
         shallowVerification: verification,
@@ -395,6 +933,64 @@
         budgetFallbackCount: budgetFallback ? 1 : 0,
         verifiedUrgentCount: verified.filter(candidate => candidate.verifiedUrgent).length,
         immediatelyRefutedCount: verified.filter(candidate => candidate.immediatelyRefuted).length
+      }
+    };
+  }
+
+  function applyLocalReading(candidates, board, color, context = {}) {
+    const started = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
+    const maxCandidates = Math.min(8, Math.max(1, Number(context.maxCandidates) || 6));
+    const budgetMs = Math.max(1, Number(context.timeBudgetMs) || 120);
+    const sorted = (Array.isArray(candidates) ? candidates : [])
+      .filter(candidate => candidate && candidate.legal !== false && candidate.ruleLegal !== false)
+      .slice()
+      .sort((a, b) => verificationPriority(b) - verificationPriority(a))
+      .slice(0, maxCandidates);
+    const selected = new Set(sorted.map(candidate => pointKey(candidate.point || candidate)));
+    let fallbackCount = 0;
+    const results = [];
+    const mapped = (Array.isArray(candidates) ? candidates : []).map(candidate => {
+      const key = pointKey(candidate.point || candidate);
+      if (!selected.has(key)) return { ...candidate, localReadingStatus: "not_read" };
+      const elapsed = (typeof performance !== "undefined" && performance.now ? performance.now() : Date.now()) - started;
+      if (elapsed > budgetMs) {
+        fallbackCount += 1;
+        return { ...candidate, localReadingStatus: "timeout" };
+      }
+      const reading = evaluateLocalSequence(board, candidate, color, context);
+      results.push(reading);
+      const rankAction = localReadingRankAction(reading);
+      const adjustment = rankAction.type === "none"
+        ? (reading.unresolved ? 0 : Math.max(-20, Math.min(25, reading.netLocalValue * 0.12)))
+        : rankAction.score;
+      return {
+        ...candidate,
+        localReading: reading,
+        localReadingStatus: reading.refuted ? "refuted" : reading.unresolved ? "unresolved" : "read",
+        localReadingAdjustment: Number(adjustment.toFixed(3)),
+        localReadingRankAction: rankAction,
+        tier: adjustedTierForLocalReading(candidate, rankAction),
+        qualityTier: adjustedTierForLocalReading(candidate, rankAction),
+        combinedScore: Number(candidate.combinedScore || 0) + adjustment,
+        fusedPolicyScore: Number.isFinite(Number(candidate.fusedPolicyScore)) ? Number(candidate.fusedPolicyScore) + adjustment : candidate.fusedPolicyScore,
+        adjustedScore: Number.isFinite(Number(candidate.adjustedScore)) ? Number(candidate.adjustedScore) + adjustment : candidate.adjustedScore
+      };
+    });
+    const latency = (typeof performance !== "undefined" && performance.now ? performance.now() : Date.now()) - started;
+    return {
+      candidates: mapped,
+      diagnostics: {
+        candidatesRead: results.length,
+        averageReadingLatencyMs: results.length ? Number((results.reduce((sum, item) => sum + item.latencyMs, 0) / results.length).toFixed(4)) : 0,
+        maximumReadingLatencyMs: results.reduce((max, item) => Math.max(max, item.latencyMs), 0),
+        totalReadingLatencyMs: Number(latency.toFixed(4)),
+        fallbackCount,
+        refutedCount: results.filter(item => item.refuted).length,
+        unresolvedCount: results.filter(item => item.unresolved).length,
+        hardOutcomeCounts: results.reduce((counts, item) => {
+          counts[item.hardOutcome || "unresolved"] = (counts[item.hardOutcome || "unresolved"] || 0) + 1;
+          return counts;
+        }, {})
       }
     };
   }
@@ -571,6 +1167,11 @@
     white,
     evaluateMove,
     boardHash,
+    createAnalysisContext,
+    cachedGroupAt,
+    cachedLibertyPoints,
+    cachedSimulateMove,
+    groupSafetyEvidence,
     groupAt,
     allGroups,
     libertyPoints,
@@ -578,6 +1179,8 @@
     simulateMove,
     simulateMoveDetailed,
     verifyShallowTacticalCandidate,
-    applyShallowTacticalVerification
+    applyShallowTacticalVerification,
+    evaluateLocalSequence,
+    applyLocalReading
   };
 }));

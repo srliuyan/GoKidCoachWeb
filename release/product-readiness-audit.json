@@ -1,10 +1,10 @@
 {
-  "appVersion": "1.0.0-rc1",
-  "engineVersion": "baseline-v3.6-frozen",
+  "appVersion": "1.3.0-dev",
+  "engineVersion": "bounded-local-reading-v1",
   "generatedAt": "2026-07-13",
   "engineStatus": {
     "classification": "ready",
-    "notes": "Engine scoring is frozen at verified baseline. Shallow tactical verification remains diagnostic-only and is not active in app.js final move selection."
+    "notes": "Engine scoring weights remain frozen. Shallow tactical verification is active only as a bounded safety layer before difficulty selection."
   },
   "applicationEntryPoint": {
     "classification": "ready",
@@ -42,9 +42,9 @@
   "difficultyUiAndMapping": {
     "classification": "ready",
     "modes": {
-      "beginner": "入门陪练 -> existing level 640",
-      "basic": "基础陪练 -> existing level 760",
-      "advanced": "进阶陪练 -> existing level 880",
+      "beginner": "入门陪练 -> existing level 720",
+      "basic": "基础陪练 -> existing level 840",
+      "advanced": "进阶陪练 -> existing level 980",
       "adaptive": "自适应陪练 -> existing level 880 with conservative game-level adjustment"
     },
     "notes": "Internal numeric engine scores are not shown to the child."
@@ -61,7 +61,7 @@
   },
   "serviceWorkerPwa": {
     "classification": "manual-test-required",
-    "cacheName": "gokidcoach-web-v39-rc1",
+    "cacheName": "gokidcoach-web-v43-local-reading-dev",
     "notes": "Runtime assets are precached; old cache cleanup exists. iPad Safari install/offline reopening must be manually verified on device."
   },
   "githubPages": {

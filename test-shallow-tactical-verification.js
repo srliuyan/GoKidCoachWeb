@@ -170,7 +170,7 @@ function testVerificationLayerProtectsUrgentAndFiltersRefuted() {
   assert(urgent.combinedScore > 90);
 }
 
-function testImmediatelyRefutedStatusIsDiagnosticOnlyUntilAccepted() {
+function testImmediatelyRefutedStatusIsExcludedFromStrongTiers() {
   const context = {
     companionPlan: { focus: "endgame", targetMoveRank: 1, candidateDiversity: 3 },
     difficultySettings: { focusArea: "endgame" },
@@ -182,11 +182,11 @@ function testImmediatelyRefutedStatusIsDiagnosticOnlyUntilAccepted() {
     makeCandidate({ x: 4, y: 4 }, { adjustedScore: 500, combinedScore: 450, immediatelyRefuted: true }),
     makeCandidate({ x: 3, y: 3 }, { adjustedScore: 490, combinedScore: 440 })
   ], context);
-  assert.strictEqual(ranked.groups.rejectedMoves.length, 0);
-  assert(ranked.ranked.some(candidate => candidate.immediatelyRefuted));
+  assert.strictEqual(ranked.groups.rejectedMoves.length, 1);
+  assert(ranked.groups.rejectedMoves.some(candidate => candidate.immediatelyRefuted));
 }
 
-function testLowDifficultyBaselineDoesNotConsumeUnacceptedVerificationFlags() {
+function testLowDifficultyUsesAcceptedVerificationFlagsSafely() {
   const settings = {
     focusArea: "capture",
     candidateTopK: 4,
@@ -203,12 +203,8 @@ function testLowDifficultyBaselineDoesNotConsumeUnacceptedVerificationFlags() {
     makeCandidate({ x: 5, y: 5 }, { combinedScore: 500, adjustedScore: 500, immediatelyRefuted: true }),
     makeCandidate({ x: 10, y: 10 }, { combinedScore: 380, adjustedScore: 380 })
   ], settings);
-  const unflagged = difficulty.adjustMoveCandidates([
-    makeCandidate({ x: 4, y: 4 }, { captures: 1, tacticalPressure: 2, combinedScore: 400, adjustedScore: 400 }),
-    makeCandidate({ x: 5, y: 5 }, { combinedScore: 500, adjustedScore: 500 }),
-    makeCandidate({ x: 10, y: 10 }, { combinedScore: 380, adjustedScore: 380 })
-  ], settings);
-  assert.deepStrictEqual(flagged.map(candidate => candidate.point), unflagged.map(candidate => candidate.point));
+  assert(!flagged.some(candidate => samePoint(candidate.point, { x: 5, y: 5 })));
+  assert(flagged.some(candidate => candidate.verifiedUrgent));
 }
 
 function testBudgetFallbackAndDeterminism() {
@@ -249,8 +245,8 @@ function run() {
   testNecessaryConnectionVerifiedAndSafeConnectionIgnored();
   testRecaptureRiskAndSelfAtariCollapseDetected();
   testVerificationLayerProtectsUrgentAndFiltersRefuted();
-  testImmediatelyRefutedStatusIsDiagnosticOnlyUntilAccepted();
-  testLowDifficultyBaselineDoesNotConsumeUnacceptedVerificationFlags();
+  testImmediatelyRefutedStatusIsExcludedFromStrongTiers();
+  testLowDifficultyUsesAcceptedVerificationFlagsSafely();
   testBudgetFallbackAndDeterminism();
   testCompleteSimulationStable();
   console.log("test-shallow-tactical-verification: ok");

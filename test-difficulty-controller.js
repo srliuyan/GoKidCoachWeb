@@ -106,6 +106,59 @@ function testOpeningWeaknessUsesOpeningBookMore() {
   assert(openingSettings.randomness <= balancedSettings.randomness);
 }
 
+function testAdvancedModeKeepsOnlyStrongestCandidate() {
+  const settings = {
+    ...controller.getDifficultySettings(makeProfile(), [true, true, false]),
+    releaseDifficultyMode: "advanced",
+    candidateTopK: 1,
+    mistakeTolerance: 6,
+    randomness: 0.01
+  };
+  const adjusted = controller.adjustMoveCandidates([
+    makeCandidate({ x: 3, y: 3 }, { combinedScore: 500, policyScore: 260 }),
+    makeCandidate({ x: 4, y: 4 }, { combinedScore: 492, policyScore: 252 }),
+    makeCandidate({ x: 5, y: 5 }, { combinedScore: 470, policyScore: 240 })
+  ], settings);
+  assert.strictEqual(adjusted.length, 1);
+  assert.deepStrictEqual(adjusted[0].point, { x: 3, y: 3 });
+}
+
+function testWeakButLegalAndLowValueExcludedWhenBetterExists() {
+  const settings = {
+    ...controller.getDifficultySettings(makeProfile(), [false, false, false]),
+    releaseDifficultyMode: "beginner",
+    candidateTopK: 4,
+    mistakeTolerance: 18
+  };
+  const adjusted = controller.adjustMoveCandidates([
+    makeCandidate({ x: 3, y: 3 }, { combinedScore: 430 }),
+    makeCandidate({ x: 9, y: 9 }, { combinedScore: 900, coherentClass: "lowValue", lowValueCandidate: true }),
+    makeCandidate({ x: 10, y: 10 }, { combinedScore: 890, immediatelyRefuted: true })
+  ], settings);
+  assert.strictEqual(adjusted.length, 1);
+  assert.deepStrictEqual(adjusted[0].point, { x: 3, y: 3 });
+}
+
+function testRandomnessLimitedToNearEquivalentCandidates() {
+  const settings = {
+    ...controller.getDifficultySettings(makeProfile(), [false, true, false]),
+    releaseDifficultyMode: "basic",
+    candidateTopK: 3,
+    mistakeTolerance: 12,
+    randomness: 1,
+    policyTemperature: 0.2
+  };
+  const adjusted = controller.adjustMoveCandidates([
+    makeCandidate({ x: 3, y: 3 }, { combinedScore: 500, policyScore: 260 }),
+    makeCandidate({ x: 4, y: 4 }, { combinedScore: 496, policyScore: 256 }),
+    makeCandidate({ x: 16, y: 16 }, { combinedScore: 420, policyScore: 180 })
+  ], settings);
+  for (let i = 0; i < 20; i += 1) {
+    const choice = controller.chooseAdaptiveMove(adjusted, settings);
+    assert([{ x: 3, y: 3 }, { x: 4, y: 4 }].some(point => point.x === choice.point.x && point.y === choice.point.y));
+  }
+}
+
 function run() {
   testThreeWinsIncreaseDifficulty();
   testThreeLossesReduceDifficulty();
@@ -113,6 +166,9 @@ function run() {
   testLifeDeathWeaknessIncreasesTacticalTraining();
   testRuleRejectedMovesRemainRejectedAfterDifficulty();
   testOpeningWeaknessUsesOpeningBookMore();
+  testAdvancedModeKeepsOnlyStrongestCandidate();
+  testWeakButLegalAndLowValueExcludedWhenBetterExists();
+  testRandomnessLimitedToNearEquivalentCandidates();
   console.log("test-difficulty-controller: ok");
 }
 

@@ -499,9 +499,14 @@
       if (edge === 0) return -18;
       return 16;
     }
-    if (centerDistance <= 4) return 18;
-    if (edge >= 2) return 14;
-    return 8;
+    if (moveNumber >= 120) {
+      if (edge === 0) return -12;
+      if (edge === 1) return -4;
+      return 0;
+    }
+    if (centerDistance <= 4) return 8;
+    if (edge >= 2) return 4;
+    return -4;
   }
 
   function evaluatePosition(board, currentPlayer) {
@@ -536,15 +541,21 @@
     const enemyWeakAfter = after.groups.enemyWeakGroups.length;
     const cutsBefore = before.groups.ownCutPoints.length;
     const cutsAfter = after.groups.ownCutPoints.length;
+    const lowValueEvidence = lowValueEndgameEvidence(board, move, currentPlayer, { moveNumber: numeric(move.moveNumber) });
 
     let score = 0;
     score += simulated.captures * 120;
     score += (ownWeakBefore - ownWeakAfter) * 95;
     score += (enemyWeakAfter - enemyWeakBefore) * 62;
     score += (cutsBefore - cutsAfter) * 65;
-    score += (after.scoreLead - before.scoreLead) * 16;
-    score += (after.thicknessLead - before.thicknessLead) * 1.2;
-    score += areaValue(point, board.length, numeric(move.moveNumber));
+    const colors = countAdjacentColors(board, point, currentPlayer);
+    const hasConcreteTerritoryBoundary = colors.own + colors.enemy >= 2 || simulated.captures > 0 || numeric(move.territoryValue) >= 4;
+    const territorySwing = lowValueEvidence.eligible || !hasConcreteTerritoryBoundary ? 0 : after.scoreLead - before.scoreLead;
+    score += territorySwing * 16;
+    const thicknessSwing = lowValueEvidence.eligible || !hasConcreteTerritoryBoundary ? 0 : after.thicknessLead - before.thicknessLead;
+    score += thicknessSwing * 1.2;
+    const area = areaValue(point, board.length, numeric(move.moveNumber));
+    score += lowValueEvidence.eligible ? Math.min(0, area) : area;
     for (const group of before.groups.enemyWeakGroups) {
       if (group.group.liberties.has(pointKey(point))) score += 56;
     }
@@ -554,6 +565,7 @@
     if (move.ownLiberties <= 1 && simulated.captures === 0) score -= 120;
     if (move.isMeaninglessFirstLine) score -= 100;
     if (move.isRandomFlyaway) score -= 80;
+    if (lowValueEvidence.eligible) score -= 90;
     return Math.round(score);
   }
 

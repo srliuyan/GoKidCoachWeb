@@ -276,6 +276,46 @@ function testLowerDifficultyMayChooseEquivalentUrgentSolution() {
   assert([{ x: 4, y: 4 }, { x: 5, y: 4 }].some(point => point.x === choice.point.x && point.y === choice.point.y));
 }
 
+function testAdvancedSelectsBestOrStrongOnly() {
+  const context = makeContext({
+    difficultySettings: { ...makeContext().difficultySettings, releaseDifficultyMode: "advanced" },
+    companionPlan: { ...makeContext().companionPlan, targetMoveRank: 3, reducePrecision: true }
+  });
+  const ranked = controller.rankCandidates([
+    makeCandidate({ x: 3, y: 3 }, { adjustedScore: 500, combinedScore: 450 }),
+    makeCandidate({ x: 4, y: 4 }, { adjustedScore: 488, combinedScore: 440 }),
+    makeCandidate({ x: 5, y: 5 }, { adjustedScore: 450, combinedScore: 405 })
+  ], context);
+  const choice = controller.chooseMoveByQuality(ranked, context);
+  assert(["bestMove", "strongMoves"].includes(choice.moveQualityBucket));
+}
+
+function testBasicAvoidsLooseAcceptableWhenGoodExists() {
+  const context = makeContext({
+    difficultySettings: { ...makeContext().difficultySettings, releaseDifficultyMode: "basic" }
+  });
+  const ranked = controller.rankCandidates([
+    makeCandidate({ x: 3, y: 3 }, { adjustedScore: 500, combinedScore: 450 }),
+    makeCandidate({ x: 4, y: 4 }, { adjustedScore: 468, combinedScore: 420 }),
+    makeCandidate({ x: 5, y: 5 }, { adjustedScore: 390, combinedScore: 340 })
+  ], context);
+  const choice = controller.chooseMoveByQuality(ranked, context);
+  assert.notStrictEqual(choice.moveQualityBucket, "acceptableMoves");
+  assert.notStrictEqual(choice.moveQualityBucket, "weakButLegalMoves");
+}
+
+function testWeakButLegalOnlyWhenNoAcceptableExists() {
+  const context = makeContext({
+    difficultySettings: { ...makeContext().difficultySettings, releaseDifficultyMode: "adaptive" }
+  });
+  const ranked = controller.rankCandidates([
+    makeCandidate({ x: 3, y: 3 }, { adjustedScore: 500, combinedScore: 450 }),
+    makeCandidate({ x: 4, y: 4 }, { adjustedScore: 260, combinedScore: 220 })
+  ], context);
+  const choice = controller.chooseMoveByQuality(ranked, context);
+  assert.notStrictEqual(choice.moveQualityBucket, "weakButLegalMoves");
+}
+
 function run() {
   testClassifyBuckets();
   testNeverChooseRejectedWhenSoft();
@@ -290,6 +330,9 @@ function run() {
   testImmediateCaptureNeverCappedByRuntime();
   testSofteningCannotChooseUnsafeOverUrgent();
   testLowerDifficultyMayChooseEquivalentUrgentSolution();
+  testAdvancedSelectsBestOrStrongOnly();
+  testBasicAvoidsLooseAcceptableWhenGoodExists();
+  testWeakButLegalOnlyWhenNoAcceptableExists();
   console.log("test-move-quality-controller: ok");
 }
 

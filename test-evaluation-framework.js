@@ -28,8 +28,18 @@ const finalScoreOverrideReportPath = path.join(__dirname, "evaluation", "final-s
 const rawUrgentSourceAuditPath = path.join(__dirname, "evaluation", "raw-urgent-source-audit.json");
 const rawUrgentSourceReportPath = path.join(__dirname, "evaluation", "raw-urgent-source-report.json");
 const shallowTacticalVerificationReportPath = path.join(__dirname, "evaluation", "shallow-tactical-verification-report.json");
+const localReadingProfileReportPath = path.join(__dirname, "evaluation", "local-reading-profile-report.json");
+const localReadingSelectionDiffPath = path.join(__dirname, "evaluation", "local-reading-selection-diff.json");
+const localReadingErrorCasesPath = path.join(__dirname, "evaluation", "local-reading-error-cases.json");
+const localReadingLatencyReportPath = path.join(__dirname, "evaluation", "local-reading-latency-report.json");
+const localReadingGateResultPath = path.join(__dirname, "evaluation", "local-reading-gate-result.json");
+const localReadingEffectivenessTracePath = path.join(__dirname, "evaluation", "local-reading-effectiveness-trace.json");
+const localReadingOpportunityCoveragePath = path.join(__dirname, "evaluation", "local-reading-opportunity-coverage.json");
+const localReadingTerminalClassificationPath = path.join(__dirname, "evaluation", "local-reading-terminal-classification-report.json");
+const localReadingBridgePath = path.join(__dirname, "evaluation", "run-local-reading-profile.js");
 const indexHtml = fs.readFileSync(path.join(__dirname, "index.html"), "utf8");
 const swSource = fs.readFileSync(path.join(__dirname, "sw.js"), "utf8");
+const appSource = fs.readFileSync(path.join(__dirname, "app.js"), "utf8");
 const qualityTiers = ["best", "strong", "good", "acceptable", "weak", "rejected"];
 
 function loadJson(filePath) {
@@ -660,6 +670,85 @@ function testShallowTacticalVerificationReport() {
   assert(report.latency.offlineEvaluationDurationMs >= 0);
 }
 
+function testLocalReadingProfileValidationReports() {
+  const trainingSource = fs.readFileSync(path.join(__dirname, "..", "training", "evaluate_policy.py"), "utf8");
+  assert(trainingSource.includes("--run-local-reading-profiles"));
+  assert(fs.existsSync(localReadingBridgePath));
+  const bridgeSource = fs.readFileSync(localReadingBridgePath, "utf8");
+  assert(bridgeSource.includes('require("../rule-engine.js")'));
+  assert(bridgeSource.includes("GoKidCoachRuleEngine.evaluateLocalSequence"));
+  assert(appSource.includes("applyLocalReading("));
+  assert(appSource.includes("maxDepth: 3"));
+  assert(appSource.includes("maxCandidates: 8"));
+  assert(appSource.includes("maxOpponentReplies: 4"));
+  assert(appSource.includes("maxAiContinuations: 3"));
+  assert(!swSource.includes("local-reading-profile-report.json"));
+  assert(!swSource.includes("local-reading-selection-diff.json"));
+  assert(!swSource.includes("local-reading-error-cases.json"));
+  assert(!swSource.includes("local-reading-latency-report.json"));
+  assert(!swSource.includes("local-reading-gate-result.json"));
+  if (
+    !fs.existsSync(localReadingProfileReportPath) ||
+    !fs.existsSync(localReadingSelectionDiffPath) ||
+    !fs.existsSync(localReadingErrorCasesPath) ||
+    !fs.existsSync(localReadingLatencyReportPath) ||
+    !fs.existsSync(localReadingGateResultPath) ||
+    !fs.existsSync(localReadingEffectivenessTracePath) ||
+    !fs.existsSync(localReadingOpportunityCoveragePath) ||
+    !fs.existsSync(localReadingTerminalClassificationPath)
+  ) return;
+
+  const report = loadJson(localReadingProfileReportPath);
+  const diff = loadJson(localReadingSelectionDiffPath);
+  const errors = loadJson(localReadingErrorCasesPath);
+  const latency = loadJson(localReadingLatencyReportPath);
+  const gates = loadJson(localReadingGateResultPath);
+  const trace = loadJson(localReadingEffectivenessTracePath);
+  const coverage = loadJson(localReadingOpportunityCoveragePath);
+  const terminal = loadJson(localReadingTerminalClassificationPath);
+  assert.strictEqual(report.randomSeed, 20260710);
+  assert.strictEqual(report.offlineOnly, true);
+  assert.strictEqual(report.browserRuntimeAffected, false);
+  assert.strictEqual(report.deploymentOccurred, false);
+  assert.strictEqual(report.profileRunnerArchitecture.pythonApproximationUsed, false);
+  assert.strictEqual(report.profileRunnerArchitecture.realImplementation.includes("rule-engine.js"), true);
+  for (const key of ["baseline_v12", "capture_only", "capture_rescue", "cut_connection", "full_conservative"]) {
+    const profile = report.profiles[key];
+    assert(profile, key);
+    assert.strictEqual(profile.usesRealJavaScriptLocalReading, true, key);
+    assert.strictEqual(profile.limits.maxDepth, 3, key);
+    assert.strictEqual(profile.limits.maxCandidates, 8, key);
+    assert.strictEqual(profile.limits.maxOpponentReplies, 4, key);
+    assert.strictEqual(profile.limits.maxAiContinuations, 3, key);
+    assert.strictEqual(profile.generalQuality.rejectedMoveRate, 0, key);
+    assert.strictEqual(typeof profile.tacticalQuality.immediateCaptureOpportunityCount, "number", key);
+    assert.strictEqual(typeof profile.tacticalQuality.atariRescueOpportunityCount, "number", key);
+    assert.strictEqual(typeof profile.tacticalQuality.necessaryConnectionOpportunityCount, "number", key);
+    assert.strictEqual(typeof profile.performance.p95ReadingLatencyMs, "number", key);
+    assert.strictEqual(typeof profile.opportunityMetrics.effectiveRerankRate, "number", key);
+    assert.strictEqual(typeof profile.opportunityMetrics.correctedSelectionRate, "number", key);
+  }
+  assert.strictEqual(diff.randomSeed, 20260710);
+  assert.strictEqual(diff.offlineOnly, true);
+  assert.strictEqual(diff.changedSelectionCount, diff.cases.length);
+  assert.strictEqual(errors.offlineOnly, true);
+  assert.strictEqual(errors.errorCaseCount, errors.cases.length);
+  assert.strictEqual(latency.offlineOnly, true);
+  assert(Array.isArray(latency.entries));
+  assert.strictEqual(gates.bestProfile, "full_conservative");
+  assert.strictEqual(gates.runtimeIntegrationAllowed, true);
+  assert.strictEqual(gates.browserRuntimeAffected, false);
+  assert.strictEqual(gates.deploymentOccurred, false);
+  assert.strictEqual(trace.offlineOnly, true);
+  assert(Array.isArray(trace.cases));
+  assert(trace.cases.some(item => item.failureCategory === "corrected"));
+  assert.strictEqual(coverage.offlineOnly, true);
+  assert(Array.isArray(coverage.profiles));
+  assert(coverage.profiles.some(item => item.profile === "full_conservative" && item.effectiveRerankRate > 0));
+  assert.strictEqual(terminal.offlineOnly, true);
+  assert.strictEqual(typeof terminal.accuracyByProfile.full_conservative, "number");
+}
+
 function testTacticalConflictReportReadable() {
   if (!fs.existsSync(tacticalConflictPath)) return;
   const report = loadJson(tacticalConflictPath);
@@ -698,6 +787,7 @@ function run() {
   testFinalScoreOverrideAuditReports();
   testRawUrgentSourceAnalysisReports();
   testShallowTacticalVerificationReport();
+  testLocalReadingProfileValidationReports();
   testTacticalConflictReportReadable();
   console.log("test-evaluation-framework: ok");
 }

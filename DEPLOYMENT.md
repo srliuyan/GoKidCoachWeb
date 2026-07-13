@@ -2,9 +2,9 @@
 
 Build:
 
-- productVersion: `1.0.0-rc1`
-- engineVersion: `baseline-v3.6-frozen`
-- serviceWorkerCache: `gokidcoach-web-v39-rc1`
+- productVersion: `1.5.1`
+- engineVersion: `candidate-coverage-v1`
+- serviceWorkerCache: `gokidcoach-web-v151-stable-20260713`
 
 Do not deploy automatically. Run these checks first:
 
@@ -104,30 +104,52 @@ node_modules/
 EOF
 git remote add origin GITHUB_REMOTE_URL
 git remote -v
-git checkout -b release/v1.0-rc1
+git checkout -b release/v1.2-rc1
 git add GoKidCoachWeb training
-git commit -m "Prepare GoKidCoach V1.0 rc1"
+git commit -m "Prepare GoKidCoach V1.2 rc1"
 ```
 
 Do not push without explicit approval:
 
 ```bash
-git push -u origin release/v1.0-rc1
+git push -u origin release/v1.2-rc1
 ```
 
 ## GitHub Pages
 
-Recommended release branch:
+This repository uses `.github/workflows/deploy-pages.yml` to publish a runtime-only artifact from `main`.
+
+The Pages artifact includes:
+
+- `index.html`
+- runtime JavaScript modules
+- `build-info.js`
+- `product-support.js`
+- `sw.js`
+- `manifest.webmanifest`
+- `styles.css`
+- `assets/`
+- `404.html`
+- `.nojekyll`
+
+The Pages artifact intentionally excludes:
+
+- `evaluation/`
+- `release/*.json`
+- `test-*.js`
+- `training/`
+- local backups
+
+Recommended release branch before merging to `main`:
 
 ```bash
-git checkout release/v1.0-rc1
+git checkout main
 ```
 
 Pages settings:
 
-- Source: Deploy from branch
-- Branch: `release/v1.0-rc1`
-- Folder: `/GoKidCoachWeb` if GitHub Pages allows that folder in your repo layout, otherwise copy web files to a publishing branch root.
+- Source: GitHub Actions
+- Workflow: `Deploy GitHub Pages`
 
 Path checks:
 

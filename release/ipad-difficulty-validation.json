@@ -1,8 +1,8 @@
 {
   "build": {
-    "productVersion": "1.0.0-rc1",
-    "engineVersion": "baseline-v3.6-frozen",
-    "serviceWorkerCache": "gokidcoach-web-v39-rc1"
+    "productVersion": "1.3.0-dev",
+    "engineVersion": "bounded-local-reading-v1",
+    "serviceWorkerCache": "gokidcoach-web-v43-local-reading-dev"
   },
   "status": "manual-test-required",
   "device": "",

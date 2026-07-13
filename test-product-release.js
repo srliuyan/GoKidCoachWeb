@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 const product = require("./product-support.js");
+const buildInfo = require("./build-info.js");
 const ruleEngine = require("./rule-engine.js");
 const difficulty = require("./difficulty-controller.js");
 
@@ -30,7 +31,12 @@ function makeCandidate(point, overrides = {}) {
 function testDifficultyModes() {
   assert.deepStrictEqual(Object.keys(product.difficultyModes), ["beginner", "basic", "advanced", "adaptive"]);
   assert.strictEqual(product.difficultyModeConfig("beginner").label, "入门陪练");
+  assert.strictEqual(product.difficultyModeConfig("beginner").level, 720);
+  assert.strictEqual(product.difficultyModeConfig("basic").level, 840);
+  assert.strictEqual(product.difficultyModeConfig("advanced").level, 980);
   assert.strictEqual(product.normalizeDifficultyMode(640), "beginner");
+  assert.strictEqual(product.normalizeDifficultyMode(840), "basic");
+  assert.strictEqual(product.normalizeDifficultyMode(980), "advanced");
   assert.strictEqual(product.normalizeDifficultyMode("adaptive"), "adaptive");
 }
 
@@ -152,22 +158,22 @@ function testCompleteGameSimulationStable() {
 
 function testPwaAssetsAndEvaluationExclusion() {
   const sw = fs.readFileSync(path.join(__dirname, "sw.js"), "utf8");
-  assert(sw.includes("gokidcoach-web-v39-rc1"));
+  assert(sw.includes("buildInfo.serviceWorkerCache"));
   assert(sw.includes("./product-support.js"));
-  assert(!sw.includes("evaluation/"));
+  assert(!sw.includes("./evaluation/"));
+  assert(sw.includes("/evaluation/"));
   const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, "manifest.webmanifest"), "utf8"));
   assert.strictEqual(manifest.display, "standalone");
   assert.strictEqual(manifest.start_url, "./");
-  assert.strictEqual(manifest.version, "1.0.0-rc1");
+  assert.strictEqual(manifest.version, buildInfo.productVersion);
 }
 
-function testFrozenEngineAndShallowInactive() {
+function testFrozenEngineAndShallowVerifierActive() {
   const freeze = fs.readFileSync(path.join(__dirname, "ENGINE-FREEZE.md"), "utf8");
   const app = fs.readFileSync(path.join(__dirname, "app.js"), "utf8");
   assert(freeze.includes("goodOrBetterRate: 0.216"));
-  assert(freeze.includes("Shallow tactical verification accepted: no"));
-  assert.strictEqual(product.engineVersion, "baseline-v3.6-frozen");
-  assert(!app.includes("applyShallowTacticalVerification("));
+  assert.strictEqual(product.engineVersion, buildInfo.engineVersion);
+  assert(app.includes("applyShallowTacticalVerification("));
 }
 
 function run() {
@@ -179,7 +185,7 @@ function run() {
   testSnapshotValidationAndDiagnostics();
   testCompleteGameSimulationStable();
   testPwaAssetsAndEvaluationExclusion();
-  testFrozenEngineAndShallowInactive();
+  testFrozenEngineAndShallowVerifierActive();
   console.log("test-product-release: ok");
 }
 

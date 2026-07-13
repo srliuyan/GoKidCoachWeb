@@ -3,8 +3,11 @@
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.GoKidCoachProductSupport = api;
 }(typeof globalThis !== "undefined" ? globalThis : this, function () {
-  const appVersion = "1.0.0-rc1";
-  const engineVersion = "baseline-v3.6-frozen";
+  const buildInfo = (typeof globalThis !== "undefined" && globalThis.GoKidCoachBuildInfo)
+    || (typeof module !== "undefined" && module.exports ? require("./build-info.js") : null);
+  if (!buildInfo) throw new Error("GoKidCoachBuildInfo must be loaded before product-support.js");
+  const appVersion = buildInfo.appVersion;
+  const engineVersion = buildInfo.engineVersion;
   const dbName = "gokidcoach-v1";
   const dbVersion = 1;
   const currentGameStore = "currentGames";
@@ -22,9 +25,9 @@
   };
 
   const difficultyModes = {
-    beginner: { key: "beginner", label: "入门陪练", level: 640, targetRank: 2.7, description: "只在有意义的合法候选中放松选择。" },
-    basic: { key: "basic", label: "基础陪练", level: 760, targetRank: 2.1, description: "通常选择好棋，允许少量可接受变化。" },
-    advanced: { key: "advanced", label: "进阶陪练", level: 880, targetRank: 1.4, description: "接近冻结引擎的强候选选择。" },
+    beginner: { key: "beginner", label: "入门陪练", level: 720, targetRank: 2.4, description: "只在有意义的合法候选中放松选择。" },
+    basic: { key: "basic", label: "基础陪练", level: 840, targetRank: 1.8, description: "通常选择好棋，允许少量可接受变化。" },
+    advanced: { key: "advanced", label: "进阶陪练", level: 980, targetRank: 1, description: "使用最强发布候选选择。" },
     adaptive: { key: "adaptive", label: "自适应陪练", level: 880, targetRank: 1.8, description: "根据完成的真实对局缓慢调整。" }
   };
 
@@ -35,9 +38,9 @@
   function normalizeDifficultyMode(value) {
     if (difficultyModes[value]) return value;
     const numeric = Number(value);
-    if (numeric <= 680) return "beginner";
-    if (numeric <= 820) return "basic";
-    if (numeric <= 930) return "advanced";
+    if (numeric <= 760) return "beginner";
+    if (numeric <= 900) return "basic";
+    if (numeric <= 980) return "advanced";
     return "adaptive";
   }
 
@@ -138,18 +141,39 @@
       && Array.isArray(snapshot.moveHistory);
   }
 
+  function normalizeSnapshot(snapshot) {
+    if (!snapshot || typeof snapshot !== "object") return snapshot;
+    const moveHistory = Array.isArray(snapshot.moveHistory)
+      ? snapshot.moveHistory
+      : Array.isArray(snapshot.moves)
+        ? snapshot.moves
+        : [];
+    return {
+      ...snapshot,
+      moveHistory: moveHistory.map(item => ({ ...item })),
+      actualMoveCount: moveHistory.length,
+      buildId: snapshot.buildId || buildInfo.buildId,
+      appVersion: snapshot.appVersion || appVersion,
+      engineVersion: snapshot.engineVersion || engineVersion,
+      schemaVersion: snapshot.schemaVersion || buildInfo.schemaVersion
+    };
+  }
+
   async function saveCurrentGame(snapshot) {
+    snapshot = normalizeSnapshot(snapshot);
     if (!validateSnapshot(snapshot)) return false;
     return idbPut(currentGameStore, {
       ...snapshot,
       appVersion,
       engineVersion,
+      buildId: buildInfo.buildId,
+      schemaVersion: buildInfo.schemaVersion,
       savedAt: Date.now()
     });
   }
 
   async function loadCurrentGame(id) {
-    const snapshot = await idbGet(currentGameStore, id);
+    const snapshot = normalizeSnapshot(await idbGet(currentGameStore, id));
     return validateSnapshot(snapshot) ? snapshot : null;
   }
 
@@ -175,7 +199,8 @@
     difficultyMode = "adaptive",
     difficultyStart = 880,
     difficultyEnd = 880,
-    date = new Date()
+    date = new Date(),
+    buildId = buildInfo.buildId
   }) {
     const blackName = childColor === 1 ? childName : "AI";
     const whiteName = childColor === 2 ? childName : "AI";
@@ -189,7 +214,9 @@
       `difficultyStart=${difficultyStart}`,
       `difficultyEnd=${difficultyEnd}`,
       `appVersion=${appVersion}`,
-      `engineVersion=${engineVersion}`
+      `engineVersion=${engineVersion}`,
+      `buildId=${buildId}`,
+      `moveCount=${moveHistory.length}`
     ].join("; ");
     return `(;GM[1]FF[4]CA[UTF-8]AP[GoKidCoachWeb:${appVersion}]SZ[${size}]KM[${komi}]DT[${date.toISOString().slice(0, 10)}]PB[${escapeSgf(blackName)}]PW[${escapeSgf(whiteName)}]RE[${escapeSgf(resultText)}]C[${escapeSgf(comment)}]${moves})`;
   }
@@ -223,6 +250,31 @@
     return { legal: true, board, moves };
   }
 
+  function boardHash(board) {
+    return (Array.isArray(board) ? board : []).map(row => row.join("")).join("|");
+  }
+
+  function exportIntegrity(snapshot, sgf, simulateMove) {
+    const moveHistory = Array.isArray(snapshot?.moveHistory) ? snapshot.moveHistory : [];
+    const replay = replaySgf(sgf, simulateMove);
+    const finalBoardHash = boardHash(snapshot?.board || []);
+    const replayedBoardHash = replay.legal ? boardHash(replay.board) : "";
+    const aiColor = snapshot?.childColor === "white" ? 1 : 2;
+    const aiMoveCount = moveHistory.filter(item => item.color === aiColor).length;
+    const childMoveCount = moveHistory.length - aiMoveCount;
+    return {
+      actualMoveCount: moveHistory.length,
+      sgfMoveCount: replay.moves.length,
+      aiMoveCount,
+      childMoveCount,
+      finalBoardHash,
+      replayedBoardHash,
+      exportSnapshotSource: snapshot?.exportSnapshotSource || "active",
+      exportIntegrityPassed: replay.legal && replay.moves.length === moveHistory.length && finalBoardHash === replayedBoardHash,
+      aiTimingCount: Array.isArray(snapshot?.diagnostics?.aiThinkTimes) ? snapshot.diagnostics.aiThinkTimes.length : 0
+    };
+  }
+
   function gameId() {
     return `game-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   }
@@ -235,12 +287,21 @@
       gameId: input.gameId || gameId(),
       appVersion,
       engineVersion,
+      buildId: buildInfo.buildId,
       date: input.date || new Date().toISOString(),
       childColor: input.childColor || "black",
       result: input.result || "unknown",
       completed: Boolean(input.completed),
       abandoned: Boolean(input.abandoned),
       moveCount: Number(input.moveCount) || 0,
+      actualMoveCount: Number(input.actualMoveCount ?? input.moveCount) || 0,
+      sgfMoveCount: Number(input.sgfMoveCount ?? input.moveCount) || 0,
+      aiMoveCount: Number(input.aiMoveCount) || 0,
+      childMoveCount: Number(input.childMoveCount) || 0,
+      finalBoardHash: input.finalBoardHash || "",
+      replayedBoardHash: input.replayedBoardHash || "",
+      exportSnapshotSource: input.exportSnapshotSource || "active",
+      exportIntegrityPassed: Boolean(input.exportIntegrityPassed),
       difficultyMode: input.difficultyMode || "adaptive",
       difficultyStart: Number(input.difficultyStart) || 0,
       difficultyEnd: Number(input.difficultyEnd) || 0,
@@ -265,6 +326,8 @@
   return {
     appVersion,
     engineVersion,
+    buildInfo,
+    normalizeSnapshot,
     releaseConfig,
     difficultyModes,
     normalizeDifficultyMode,
@@ -278,6 +341,8 @@
     buildSGF,
     parseSgfMoves,
     replaySgf,
+    boardHash,
+    exportIntegrity,
     diagnosticSummary,
     saveDiagnostic,
     saveDebugExport

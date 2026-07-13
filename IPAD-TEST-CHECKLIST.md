@@ -2,9 +2,9 @@
 
 Build under test:
 
-- productVersion: `1.0.0-rc1`
-- engineVersion: `baseline-v3.6-frozen`
-- serviceWorkerCache: `gokidcoach-web-v39-rc1`
+- productVersion: `1.3.0-dev`
+- engineVersion: `bounded-local-reading-v1`
+- serviceWorkerCache: `gokidcoach-web-v151-stable-20260713`
 - test URL:
 - iPad model:
 - iPadOS version:
@@ -19,7 +19,7 @@ For every test, fill in Actual / Pass-Fail / Screenshot or Note. Severity if fai
 | ID | Steps | Expected Result | Actual | Pass/Fail | Screenshot or Note | Severity |
 |---|---|---|---|---|---|---|
 | A-01 | Open the test URL in Safari. | App shell loads, board visible, no console-visible fatal error. |  |  |  | blocker |
-| A-02 | Open parent view. | Version text shows `1.0.0-rc1 / baseline-v3.6-frozen`. |  |  |  | major |
+| A-02 | Open parent view. | Version text shows `1.3.0-dev / bounded-local-reading-v1`. |  |  |  | major |
 | A-03 | Wait 10 seconds after first load. | Required runtime assets finish loading; no evaluation JSON is requested. |  |  |  | major |
 
 ## B. New-Game Setup
@@ -118,7 +118,7 @@ For every test, fill in Actual / Pass-Fail / Screenshot or Note. Severity if fai
 
 | ID | Steps | Expected Result | Actual | Pass/Fail | Screenshot or Note | Severity |
 |---|---|---|---|---|---|---|
-| M-01 | Install rc1, then deploy harmless rc2 label change. | App eventually shows rc2 without corrupting active game. |  |  |  | major |
+| M-01 | Install 1.3.0-dev, then deploy harmless 1.3.0-dev2 label change. | App eventually shows rc2 without corrupting active game. |  |  |  | major |
 | M-02 | Inspect caches if available. | Old `gokidcoach-web-*` cache is removed after activation. |  |  |  | major |
 
 ## N. Full-Game Stability

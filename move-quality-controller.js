@@ -47,6 +47,9 @@
 
   function invalidMove(candidate) {
     if (!candidate || candidate.legal === false || candidate.ruleLegal === false) return true;
+    if (candidate.immediatelyRefuted && !candidate.verifiedUrgent) return true;
+    if (candidate.coherentClass === "rejected" || candidate.coherentClass === "immediatelyRefuted") return true;
+    if ((candidate.coherentClass === "lowValue" || candidate.lowValueCandidate || candidate.dameCandidate || candidate.redundantReinforcement) && !candidate.verifiedUrgent) return true;
     if (candidate.isSuicide || candidate.obviousGiveaway) return true;
     if (candidate.isMeaninglessFirstLine || candidate.isRandomFlyaway) return true;
     if (numeric(candidate.ruleScore) <= -900) return true;
@@ -143,6 +146,8 @@
     else if (rankIndex <= 2 && bestScoreGap <= 72) bucket = "goodMoves";
     else if (bestScoreGap <= 150) bucket = "acceptableMoves";
     else bucket = "weakButLegalMoves";
+    if (candidate.verifiedUrgent && bucket === "weakButLegalMoves") bucket = "acceptableMoves";
+    if (candidate.coherentClass === "coherentTactical" && bucket === "weakButLegalMoves" && bestScoreGap <= 190) bucket = "acceptableMoves";
 
     const reasons = [];
     if (bucket === "bestMove") reasons.push("best_move");
@@ -208,11 +213,23 @@
       ? candidates
       : rankCandidates(candidates, baseContext);
     const { context, groups } = rankedResult;
-    const pools = context.increasePrecision
-      ? [...groups.bestMove, ...groups.strongMoves, ...groups.goodMoves]
-      : context.reducePrecision
-        ? [...groups.goodMoves, ...groups.acceptableMoves, ...groups.strongMoves]
-        : [...groups.strongMoves, ...groups.goodMoves, ...groups.bestMove, ...groups.acceptableMoves];
+    const mode = baseContext?.difficultySettings?.releaseDifficultyMode || "adaptive";
+    const hasAcceptableOrBetter = groups.bestMove.length + groups.strongMoves.length + groups.goodMoves.length + groups.acceptableMoves.length > 0;
+    let pools;
+    if (mode === "advanced") {
+      pools = [...groups.bestMove, ...groups.strongMoves, ...groups.goodMoves.filter(candidate => numeric(candidate.bestScoreGap) <= 20)];
+    } else if (mode === "basic") {
+      pools = [...groups.strongMoves, ...groups.goodMoves, ...groups.bestMove, ...groups.acceptableMoves.filter(candidate => numeric(candidate.bestScoreGap) <= 36)];
+    } else if (mode === "beginner") {
+      pools = [...groups.goodMoves, ...groups.acceptableMoves, ...groups.strongMoves, ...groups.bestMove];
+    } else {
+      pools = context.increasePrecision
+        ? [...groups.bestMove, ...groups.strongMoves, ...groups.goodMoves]
+        : context.reducePrecision
+          ? [...groups.goodMoves, ...groups.acceptableMoves, ...groups.strongMoves]
+          : [...groups.strongMoves, ...groups.goodMoves, ...groups.bestMove, ...groups.acceptableMoves];
+    }
+    if (!pools.length && !hasAcceptableOrBetter) pools = groups.weakButLegalMoves.slice(0, 1);
 
     const filtered = pools
       .filter(candidate => candidate.moveQualityBucket !== "rejectedMoves")

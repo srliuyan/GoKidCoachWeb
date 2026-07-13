@@ -328,6 +328,18 @@ function testUnsafeConnectionUrgentEvidence() {
   assert.strictEqual(evidence.urgent, true);
 }
 
+function testLocalEmptinessAloneNoPositiveLateValue() {
+  const board = emptyBoard();
+  const score = evaluator.scoreMoveByPosition({ point: { x: 9, y: 9 }, moveNumber: 150, legal: true, ruleLegal: true }, board, black);
+  assert(score <= 0);
+}
+
+function testEdgeProximityAloneNoPositiveLateValue() {
+  const board = emptyBoard();
+  const score = evaluator.scoreMoveByPosition({ point: { x: 0, y: 9 }, moveNumber: 150, legal: true, ruleLegal: true }, board, black);
+  assert(score < 0);
+}
+
 function run() {
   testDetectWeakGroups();
   testDetectCutPoints();
@@ -359,6 +371,8 @@ function run() {
   testFalseTacticalPatternNotUrgent();
   testAlreadySafeConnectionNotUrgent();
   testUnsafeConnectionUrgentEvidence();
+  testLocalEmptinessAloneNoPositiveLateValue();
+  testEdgeProximityAloneNoPositiveLateValue();
   console.log("test-position-evaluator: ok");
 }
 

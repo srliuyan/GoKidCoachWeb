@@ -1,15 +1,15 @@
-# V1.0 Release Checklist
+# V1.2 Release Checklist
 
 Build under test:
 
-- productVersion: `1.0.0-rc1`
-- engineVersion: `baseline-v3.6-frozen`
-- serviceWorkerCache: `gokidcoach-web-v39-rc1`
+- productVersion: `1.3.0-dev`
+- engineVersion: `bounded-local-reading-v1`
+- serviceWorkerCache: `gokidcoach-web-v151-stable-20260713`
 
 ## Automated
 
-- [x] Engine scoring remains frozen.
-- [x] Shallow tactical verification remains inactive in `app.js`.
+- [x] Engine remains browser-only and no new engine was added.
+- [x] Shallow tactical verification is active only as a bounded safety layer.
 - [x] `node GoKidCoachWeb/test-product-release.js` passes.
 - [x] All `GoKidCoachWeb/test-*.js` pass.
 - [x] `node --check GoKidCoachWeb/*.js` passes.

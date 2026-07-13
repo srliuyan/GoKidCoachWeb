@@ -107,6 +107,12 @@
   function candidateIsReasonable(candidate) {
     if (!candidate || candidate.legal === false) return false;
     if (candidate.ruleLegal === false) return false;
+    if (candidate.immediatelyRefuted && !candidate.verifiedUrgent) return false;
+    if (candidate.coherentClass === "rejected" || candidate.coherentClass === "immediatelyRefuted") return false;
+    if (candidate.coherentClass === "lowValue" && !candidate.verifiedUrgent) return false;
+    if (candidate.lowValueCandidate && !candidate.verifiedUrgent) return false;
+    if (candidate.redundantReinforcement && !candidate.verifiedUrgent) return false;
+    if (candidate.dameCandidate && !candidate.verifiedUrgent) return false;
     if (candidate.isSuicide || candidate.obviousGiveaway) return false;
     if (candidate.isMeaninglessFirstLine || candidate.isRandomFlyaway) return false;
     if (Number(candidate.ruleScore) <= -900) return false;
@@ -151,6 +157,7 @@
   }
 
   function adjustMoveCandidates(candidates, difficultySettings) {
+    const mode = difficultySettings.releaseDifficultyMode || "adaptive";
     const prepared = (Array.isArray(candidates) ? candidates : [])
       .filter(candidateIsReasonable)
       .map(candidate => ({
@@ -160,12 +167,18 @@
       .sort((a, b) => b.adjustedScore - a.adjustedScore);
 
     if (!prepared.length) return [];
+    const urgent = prepared.filter(candidate => candidate.verifiedUrgent || candidate.coherentClass === "protectedUrgent");
     const bestScore = prepared[0].adjustedScore;
     const qualityFloor = bestScore - difficultySettings.mistakeTolerance;
-    return prepared.filter((candidate, index) => {
-      if (index >= Math.max(difficultySettings.candidateTopK * 2, 4)) return false;
-      return candidate.adjustedScore >= qualityFloor;
+    const modeCap = mode === "advanced" ? 2 : mode === "basic" ? 3 : mode === "beginner" ? 4 : Math.max(difficultySettings.candidateTopK * 2, 4);
+    const filtered = prepared.filter((candidate, index) => {
+      if (index >= modeCap) return false;
+      return candidate.adjustedScore >= qualityFloor || candidate.verifiedUrgent;
     });
+    for (const candidate of urgent) {
+      if (!filtered.some(item => item.point?.x === candidate.point?.x && item.point?.y === candidate.point?.y)) filtered.push(candidate);
+    }
+    return filtered.sort((a, b) => b.adjustedScore - a.adjustedScore);
   }
 
   function weightedChoice(candidates, temperature) {
@@ -186,11 +199,14 @@
       : adjustMoveCandidates(candidates, difficultySettings);
     if (!adjusted.length) return null;
 
-    const capped = adjusted.slice(0, difficultySettings.candidateTopK);
+    const mode = difficultySettings.releaseDifficultyMode || "adaptive";
+    const capped = adjusted.slice(0, mode === "advanced" ? 1 : difficultySettings.candidateTopK);
     if (capped.length === 1) return capped[0];
-    if (difficultySettings.randomness <= 0.015) return capped[0];
+    if (mode === "advanced" || difficultySettings.randomness <= 0.015) return capped[0];
+    const nearEquivalent = capped.filter(candidate => capped[0].adjustedScore - candidate.adjustedScore <= Math.max(8, difficultySettings.mistakeTolerance * 0.5));
+    if (nearEquivalent.length <= 1) return capped[0];
     if (Math.random() > difficultySettings.randomness) return capped[0];
-    return weightedChoice(capped, difficultySettings.policyTemperature);
+    return weightedChoice(nearEquivalent, difficultySettings.policyTemperature);
   }
 
   return {

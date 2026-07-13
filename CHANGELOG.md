@@ -1,5 +1,15 @@
 # Changelog
 
+## V1.5.1 Safe Legacy Cleanup - 2026-07-13
+
+- Promoted release metadata to productVersion `1.5.1`, engineVersion `candidate-coverage-v1`, buildId `gokidcoach-1.5.1-candidate-coverage-v1-20260713`.
+- Added cleanup dependency, unused-code, service-worker asset and behavior-lock audits.
+- Removed duplicate fallback BUILD_INFO literals from `sw.js`, `product-support.js` and `app.js`.
+- Kept difficulty mappings, candidate ranking, scoring weights, ContextFusion and local-reading limits unchanged.
+- Added `test-cleanup-integrity.js` to verify cached assets, BUILD_INFO source, behavior locks, export integrity, build consistency and long-game stability.
+- Retained historical evaluation reports and emergency fallback paths where dependency evidence did not prove safe deletion.
+- No deployment.
+
 ## V1.0 Final Engine Safety Fix - 2026-07-13
 
 - Added offline raw urgent-source analysis support in `training/evaluate_policy.py`.
@@ -10,10 +20,11 @@
 - Added V1.0 release guardrail tests for captures, rescues, necessary connections, legal move safety, opening coherence, yose-vs-dame behavior, and difficulty coherence.
 - Froze engine scoring for V1.0 product completion.
 - Added diagnostic shallow tactical verification APIs and tests.
+- Activated bounded shallow tactical verification as a runtime safety layer for verified urgent moves and immediate refutations.
 - Evaluated shallow verification profiles; no profile passed V1.0 gates, so browser runtime selection remains on the frozen baseline.
 - Added V1.0 product-support layer for difficulty modes, IndexedDB snapshots, SGF round-trip support and local diagnostics.
 - Added child color selection, continue/clear save actions, debug summary export and visible version text in parent view.
-- Updated PWA cache to `gokidcoach-web-v39-rc1` and kept evaluation JSON excluded from runtime cache.
+- Updated PWA cache to `gokidcoach-web-v43-local-reading-dev` and kept evaluation JSON excluded from runtime cache.
 - Added product release tests.
 
 Final baseline:

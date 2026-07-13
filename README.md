@@ -90,18 +90,22 @@ https://你的GitHub用户名.github.io/仓库名/
 - 当前未完成棋局会自动保存到 localStorage，并写入 IndexedDB 耐久副本。下次打开继续保留棋盘、手数、提子、劫状态、停一手状态、难度模式和孩子执棋。
 - PWA 已包含图标、manifest 和 Service Worker，添加到主屏幕后支持基础离线打开。
 
-## V1.0 Release Candidate
+## Current Local Runtime
 
-V1.0 停止引擎研究，目标是稳定可玩的 iPad 产品。浏览器引擎保持冻结 baseline；`product-support.js` 只处理发布层能力，包括四个难度模式、IndexedDB 存档、SGF 构造/解析、对局诊断摘要和版本信息。
+当前本地运行时已经进入 V1.5.1 候选覆盖阶段。`build-info.js` 是产品版本、引擎版本、buildId 和 service-worker cache namespace 的唯一活跃来源；`product-support.js` 只处理发布层能力，包括四个难度模式、IndexedDB 存档、SGF 构造/解析、对局诊断摘要和版本信息。
 
-四个模式的发布映射：
+四个模式的当前映射：
 
-- 入门陪练：映射到既有 AI level 640，只在有意义的合法候选中放松选择。
-- 基础陪练：映射到既有 AI level 760，通常选择 good 候选，允许有限 acceptable 候选。
-- 进阶陪练：映射到既有 AI level 880，偏向 strongest candidates。
+- 入门陪练：AI level 720，只在有意义的合法候选中放松选择。
+- 基础陪练：AI level 840，通常选择好棋，允许少量可接受变化。
+- 进阶陪练：AI level 980，使用最强发布候选选择。
 - 自适应陪练：以 level 880 起步，只根据完成的真实对局缓慢调整。
 
 本地诊断只保存在设备上，不上传服务器。正常对局只保存轻量摘要，不保存每个候选点的完整分数。
+
+## V1.5.1 Cleanup Boundary
+
+安全清理只移除已证明无运行价值的重复元数据来源和不可达备用路径。当前保留评估报告、行为锁报告、紧急 fallback 和局部规则辅助函数，因为它们仍被测试、审计或运行时保护路径引用。清理不能改变候选排序、走棋选择、难度映射、评分权重或本地阅读限制。
 
 ## 记忆和难度机制
 
