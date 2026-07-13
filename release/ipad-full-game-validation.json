@@ -1,0 +1,28 @@
+{
+  "build": {
+    "productVersion": "1.0.0-rc1",
+    "engineVersion": "baseline-v3.6-frozen",
+    "serviceWorkerCache": "gokidcoach-web-v39-rc1"
+  },
+  "status": "manual-test-required",
+  "deviceModel": "",
+  "iPadOSVersion": "",
+  "safariOrPwaMode": "",
+  "testDate": "",
+  "games": [
+    {
+      "mode": "自适应陪练",
+      "moveCount": 0,
+      "completed": null,
+      "averagePerceivedAiResponseTime": "",
+      "slowestObservedAiResponse": "",
+      "appReloads": 0,
+      "crashes": 0,
+      "boardInputErrors": 0,
+      "restoreEvents": 0,
+      "memoryWarningBehavior": "",
+      "assetReloadBehavior": "",
+      "notes": "Physical iPad result required; Node simulation is not sufficient."
+    }
+  ]
+}

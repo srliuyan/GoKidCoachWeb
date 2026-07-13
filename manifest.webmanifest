@@ -1,6 +1,9 @@
 {
   "name": "围棋陪练",
   "short_name": "围棋陪练",
+  "id": "./?app=GoKidCoachWeb&version=1.0.0-rc1",
+  "version": "1.0.0-rc1",
+  "description": "GoKidCoach V1.0 RC1 iPad PWA with frozen baseline-v3.6 engine.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
