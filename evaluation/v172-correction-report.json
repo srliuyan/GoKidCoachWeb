@@ -1,0 +1,20 @@
+{
+  "productVersion": "1.7.2-dev",
+  "engineVersion": "candidate-breadth-audit-v1",
+  "selectedProfile": "whole_board_only",
+  "retainedSources": [
+    "whole_board_strategy"
+  ],
+  "removedSources": [
+    {
+      "source": "strategic_invasion_reduction",
+      "reason": "distinct framework probes overlapped whole_board_strategy and had zero unique contribution in this profile set"
+    },
+    {
+      "source": "strategic_tenuki",
+      "reason": "tenuki probes overlapped whole_board_strategy and had zero unique contribution"
+    }
+  ],
+  "runtimeIntegrated": true,
+  "deploymentOccurred": false
+}

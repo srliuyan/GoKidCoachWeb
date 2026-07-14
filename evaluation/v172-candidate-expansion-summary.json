@@ -108,5 +108,24 @@
       "whole_board_strategy"
     ]
   },
+  "selectedProfile": "whole_board_only",
+  "retainedSources": [
+    "whole_board_strategy"
+  ],
+  "removedSources": [
+    {
+      "source": "strategic_invasion_reduction",
+      "reason": "distinct framework probes overlapped whole_board_strategy and had zero unique contribution in this profile set"
+    },
+    {
+      "source": "strategic_tenuki",
+      "reason": "tenuki probes overlapped whole_board_strategy and had zero unique contribution"
+    }
+  ],
+  "uniqueContributionCountBySource": {
+    "whole_board_strategy": 2,
+    "strategic_invasion_reduction": 0,
+    "strategic_tenuki": 0
+  },
   "deploymentOccurred": false
 }

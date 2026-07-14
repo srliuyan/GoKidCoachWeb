@@ -1331,13 +1331,15 @@ function analyzeGroupsForMove(color) {
   return own;
 }
 
-function addCandidatePoint(map, point, reason, priority, color) {
+function addCandidatePoint(map, point, reason, priority, color, metadata = {}) {
   if (!point || point.x < 0 || point.y < 0 || point.x >= size || point.y >= size || board[point.y][point.x] !== empty) return;
   const rule = window.GoKidCoachRuleEngine?.evaluateMove?.({ board, point, color, moveHistory, positionHashes });
   if (rule && !rule.legal) return;
   const key = `${point.x},${point.y}`;
   const previous = map.get(key);
-  const sourceTags = new Set([...(previous?.sourceTags || []), reason]);
+  const sourceTags = new Set([...(previous?.sourceTags || []), ...(metadata.sourceTags || []), reason]);
+  const purposeLabels = new Set([...(previous?.purposeLabels || []), ...(metadata.purposeLabels || [])]);
+  const affectedGroups = new Set([...(previous?.affectedGroups || []), ...(metadata.affectedGroups || [])]);
   const urgent = /capture|rescue|critical|necessary|urgent/.test(reason) || Boolean(previous?.urgent);
   const weakGroup = /weak_group|escape|connection_toward_support|defense/.test(reason) || Boolean(previous?.weakGroup);
   const global = /whole_board|invasion|reduction|policy_probe|position_probe/.test(reason) || Boolean(previous?.global);
@@ -1348,15 +1350,80 @@ function addCandidatePoint(map, point, reason, priority, color) {
       priority,
       source: reason,
       sourceTags: Array.from(sourceTags),
+      purposeLabels: Array.from(purposeLabels),
+      generationReason: metadata.generationReason || reason,
+      confidence: metadata.confidence || previous?.confidence || "",
+      primaryRegion: metadata.primaryRegion || previous?.primaryRegion || "",
+      affectedGroups: Array.from(affectedGroups),
+      tacticalSafety: metadata.tacticalSafety || previous?.tacticalSafety || null,
       urgent,
       weakGroup,
       global
     });
   } else {
     previous.sourceTags = Array.from(sourceTags);
+    previous.purposeLabels = Array.from(purposeLabels);
+    previous.affectedGroups = Array.from(affectedGroups);
+    previous.generationReason = [previous.generationReason, metadata.generationReason].filter(Boolean).join("; ");
+    previous.confidence = previous.confidence || metadata.confidence || "";
+    previous.primaryRegion = previous.primaryRegion || metadata.primaryRegion || "";
+    previous.tacticalSafety = previous.tacticalSafety || metadata.tacticalSafety || null;
     previous.urgent = urgent;
     previous.weakGroup = weakGroup;
     previous.global = global;
+  }
+}
+
+function maxStrengthUrgentCandidateExists(candidateMap) {
+  return Array.from(candidateMap.values()).some(item => item.urgent && item.priority >= 780);
+}
+
+function regionForStrategicPoint(point) {
+  if (point.x <= 4 && point.y <= 4) return "upper_left_corner";
+  if (point.x >= 14 && point.y <= 4) return "upper_right_corner";
+  if (point.x <= 4 && point.y >= 14) return "lower_left_corner";
+  if (point.x >= 14 && point.y >= 14) return "lower_right_corner";
+  if (point.y <= 3) return "top_side";
+  if (point.y >= 15) return "bottom_side";
+  if (point.x <= 3) return "left_side";
+  if (point.x >= 15) return "right_side";
+  return "center";
+}
+
+function addMaxStrengthWholeBoardStrategyCandidates(candidateMap, color, ownGroups) {
+  if (!isMaxStrengthMode() || maxStrengthUrgentCandidateExists(candidateMap)) return;
+  const strategicPoints = [
+    { point: { x: 10, y: 14 }, purpose: "develop_influence", reason: "thickness_direction_global_value", priority: 535 },
+    { point: { x: 10, y: 3 }, purpose: "global_large_point", reason: "largest_open_region_global_value", priority: 526 },
+    { point: { x: 4, y: 15 }, purpose: "global_large_point", reason: "large_extension_global_value", priority: 518 },
+    { point: { x: 14, y: 4 }, purpose: "approach", reason: "major_approach_enclosure_value", priority: 512 }
+  ];
+  const usedRegions = new Set();
+  let added = 0;
+  for (const item of strategicPoints) {
+    if (added >= 2) break;
+    const region = regionForStrategicPoint(item.point);
+    if (usedRegions.has(region)) continue;
+    const near = nearestStoneDistance(item.point);
+    const stableOwnGroups = ownGroups.filter(group => group.classification !== "critical" && group.classification !== "weak").length;
+    addCandidatePoint(candidateMap, item.point, "whole_board_strategy", item.priority + Math.max(0, 6 - Math.min(6, near)), color, {
+      sourceTags: ["whole_board_strategy"],
+      purposeLabels: [item.purpose],
+      generationReason: item.reason,
+      confidence: "high",
+      primaryRegion: region,
+      affectedGroups: [],
+      tacticalSafety: {
+        urgentFight: false,
+        legal: true,
+        immediateSelfAtari: false,
+        stableOwnGroupCount: stableOwnGroups
+      }
+    });
+    if (candidateMap.has(`${item.point.x},${item.point.y}`)) {
+      usedRegions.add(region);
+      added += 1;
+    }
   }
 }
 
@@ -1384,6 +1451,12 @@ function prioritizedCandidateList(candidates, maxCount = 12) {
   return selected.slice(0, maxCount).map(item => ({
     ...item.point,
     sourceTags: item.sourceTags || [item.source],
+    purposeLabels: item.purposeLabels || [],
+    generationReason: item.generationReason || item.source,
+    confidence: item.confidence || "",
+    primaryRegion: item.primaryRegion || "",
+    affectedGroups: item.affectedGroups || [],
+    tacticalSafety: item.tacticalSafety || null,
     candidateSource: item.source,
     urgentCandidate: Boolean(item.urgent),
     weakGroupCandidate: Boolean(item.weakGroup),
@@ -1453,6 +1526,7 @@ function generateMiddlegameCandidateMoves(color) {
       }
     }
   }
+  addMaxStrengthWholeBoardStrategyCandidates(candidates, color, ownGroups);
   return prioritizedCandidateList(candidates, 12);
 }
 

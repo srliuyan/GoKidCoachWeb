@@ -136,9 +136,22 @@ function testDeterministicAndCheckModeClean() {
 
 function testLowerModeBehaviorLockAndRuntimeUnchanged() {
   const result = expansion.run();
-  assert.strictEqual(result.report.runtimeBehaviorChanged, false);
+  assert.strictEqual(result.report.runtimeBehaviorChanged, true);
+  assert.strictEqual(result.report.runtimeScope, "MAX_STRENGTH_FIXED whole_board_strategy only");
   assert.strictEqual(result.report.top10ReadingCapChanged, false);
   assert.strictEqual(result.report.finalSelectorGuardChanged, false);
+}
+
+function testSelectedProfileAndRuntimeWiring() {
+  const result = expansion.run();
+  assert.strictEqual(result.report.selectedProfile, "whole_board_only");
+  assert.deepStrictEqual(result.report.retainedSources, ["whole_board_strategy"]);
+  assert(result.report.removedSources.some(item => item.source === "strategic_invasion_reduction"));
+  assert(result.report.removedSources.some(item => item.source === "strategic_tenuki"));
+  assert.strictEqual(result.report.gate.runtimeIntegrated, true);
+  const appSource = fs.readFileSync(path.join(__dirname, "app.js"), "utf8");
+  assert(appSource.includes("addMaxStrengthWholeBoardStrategyCandidates"));
+  assert(appSource.includes("if (!isMaxStrengthMode()"));
 }
 
 function run() {
@@ -151,6 +164,7 @@ function run() {
   testUrgentCandidatePreservationAndTop10Entry();
   testDeterministicAndCheckModeClean();
   testLowerModeBehaviorLockAndRuntimeUnchanged();
+  testSelectedProfileAndRuntimeWiring();
   console.log("test-v172-candidate-expansion: ok");
 }
 

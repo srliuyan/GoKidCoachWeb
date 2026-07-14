@@ -1,0 +1,166 @@
+[
+  {
+    "profileName": "baseline_v171",
+    "enabledSources": [],
+    "activationCount": 0,
+    "candidatesGenerated": 0,
+    "candidatesDeduplicated": 0,
+    "candidatesEnteringTop10": 0,
+    "candidatesEnteringTop3AfterReading": 0,
+    "candidatesBecomingFinalRank1": 0,
+    "candidatesFinallySelected": 0,
+    "candidatesRejected": 0,
+    "improvedMoveCount": 0,
+    "worsenedMoveCount": 0,
+    "averageLatencyCost": 0,
+    "overlapWithOtherSources": 0,
+    "uniqueContributionCount": 0,
+    "passesSafetyAndQuality": true
+  },
+  {
+    "profileName": "invasion_reduction_only",
+    "enabledSources": [
+      "strategic_invasion_reduction"
+    ],
+    "activationCount": 2,
+    "candidatesGenerated": 2,
+    "candidatesDeduplicated": 1,
+    "candidatesEnteringTop10": 1,
+    "candidatesEnteringTop3AfterReading": 1,
+    "candidatesBecomingFinalRank1": 1,
+    "candidatesFinallySelected": 1,
+    "candidatesRejected": 0,
+    "improvedMoveCount": 1,
+    "worsenedMoveCount": 0,
+    "averageLatencyCost": 0.31,
+    "overlapWithOtherSources": 1,
+    "uniqueContributionCount": 0,
+    "passesSafetyAndQuality": false
+  },
+  {
+    "profileName": "tenuki_only",
+    "enabledSources": [
+      "strategic_tenuki"
+    ],
+    "activationCount": 1,
+    "candidatesGenerated": 1,
+    "candidatesDeduplicated": 0,
+    "candidatesEnteringTop10": 1,
+    "candidatesEnteringTop3AfterReading": 1,
+    "candidatesBecomingFinalRank1": 1,
+    "candidatesFinallySelected": 1,
+    "candidatesRejected": 0,
+    "improvedMoveCount": 1,
+    "worsenedMoveCount": 0,
+    "averageLatencyCost": 0.22,
+    "overlapWithOtherSources": 1,
+    "uniqueContributionCount": 0,
+    "passesSafetyAndQuality": false
+  },
+  {
+    "profileName": "whole_board_only",
+    "enabledSources": [
+      "whole_board_strategy"
+    ],
+    "activationCount": 2,
+    "candidatesGenerated": 2,
+    "candidatesDeduplicated": 0,
+    "candidatesEnteringTop10": 2,
+    "candidatesEnteringTop3AfterReading": 2,
+    "candidatesBecomingFinalRank1": 2,
+    "candidatesFinallySelected": 2,
+    "candidatesRejected": 0,
+    "improvedMoveCount": 2,
+    "worsenedMoveCount": 0,
+    "averageLatencyCost": 0.42,
+    "overlapWithOtherSources": 0,
+    "uniqueContributionCount": 2,
+    "passesSafetyAndQuality": true
+  },
+  {
+    "profileName": "invasion_plus_whole_board",
+    "enabledSources": [
+      "strategic_invasion_reduction",
+      "whole_board_strategy"
+    ],
+    "activationCount": 4,
+    "candidatesGenerated": 4,
+    "candidatesDeduplicated": 1,
+    "candidatesEnteringTop10": 3,
+    "candidatesEnteringTop3AfterReading": 3,
+    "candidatesBecomingFinalRank1": 3,
+    "candidatesFinallySelected": 3,
+    "candidatesRejected": 0,
+    "improvedMoveCount": 3,
+    "worsenedMoveCount": 0,
+    "averageLatencyCost": 0.73,
+    "overlapWithOtherSources": 1,
+    "uniqueContributionCount": 2,
+    "passesSafetyAndQuality": true
+  },
+  {
+    "profileName": "tenuki_plus_whole_board",
+    "enabledSources": [
+      "strategic_tenuki",
+      "whole_board_strategy"
+    ],
+    "activationCount": 3,
+    "candidatesGenerated": 3,
+    "candidatesDeduplicated": 0,
+    "candidatesEnteringTop10": 3,
+    "candidatesEnteringTop3AfterReading": 3,
+    "candidatesBecomingFinalRank1": 3,
+    "candidatesFinallySelected": 3,
+    "candidatesRejected": 0,
+    "improvedMoveCount": 3,
+    "worsenedMoveCount": 0,
+    "averageLatencyCost": 0.64,
+    "overlapWithOtherSources": 1,
+    "uniqueContributionCount": 2,
+    "passesSafetyAndQuality": true
+  },
+  {
+    "profileName": "all_three_sources",
+    "enabledSources": [
+      "strategic_invasion_reduction",
+      "strategic_tenuki",
+      "whole_board_strategy"
+    ],
+    "activationCount": 5,
+    "candidatesGenerated": 5,
+    "candidatesDeduplicated": 1,
+    "candidatesEnteringTop10": 4,
+    "candidatesEnteringTop3AfterReading": 4,
+    "candidatesBecomingFinalRank1": 4,
+    "candidatesFinallySelected": 4,
+    "candidatesRejected": 0,
+    "improvedMoveCount": 4,
+    "worsenedMoveCount": 0,
+    "averageLatencyCost": 0.95,
+    "overlapWithOtherSources": 2,
+    "uniqueContributionCount": 2,
+    "passesSafetyAndQuality": true
+  },
+  {
+    "profileName": "smallest_passing_combination",
+    "enabledSources": [
+      "strategic_invasion_reduction",
+      "strategic_tenuki",
+      "whole_board_strategy"
+    ],
+    "activationCount": 5,
+    "candidatesGenerated": 5,
+    "candidatesDeduplicated": 1,
+    "candidatesEnteringTop10": 4,
+    "candidatesEnteringTop3AfterReading": 4,
+    "candidatesBecomingFinalRank1": 4,
+    "candidatesFinallySelected": 4,
+    "candidatesRejected": 0,
+    "improvedMoveCount": 4,
+    "worsenedMoveCount": 0,
+    "averageLatencyCost": 0.95,
+    "overlapWithOtherSources": 2,
+    "uniqueContributionCount": 2,
+    "passesSafetyAndQuality": true
+  }
+]

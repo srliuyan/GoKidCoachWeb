@@ -366,6 +366,61 @@
       "tracked": true,
       "current": true,
       "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-correction-report.json",
+      "generator": "evaluation/run-v172-candidate-expansion.js",
+      "command": "node evaluation/run-v172-candidate-expansion.js --write-reports",
+      "purpose": "V1.7.2 selected strategic candidate correction report",
+      "requiredInputs": ["evaluation/v172-missed-opportunities.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-before-after-cases.json",
+      "generator": "evaluation/run-v172-candidate-expansion.js",
+      "command": "node evaluation/run-v172-candidate-expansion.js --write-reports",
+      "purpose": "V1.7.2 before/after strategic candidate cases",
+      "requiredInputs": ["evaluation/v172-missed-opportunities.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-profile-comparison.json",
+      "generator": "evaluation/run-v172-candidate-expansion.js",
+      "command": "node evaluation/run-v172-candidate-expansion.js --write-reports",
+      "purpose": "V1.7.2 strategic candidate profile comparison",
+      "requiredInputs": ["evaluation/v172-missed-opportunities.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-candidate-source-effectiveness.json",
+      "generator": "evaluation/run-v172-candidate-expansion.js",
+      "command": "node evaluation/run-v172-candidate-expansion.js --write-reports",
+      "purpose": "V1.7.2 candidate source unique contribution analysis",
+      "requiredInputs": ["evaluation/v172-missed-opportunities.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-final-gate-result.json",
+      "generator": "evaluation/run-v172-candidate-expansion.js",
+      "command": "node evaluation/run-v172-candidate-expansion.js --write-reports",
+      "purpose": "V1.7.2 final strategic candidate expansion gate result",
+      "requiredInputs": ["evaluation/v172-missed-opportunities.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
     }
   ]
 }

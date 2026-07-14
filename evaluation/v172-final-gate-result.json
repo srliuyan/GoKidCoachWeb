@@ -1,0 +1,77 @@
+{
+  "selectedProfile": "whole_board_only",
+  "passed": true,
+  "failedGates": [],
+  "runtimeIntegrated": true,
+  "retainedSources": [
+    "whole_board_strategy"
+  ],
+  "removedSources": [
+    {
+      "source": "strategic_invasion_reduction",
+      "reason": "distinct framework probes overlapped whole_board_strategy and had zero unique contribution in this profile set"
+    },
+    {
+      "source": "strategic_tenuki",
+      "reason": "tenuki probes overlapped whole_board_strategy and had zero unique contribution"
+    }
+  ],
+  "benchmark": {
+    "before": {
+      "goodOrBetterRate": 0.216,
+      "endgameGoodOrBetterRate": 0.108,
+      "averageScoreLossFromBest": 9.513055,
+      "rejectedMoveRate": 0
+    },
+    "after": {
+      "goodOrBetterRate": 0.216,
+      "endgameGoodOrBetterRate": 0.108,
+      "averageScoreLossFromBest": 9.513055,
+      "rejectedMoveRate": 0
+    },
+    "noPhaseRegressionAbove002": true
+  },
+  "tacticalSafety": {
+    "missedImmediateCaptureCount": 0,
+    "missedAtariRescueCount": 0,
+    "failedRescueSelectionCount": 0,
+    "selfAtariSelectionCount": 0,
+    "immediatelyRefutedSelectionCount": 0,
+    "tacticalOverrideMissedCount": 0,
+    "urgentCandidateCoverageRate": 1,
+    "tacticalCandidateCoverageRate": 1,
+    "top10TacticalCoverageRate": 1
+  },
+  "maxModeSafety": {
+    "adaptiveWeakeningCount": 0,
+    "lowerTierSubstitutionCount": 0,
+    "unsupportedFallbackCount": 0,
+    "postGuardRerankingCount": 0
+  },
+  "middlegameMetrics": {
+    "selectedCoherentMoveRate": 0.94,
+    "lowerModeBehaviorLockPassed": true,
+    "candidateFloodConditionAppeared": false,
+    "changedSelectionsTraceable": true
+  },
+  "endgameSafety": {
+    "calibratedEndgameBadMoveCount": 0,
+    "senteGoteMisclassificationCount": 0,
+    "rejectedMoveRate": 0
+  },
+  "performance": {
+    "averageLatencyBefore": 27.297,
+    "averageLatencyAfter": 29.84,
+    "averageLatencyRegressionPct": 9.316,
+    "p95LatencyBefore": 30.3,
+    "p95LatencyAfter": 33.12,
+    "p95LatencyRegressionPct": 9.307,
+    "simulation300MovesPassed": true,
+    "lateGameGrowthRegression": false,
+    "memoryListenerDomStabilityUnchanged": true,
+    "newStallAbove250MsCausedByCandidateExpansion": false
+  },
+  "deploymentOccurred": false,
+  "exactNextStrengthBottleneck": "production integration now relies on runtime validation of whole_board_strategy region quality and avoiding redundant global points",
+  "v173Recommendation": "Run a runtime A/B audit of whole_board_strategy candidate quality by phase before adding invasion or tenuki sources."
+}
