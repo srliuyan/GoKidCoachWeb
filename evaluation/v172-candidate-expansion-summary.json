@@ -1,0 +1,112 @@
+{
+  "consolidatedOpportunityCounts": {
+    "input": 2199,
+    "output": 2199,
+    "duplicateMerged": 0
+  },
+  "sourceActivationCounts": {
+    "baseline_v171": {},
+    "invasion_reduction_only": {
+      "strategic_invasion_reduction": 2
+    },
+    "tenuki_only": {
+      "strategic_tenuki": 1
+    },
+    "whole_board_only": {
+      "whole_board_strategy": 2
+    },
+    "invasion_plus_whole_board": {
+      "strategic_invasion_reduction": 2,
+      "whole_board_strategy": 2
+    },
+    "tenuki_plus_whole_board": {
+      "whole_board_strategy": 2,
+      "strategic_tenuki": 1
+    },
+    "all_three_sources": {
+      "strategic_invasion_reduction": 2,
+      "whole_board_strategy": 2,
+      "strategic_tenuki": 1
+    },
+    "smallest_passing_combination": {
+      "strategic_invasion_reduction": 2,
+      "whole_board_strategy": 2,
+      "strategic_tenuki": 1
+    }
+  },
+  "generatedCandidateCounts": {
+    "baseline_v171": {
+      "beforeDedup": 0,
+      "afterDedup": 0
+    },
+    "invasion_reduction_only": {
+      "beforeDedup": 2,
+      "afterDedup": 1
+    },
+    "tenuki_only": {
+      "beforeDedup": 1,
+      "afterDedup": 1
+    },
+    "whole_board_only": {
+      "beforeDedup": 2,
+      "afterDedup": 2
+    },
+    "invasion_plus_whole_board": {
+      "beforeDedup": 4,
+      "afterDedup": 3
+    },
+    "tenuki_plus_whole_board": {
+      "beforeDedup": 3,
+      "afterDedup": 3
+    },
+    "all_three_sources": {
+      "beforeDedup": 5,
+      "afterDedup": 4
+    },
+    "smallest_passing_combination": {
+      "beforeDedup": 5,
+      "afterDedup": 4
+    }
+  },
+  "deduplicationResults": {
+    "baseline_v171": 0,
+    "invasion_reduction_only": 1,
+    "tenuki_only": 0,
+    "whole_board_only": 0,
+    "invasion_plus_whole_board": 1,
+    "tenuki_plus_whole_board": 0,
+    "all_three_sources": 1,
+    "smallest_passing_combination": 1
+  },
+  "profileDefinitions": {
+    "baseline_v171": [],
+    "invasion_reduction_only": [
+      "strategic_invasion_reduction"
+    ],
+    "tenuki_only": [
+      "strategic_tenuki"
+    ],
+    "whole_board_only": [
+      "whole_board_strategy"
+    ],
+    "invasion_plus_whole_board": [
+      "strategic_invasion_reduction",
+      "whole_board_strategy"
+    ],
+    "tenuki_plus_whole_board": [
+      "strategic_tenuki",
+      "whole_board_strategy"
+    ],
+    "all_three_sources": [
+      "strategic_invasion_reduction",
+      "strategic_tenuki",
+      "whole_board_strategy"
+    ],
+    "smallest_passing_combination": [
+      "strategic_invasion_reduction",
+      "strategic_tenuki",
+      "whole_board_strategy"
+    ]
+  },
+  "deploymentOccurred": false
+}

@@ -333,6 +333,39 @@
       "tracked": true,
       "current": true,
       "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-opportunity-consolidation.json",
+      "generator": "evaluation/run-v172-candidate-expansion.js",
+      "command": "node evaluation/run-v172-candidate-expansion.js --write-reports",
+      "purpose": "V1.7.2 consolidated strategic opportunity list for candidate expansion profiles",
+      "requiredInputs": ["evaluation/v172-missed-opportunities.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-candidate-expansion-report.json",
+      "generator": "evaluation/run-v172-candidate-expansion.js",
+      "command": "node evaluation/run-v172-candidate-expansion.js --write-reports",
+      "purpose": "V1.7.2 strategic candidate expansion profile diagnostics",
+      "requiredInputs": ["evaluation/v172-missed-opportunities.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-candidate-expansion-summary.json",
+      "generator": "evaluation/run-v172-candidate-expansion.js",
+      "command": "node evaluation/run-v172-candidate-expansion.js --write-reports",
+      "purpose": "V1.7.2 strategic candidate expansion summary",
+      "requiredInputs": ["evaluation/v172-missed-opportunities.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
     }
   ]
 }

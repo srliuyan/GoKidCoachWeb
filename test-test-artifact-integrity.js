@@ -11,6 +11,7 @@ const senteGote = require("./evaluation/run-v162-sente-gote-audit.js");
 const maxStrength = require("./evaluation/run-v170-max-strength-audit.js");
 const top10Reading = require("./evaluation/run-v171-top10-reading-audit.js");
 const breadthAudit = require("./evaluation/run-v172-candidate-breadth-audit.js");
+const candidateExpansion = require("./evaluation/run-v172-candidate-expansion.js");
 
 const root = __dirname;
 
@@ -155,6 +156,9 @@ function testDeterministicHashesRepeat() {
   const k = breadthAudit.run({ seed: 20260714 });
   const l = breadthAudit.run({ seed: 20260714 });
   assert.strictEqual(deterministicHash(k.summary), deterministicHash(l.summary));
+  const m = candidateExpansion.run();
+  const n = candidateExpansion.run();
+  assert.strictEqual(deterministicHash(m.summary), deterministicHash(n.summary));
 }
 
 function testReportManifestCoversCurrentReports() {
@@ -171,6 +175,8 @@ function testReportManifestCoversCurrentReports() {
     "evaluation/v171-gate-result.json",
     "evaluation/v172-candidate-source-summary.json",
     "evaluation/v172-gate-result.json",
+    "evaluation/v172-opportunity-consolidation.json",
+    "evaluation/v172-candidate-expansion-summary.json",
     "evaluation/long-game-performance-report.json",
     "evaluation/build-consistency-audit.json",
     "evaluation/export-integrity-report.json",
