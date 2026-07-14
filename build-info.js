@@ -1,10 +1,10 @@
 (function (root) {
   const BUILD_INFO = {
-    productVersion: "1.7.1-dev",
-    appVersion: "1.7.1-dev",
-    engineVersion: "top10-candidate-reading-v1",
-    buildId: "gokidcoach-1.7.1-dev-top10-candidate-reading-v1-20260714",
-    serviceWorkerCache: "gokidcoach-web-v171-dev-top10-candidate-reading-20260714",
+    productVersion: "1.7.2-dev",
+    appVersion: "1.7.2-dev",
+    engineVersion: "candidate-breadth-audit-v1",
+    buildId: "gokidcoach-1.7.2-dev-candidate-breadth-audit-v1-20260714",
+    serviceWorkerCache: "gokidcoach-web-v172-dev-candidate-breadth-audit-20260714",
     schemaVersion: 3,
     generatedAt: "2026-07-13T00:00:00Z"
   };

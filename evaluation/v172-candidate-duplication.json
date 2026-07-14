@@ -1,0 +1,2506 @@
+{
+  "duplicateRate": 0.137765,
+  "crossSourceDuplicateRate": 0.137765,
+  "rows": [
+    {
+      "positionId": "benchmark_1",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_2",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_3",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_4",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_5",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_6",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_7",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_8",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_9",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_10",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_11",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_12",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_13",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_14",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_15",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_16",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_17",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_18",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_19",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_20",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_21",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_22",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_23",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_24",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_25",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_26",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_27",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_28",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_29",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_30",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_31",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_32",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_33",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_34",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_35",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_36",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_37",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_38",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_39",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_40",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_41",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_42",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_43",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_44",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_45",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_46",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_47",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_48",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_49",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_50",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_51",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_52",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_53",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_54",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_55",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_56",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_57",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_58",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_59",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_60",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_61",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_62",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_63",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_64",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_65",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_66",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_67",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_68",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_69",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_70",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_71",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_72",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_73",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_74",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_75",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_76",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_77",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_78",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_79",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_80",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_81",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_82",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_83",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_84",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_85",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_86",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_87",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_88",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_89",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_90",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_91",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_92",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_93",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_94",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_95",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_96",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_97",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_98",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_99",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_100",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_101",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_102",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_103",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_104",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_105",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_106",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_107",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_108",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_109",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_110",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_111",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_112",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_113",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_114",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_115",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_116",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_117",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_118",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_119",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_120",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_121",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_122",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_123",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_124",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_125",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_126",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_127",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_128",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_129",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_130",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_131",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_132",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_133",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_134",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_135",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_136",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_137",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_138",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_139",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_140",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_141",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_142",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_143",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_144",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_145",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_146",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_147",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_148",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_149",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_150",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_151",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_152",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_153",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_154",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_155",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_156",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_157",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_158",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_159",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_160",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_161",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_162",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_163",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_164",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_165",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_166",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_167",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_168",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_169",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_170",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_171",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_172",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_173",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_174",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_175",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_176",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_177",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_178",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_179",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_180",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_181",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_182",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_183",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_184",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_185",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_186",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_187",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_188",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_189",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_190",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_191",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_192",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_193",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_194",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_195",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_196",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_197",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_198",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_199",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_200",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_201",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_202",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_203",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_204",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_205",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_206",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_207",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_208",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_209",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_210",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_211",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_212",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_213",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_214",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_215",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_216",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_217",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_218",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_219",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_220",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_221",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_222",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_223",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_224",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_225",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_226",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_227",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_228",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_229",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_230",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_231",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_232",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_233",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_234",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_235",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_236",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_237",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_238",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_239",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_240",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_241",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_242",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_243",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_244",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_245",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_246",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_247",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_248",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_249",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_250",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_251",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_252",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_253",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_254",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_255",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_256",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_257",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_258",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_259",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_260",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_261",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_262",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_263",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_264",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_265",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_266",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_267",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_268",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_269",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_270",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_271",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_272",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_273",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_274",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_275",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_276",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_277",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_278",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_279",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_280",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_281",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_282",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_283",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_284",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_285",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_286",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_287",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_288",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_289",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_290",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_291",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_292",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_293",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_294",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_295",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_296",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_297",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_298",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_299",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_300",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_301",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_302",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_303",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_304",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_305",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_306",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_307",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_308",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_309",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_310",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_311",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_312",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_313",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_314",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_315",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_316",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_317",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_318",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_319",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_320",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_321",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_322",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_323",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_324",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_325",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_326",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_327",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_328",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_329",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_330",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_331",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_332",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_333",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_334",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_335",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_336",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_337",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_338",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_339",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_340",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_341",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_342",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_343",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_344",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_345",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_346",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_347",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_348",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_349",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_350",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_351",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_352",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_353",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_354",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_355",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_356",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_357",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_358",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_359",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_360",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_361",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_362",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_363",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_364",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_365",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_366",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_367",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_368",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_369",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_370",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_371",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_372",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_373",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_374",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_375",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_376",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_377",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_378",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_379",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_380",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_381",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_382",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_383",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_384",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_385",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_386",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_387",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_388",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_389",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_390",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_391",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_392",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_393",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_394",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_395",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_396",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_397",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_398",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_399",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_400",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_401",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_402",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_403",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_404",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_405",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_406",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_407",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_408",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_409",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_410",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_411",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_412",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_413",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_414",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_415",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_416",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_417",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_418",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_419",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_420",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_421",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_422",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_423",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_424",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_425",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_426",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_427",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_428",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_429",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_430",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_431",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_432",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_433",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_434",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_435",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_436",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_437",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_438",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_439",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_440",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_441",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_442",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_443",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_444",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_445",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_446",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_447",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_448",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_449",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_450",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_451",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_452",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_453",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_454",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_455",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_456",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_457",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_458",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_459",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_460",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_461",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_462",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_463",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_464",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_465",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_466",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_467",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_468",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_469",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_470",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_471",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_472",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_473",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_474",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_475",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_476",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_477",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_478",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_479",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_480",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_481",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_482",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_483",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_484",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_485",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_486",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_487",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_488",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_489",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_490",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_491",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_492",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_493",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_494",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_495",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_496",
+      "localDuplicateCount": 3,
+      "crossSourceDuplicateCount": 3
+    },
+    {
+      "positionId": "benchmark_497",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_498",
+      "localDuplicateCount": 2,
+      "crossSourceDuplicateCount": 2
+    },
+    {
+      "positionId": "benchmark_499",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    },
+    {
+      "positionId": "benchmark_500",
+      "localDuplicateCount": 1,
+      "crossSourceDuplicateCount": 1
+    }
+  ]
+}

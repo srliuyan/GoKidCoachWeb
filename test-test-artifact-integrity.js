@@ -10,6 +10,7 @@ const endgame = require("./evaluation/run-v161-endgame-audit.js");
 const senteGote = require("./evaluation/run-v162-sente-gote-audit.js");
 const maxStrength = require("./evaluation/run-v170-max-strength-audit.js");
 const top10Reading = require("./evaluation/run-v171-top10-reading-audit.js");
+const breadthAudit = require("./evaluation/run-v172-candidate-breadth-audit.js");
 
 const root = __dirname;
 
@@ -151,6 +152,9 @@ function testDeterministicHashesRepeat() {
   const i = top10Reading.run({ seed: 20260713, selfPlayGames: 100 });
   const j = top10Reading.run({ seed: 20260713, selfPlayGames: 100 });
   assert.strictEqual(deterministicHash(i.summary), deterministicHash(j.summary));
+  const k = breadthAudit.run({ seed: 20260714 });
+  const l = breadthAudit.run({ seed: 20260714 });
+  assert.strictEqual(deterministicHash(k.summary), deterministicHash(l.summary));
 }
 
 function testReportManifestCoversCurrentReports() {
@@ -165,6 +169,8 @@ function testReportManifestCoversCurrentReports() {
     "evaluation/v170-gate-result.json",
     "evaluation/v171-top10-reading-summary.json",
     "evaluation/v171-gate-result.json",
+    "evaluation/v172-candidate-source-summary.json",
+    "evaluation/v172-gate-result.json",
     "evaluation/long-game-performance-report.json",
     "evaluation/build-consistency-audit.json",
     "evaluation/export-integrity-report.json",

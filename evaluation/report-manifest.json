@@ -245,6 +245,94 @@
       "tracked": true,
       "current": true,
       "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-candidate-breadth-audit.json",
+      "generator": "evaluation/run-v172-candidate-breadth-audit.js",
+      "command": "node evaluation/run-v172-candidate-breadth-audit.js --write-reports --seed 20260714",
+      "purpose": "V1.7.2 per-position candidate-source, purpose, region, and opportunity audit",
+      "requiredInputs": ["V1.7.1 top10 position set", "seed:20260714"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-candidate-source-summary.json",
+      "generator": "evaluation/run-v172-candidate-breadth-audit.js",
+      "command": "node evaluation/run-v172-candidate-breadth-audit.js --write-reports --seed 20260714",
+      "purpose": "V1.7.2 candidate source inventory and source health classification",
+      "requiredInputs": ["source inventory", "seed:20260714"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-purpose-summary.json",
+      "generator": "evaluation/run-v172-candidate-breadth-audit.js",
+      "command": "node evaluation/run-v172-candidate-breadth-audit.js --write-reports --seed 20260714",
+      "purpose": "V1.7.2 candidate purpose coverage summary",
+      "requiredInputs": ["V1.7.1 top10 position set", "seed:20260714"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-region-summary.json",
+      "generator": "evaluation/run-v172-candidate-breadth-audit.js",
+      "command": "node evaluation/run-v172-candidate-breadth-audit.js --write-reports --seed 20260714",
+      "purpose": "V1.7.2 board-region coverage summary",
+      "requiredInputs": ["V1.7.1 top10 position set", "seed:20260714"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-missed-opportunities.json",
+      "generator": "evaluation/run-v172-candidate-breadth-audit.js",
+      "command": "node evaluation/run-v172-candidate-breadth-audit.js --write-reports --seed 20260714",
+      "purpose": "V1.7.2 missed high-value candidate opportunity diagnostics",
+      "requiredInputs": ["V1.7.1 top10 position set", "seed:20260714"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-candidate-duplication.json",
+      "generator": "evaluation/run-v172-candidate-breadth-audit.js",
+      "command": "node evaluation/run-v172-candidate-breadth-audit.js --write-reports --seed 20260714",
+      "purpose": "V1.7.2 candidate duplicate and cross-source duplicate diagnostics",
+      "requiredInputs": ["V1.7.1 top10 position set", "seed:20260714"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-candidate-loss-trace.json",
+      "generator": "evaluation/run-v172-candidate-breadth-audit.js",
+      "command": "node evaluation/run-v172-candidate-breadth-audit.js --write-reports --seed 20260714",
+      "purpose": "V1.7.2 missed opportunity failure-stage trace",
+      "requiredInputs": ["V1.7.1 top10 position set", "seed:20260714"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v172-gate-result.json",
+      "generator": "evaluation/run-v172-candidate-breadth-audit.js",
+      "command": "node evaluation/run-v172-candidate-breadth-audit.js --write-reports --seed 20260714",
+      "purpose": "V1.7.2 candidate breadth diagnostic gate result",
+      "requiredInputs": ["V1.7.1 top10 position set", "seed:20260714"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
     }
   ]
 }
