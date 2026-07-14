@@ -11,6 +11,23 @@
     return Number.isFinite(Number(value)) ? Number(value) : 0;
   }
 
+  function isMaxStrengthMode(mode) {
+    return mode === "MAX_STRENGTH_FIXED" || mode === "advanced";
+  }
+
+  function pointTieBreak(a, b) {
+    const pa = a?.point || {};
+    const pb = b?.point || {};
+    return numeric(pa.y ?? 99) - numeric(pb.y ?? 99)
+      || numeric(pa.x ?? 99) - numeric(pb.x ?? 99);
+  }
+
+  function compareBaseStrength(a, b) {
+    return numeric(b.adjustedScore ?? b.combinedScore) - numeric(a.adjustedScore ?? a.combinedScore)
+      || numeric(b.combinedScore) - numeric(a.combinedScore)
+      || pointTieBreak(a, b);
+  }
+
   function averageQualityImpact(recentMoveAssessments) {
     const items = (Array.isArray(recentMoveAssessments) ? recentMoveAssessments : []).slice(-12);
     if (!items.length) return 0;
@@ -63,6 +80,28 @@
     const smoothing = smoothStrengthAdjustment(companionState, recentMoveAssessments);
     const companionPlan = baseContext?.companionPlan || {};
     const difficultySettings = baseContext?.difficultySettings || {};
+    const maxStrength = isMaxStrengthMode(difficultySettings.releaseDifficultyMode);
+    if (maxStrength) {
+      return {
+        focus: "max",
+        currentStrength: 100,
+        targetAiStrength: 100,
+        precisionBand: "fixed",
+        candidateDiversity: 1,
+        tacticalSharpness: 1,
+        territorialPreference: 1,
+        openingPrecision: 1,
+        endgamePrecision: 1,
+        confidenceBase: 0.9,
+        confidenceDrop: 0.04,
+        targetMoveRank: 1,
+        reducePrecision: false,
+        increasePrecision: true,
+        smoothing: { smoothedInfluence: 0, pressureDelta: 0, targetMoveRankDelta: 0, confidenceDelta: 0 },
+        moveNumber: numeric(baseContext?.moveNumber),
+        maxStrengthFixed: true
+      };
+    }
     return {
       focus: companionPlan.focus || difficultySettings.focusArea || "opening",
       currentStrength: numeric(companionPlan.currentStrength || difficultySettings.currentStrengthEstimate || companionState.currentStrength || 50),
@@ -172,7 +211,7 @@
     const context = createContext(baseContext);
     const sorted = (Array.isArray(candidates) ? candidates : [])
       .slice()
-      .sort((a, b) => numeric(b.adjustedScore ?? b.combinedScore) - numeric(a.adjustedScore ?? a.combinedScore));
+      .sort(compareBaseStrength);
     const bestScore = numeric(sorted[0]?.adjustedScore ?? sorted[0]?.combinedScore);
     const groups = {
       bestMove: [],
@@ -214,6 +253,11 @@
       : rankCandidates(candidates, baseContext);
     const { context, groups } = rankedResult;
     const mode = baseContext?.difficultySettings?.releaseDifficultyMode || "adaptive";
+    if (isMaxStrengthMode(mode)) {
+      return (rankedResult.ranked || [])
+        .filter(candidate => candidate.moveQualityBucket !== "rejectedMoves")
+        .sort(compareBaseStrength)[0] || null;
+    }
     const hasAcceptableOrBetter = groups.bestMove.length + groups.strongMoves.length + groups.goodMoves.length + groups.acceptableMoves.length > 0;
     let pools;
     if (mode === "advanced") {

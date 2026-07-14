@@ -14,6 +14,7 @@ const detailedMoveDiagnosticCap = 100;
 const detailedCandidateDiagnosticCap = 20;
 const rawStageTimingCap = 100;
 const recoverySnapshotInterval = 20;
+const maxStrengthMode = "MAX_STRENGTH_FIXED";
 const difficultyPresets = [
   { value: "beginner", level: 720, key: "difficultyBeginner" },
   { value: "basic", level: 840, key: "difficultyIntermediate" },
@@ -163,6 +164,8 @@ let companionState = createCompanionStateForChild();
 let currentCompanionPlan = null;
 let currentMoveQualityPlan = null;
 let lastAdaptiveSummary = null;
+let lastSelectedCandidateFinalRank = 0;
+let lastSelectedCandidateTier = "";
 let previousPositionEval = null;
 size = fixedBoardSize;
 let board = freshBoard();
@@ -328,6 +331,30 @@ function productSupportApi() {
   return window.GoKidCoachProductSupport;
 }
 
+function isMaxStrengthMode(value = profile?.difficultyMode) {
+  const product = productSupportApi();
+  return product && typeof product.isMaxStrengthMode === "function"
+    ? product.isMaxStrengthMode(value)
+    : value === maxStrengthMode || value === "advanced";
+}
+
+function candidateStrengthValue(candidate) {
+  return Number(candidate?.adjustedScore ?? candidate?.combinedScore ?? -Infinity);
+}
+
+function deterministicCandidateCompare(a, b) {
+  const pointA = a?.point || {};
+  const pointB = b?.point || {};
+  return candidateStrengthValue(b) - candidateStrengthValue(a)
+    || Number(b?.combinedScore || 0) - Number(a?.combinedScore || 0)
+    || Number(pointA.y ?? 99) - Number(pointB.y ?? 99)
+    || Number(pointA.x ?? 99) - Number(pointB.x ?? 99);
+}
+
+function selectedCandidateTier(candidate) {
+  return candidate?.moveQualityBucket || candidate?.tier || candidate?.qualityTier || candidate?.coherentClass || "";
+}
+
 function buildInfo() {
   const info = window.GoKidCoachBuildInfo || productSupportApi()?.buildInfo;
   if (!info) throw new Error("GoKidCoachBuildInfo must be loaded before app.js");
@@ -433,6 +460,7 @@ function createAdaptiveGameState() {
 function createCompanionPlanForCurrentChild() {
   const api = companionEngineApi();
   if (!api || typeof api.createCompanionPlan !== "function") return null;
+  if (isMaxStrengthMode()) return null;
   return api.createCompanionPlan(
     studentProfile || loadStudentProfileForChild(),
     recentGamesForAdaptive(),
@@ -464,15 +492,21 @@ function applyReleaseDifficultyMode(settings) {
     adjusted.ruleEngineWeight = Math.max(Number(adjusted.ruleEngineWeight) || 1.15, 1.22);
     adjusted.tacticalStrictness = Math.max(Number(adjusted.tacticalStrictness) || 1.08, 1.14);
     adjusted.endgamePrecision = Math.max(Number(adjusted.endgamePrecision) || 1, 1.02);
-  } else if (mode === "advanced") {
+  } else if (mode === maxStrengthMode || mode === "advanced") {
     adjusted.candidateTopK = 1;
-    adjusted.mistakeTolerance = 6;
-    adjusted.randomness = 0.01;
-    adjusted.policyTemperature = 0.18;
-    adjusted.ruleEngineWeight = Math.max(Number(adjusted.ruleEngineWeight) || 1.25, 1.34);
-    adjusted.tacticalStrictness = Math.max(Number(adjusted.tacticalStrictness) || 1.18, 1.28);
-    adjusted.openingBookWeight = Math.max(Number(adjusted.openingBookWeight) || 1.2, 1.28);
-    adjusted.endgamePrecision = Math.max(Number(adjusted.endgamePrecision) || 1.04, 1.08);
+    adjusted.mistakeTolerance = 0;
+    adjusted.randomness = 0;
+    adjusted.policyTemperature = 0;
+    adjusted.ruleEngineWeight = 1;
+    adjusted.tacticalStrictness = 1;
+    adjusted.openingBookWeight = 1;
+    adjusted.endgamePrecision = 1;
+    adjusted.suggestedAiStrength = 100;
+    adjusted.focusArea = "max";
+    adjusted.weakAreas = [];
+    adjusted.adaptiveWeakeningEnabled = false;
+    adjusted.randomSofteningEnabled = false;
+    adjusted.maxStrengthFixed = true;
   } else {
     adjusted.randomness = Math.min(Number(adjusted.randomness) || 0.04, 0.04);
     adjusted.mistakeTolerance = Math.min(Number(adjusted.mistakeTolerance) || 16, 16);
@@ -887,6 +921,10 @@ function saveCurrentGame() {
     consecutivePasses,
     childColor: profile.childColor || "black",
     difficultyMode: profile.difficultyMode || "adaptive",
+    adaptiveWeakeningEnabled: !isMaxStrengthMode(profile.difficultyMode),
+    randomSofteningEnabled: !isMaxStrengthMode(profile.difficultyMode),
+    selectedCandidateFinalRank: lastSelectedCandidateFinalRank,
+    selectedCandidateTier: lastSelectedCandidateTier,
     adaptiveDifficultyState: {
       companionState,
       currentCompanionPlan,
@@ -958,6 +996,10 @@ function loadCurrentGame() {
       : null;
     profile.childColor = saved.childColor === "white" ? "white" : profile.childColor || "black";
     profile.difficultyMode = productSupportApi()?.normalizeDifficultyMode?.(saved.difficultyMode || profile.difficultyMode) || profile.difficultyMode || "adaptive";
+    if (isMaxStrengthMode(profile.difficultyMode)) {
+      currentCompanionPlan = null;
+      currentMoveQualityPlan = null;
+    }
     currentGameId = saved.gameId || currentGameId;
     gameStartTimestamp = Number(saved.gameStartTimestamp) || Date.now();
     restoreCount = Number(saved.diagnostics?.restoreCount || saved.restoreCount || 0) + 1;
@@ -1080,6 +1122,10 @@ function createExportSnapshot(source = "active") {
     difficultyMode: profile.difficultyMode || "adaptive",
     difficultyStart: profile.initialAiLevel,
     difficultyEnd: profile.aiLevel,
+    adaptiveWeakeningEnabled: !isMaxStrengthMode(profile.difficultyMode),
+    randomSofteningEnabled: !isMaxStrengthMode(profile.difficultyMode),
+    selectedCandidateFinalRank: lastSelectedCandidateFinalRank,
+    selectedCandidateTier: lastSelectedCandidateTier,
     diagnostics: {
       restoreCount,
       childIllegalAttemptCount,
@@ -1787,7 +1833,8 @@ function chooseLocalAIMove(moves, color = aiStoneColor(), perfRecord = null) {
   const moveQuality = moveQualityControllerApi();
   const positionEvaluator = positionEvaluatorApi();
   const midgameStability = midgameStabilityApi();
-  const companionPlan = createCompanionPlanForCurrentChild();
+  const maxMode = isMaxStrengthMode();
+  const companionPlan = maxMode ? null : createCompanionPlanForCurrentChild();
   const settings = applyReleaseDifficultyMode(
     difficulty.getDifficultySettings(studentProfile || loadStudentProfileForChild(), recentChildResults(), companionPlan)
   );
@@ -1818,10 +1865,10 @@ function chooseLocalAIMove(moves, color = aiStoneColor(), perfRecord = null) {
     return fusion && typeof fusion.fuseCandidate === "function"
       ? fusion.fuseCandidate(prepared, {
         moveNumber: moveHistory.length,
-        companionPlan,
+        companionPlan: maxMode ? null : companionPlan,
         difficultySettings: settings,
-        childStrengthEstimate: companionPlan?.currentStrength,
-        aiCalibrationLevel: settings?.suggestedAiStrength
+        childStrengthEstimate: maxMode ? 100 : companionPlan?.currentStrength,
+        aiCalibrationLevel: maxMode ? 100 : settings?.suggestedAiStrength
       })
       : prepared;
   }));
@@ -1874,9 +1921,11 @@ function chooseLocalAIMove(moves, color = aiStoneColor(), perfRecord = null) {
       : { ranked: adjusted, groups: {}, context: moveQualityContext }
   ));
   const preferred = measureStage(perfRecord || {}, "finalSelectionMs", () => (
-    moveQuality && typeof moveQuality.chooseMoveByQuality === "function"
-      ? moveQuality.chooseMoveByQuality(ranked, moveQualityContext)
-      : difficulty.chooseAdaptiveMove(ranked.ranked || adjusted, settings)
+    maxMode
+      ? (ranked.ranked || adjusted).slice().sort(deterministicCandidateCompare)[0]
+      : moveQuality && typeof moveQuality.chooseMoveByQuality === "function"
+        ? moveQuality.chooseMoveByQuality(ranked, moveQualityContext)
+        : difficulty.chooseAdaptiveMove(ranked.ranked || adjusted, settings)
   ));
   const choice = preferred
     || ranked.ranked?.[0]
@@ -1894,6 +1943,9 @@ function chooseLocalAIMove(moves, color = aiStoneColor(), perfRecord = null) {
       confidence: guardedChoice.confidence || 0,
       precisionBand: (ranked.context || moveQualityContext)?.precisionBand || "balanced"
     };
+    const finalRank = (ranked.ranked || adjusted).findIndex(candidate => candidateKey(candidate) === candidateKey(guardedChoice));
+    lastSelectedCandidateFinalRank = finalRank >= 0 ? finalRank + 1 : 0;
+    lastSelectedCandidateTier = selectedCandidateTier(guardedChoice);
   }
   return guardedChoice?.point || null;
 }
@@ -2395,7 +2447,8 @@ function changeBoardSize(value) {
 
 function nearestDifficultyPreset(level) {
   const mode = productSupportApi()?.normalizeDifficultyMode?.(profile.difficultyMode || level) || profile.difficultyMode || "adaptive";
-  return difficultyPresets.find(preset => preset.value === mode) || difficultyPresets[3];
+  const uiMode = mode === maxStrengthMode ? "advanced" : mode;
+  return difficultyPresets.find(preset => preset.value === uiMode) || difficultyPresets[3];
 }
 
 function changeInitialDifficulty(value) {
@@ -2535,6 +2588,10 @@ function saveGameDiagnostic(status, result = null) {
     difficultyMode: profile.difficultyMode || "adaptive",
     difficultyStart: profile.initialAiLevel,
     difficultyEnd: profile.aiLevel,
+    adaptiveWeakeningEnabled: !isMaxStrengthMode(profile.difficultyMode),
+    randomSofteningEnabled: !isMaxStrengthMode(profile.difficultyMode),
+    selectedCandidateFinalRank: lastSelectedCandidateFinalRank,
+    selectedCandidateTier: lastSelectedCandidateTier,
     aiThinkTimes,
     restoreCount,
     childIllegalAttemptCount,
@@ -2560,6 +2617,11 @@ function exportDebugSummary() {
     engineVersion: info.engineVersion,
     productVersion: info.productVersion,
     buildId: info.buildId,
+    difficultyMode: profile.difficultyMode || "adaptive",
+    adaptiveWeakeningEnabled: !isMaxStrengthMode(profile.difficultyMode),
+    randomSofteningEnabled: !isMaxStrengthMode(profile.difficultyMode),
+    selectedCandidateFinalRank: lastSelectedCandidateFinalRank,
+    selectedCandidateTier: lastSelectedCandidateTier,
     summary: { ...summary, ...integrity },
     sgf,
     ...integrity,

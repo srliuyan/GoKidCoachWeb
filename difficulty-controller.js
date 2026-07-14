@@ -20,6 +20,27 @@
     return Math.max(min, Math.min(max, value));
   }
 
+  function isMaxStrengthMode(mode) {
+    return mode === "MAX_STRENGTH_FIXED" || mode === "advanced";
+  }
+
+  function candidatePoint(candidate) {
+    return candidate?.point || candidate || {};
+  }
+
+  function candidateTieBreak(a, b) {
+    const pointA = candidatePoint(a);
+    const pointB = candidatePoint(b);
+    return Number(pointA.y ?? 99) - Number(pointB.y ?? 99)
+      || Number(pointA.x ?? 99) - Number(pointB.x ?? 99);
+  }
+
+  function compareAdjustedCandidates(a, b) {
+    return Number(b.adjustedScore || 0) - Number(a.adjustedScore || 0)
+      || Number(b.combinedScore || 0) - Number(a.combinedScore || 0)
+      || candidateTieBreak(a, b);
+  }
+
   function normalizeProfile(studentProfile) {
     const scores = {};
     for (const key of Object.keys(defaultScores)) {
@@ -164,9 +185,10 @@
         ...candidate,
         adjustedScore: adjustedScore(candidate, difficultySettings)
       }))
-      .sort((a, b) => b.adjustedScore - a.adjustedScore);
+      .sort(compareAdjustedCandidates);
 
     if (!prepared.length) return [];
+    if (isMaxStrengthMode(mode)) return prepared;
     const urgent = prepared.filter(candidate => candidate.verifiedUrgent || candidate.coherentClass === "protectedUrgent");
     const bestScore = prepared[0].adjustedScore;
     const qualityFloor = bestScore - difficultySettings.mistakeTolerance;
@@ -178,7 +200,7 @@
     for (const candidate of urgent) {
       if (!filtered.some(item => item.point?.x === candidate.point?.x && item.point?.y === candidate.point?.y)) filtered.push(candidate);
     }
-    return filtered.sort((a, b) => b.adjustedScore - a.adjustedScore);
+    return filtered.sort(compareAdjustedCandidates);
   }
 
   function weightedChoice(candidates, temperature) {
@@ -200,6 +222,7 @@
     if (!adjusted.length) return null;
 
     const mode = difficultySettings.releaseDifficultyMode || "adaptive";
+    if (isMaxStrengthMode(mode)) return adjusted.slice().sort(compareAdjustedCandidates)[0];
     const capped = adjusted.slice(0, mode === "advanced" ? 1 : difficultySettings.candidateTopK);
     if (capped.length === 1) return capped[0];
     if (mode === "advanced" || difficultySettings.randomness <= 0.015) return capped[0];
@@ -212,6 +235,7 @@
   return {
     getDifficultySettings,
     adjustMoveCandidates,
-    chooseAdaptiveMove
+    chooseAdaptiveMove,
+    isMaxStrengthMode
   };
 }));

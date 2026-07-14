@@ -1,10 +1,10 @@
 (function (root) {
   const BUILD_INFO = {
-    productVersion: "1.6.3",
-    appVersion: "1.6.3",
-    engineVersion: "coherent-stress-hardened-v1",
-    buildId: "gokidcoach-1.6.3-coherent-stress-hardened-v1-20260714-final",
-    serviceWorkerCache: "gokidcoach-web-v163-coherent-stress-hardened-final-20260714",
+    productVersion: "1.7.0-dev",
+    appVersion: "1.7.0-dev",
+    engineVersion: "max-strength-unlock-v1",
+    buildId: "gokidcoach-1.7.0-dev-max-strength-unlock-v1-20260714",
+    serviceWorkerCache: "gokidcoach-web-v170-dev-max-strength-unlock-20260714",
     schemaVersion: 3,
     generatedAt: "2026-07-13T00:00:00Z"
   };

@@ -13,6 +13,7 @@
   const currentGameStore = "currentGames";
   const diagnosticsStore = "diagnostics";
   const debugStore = "debugExports";
+  const MAX_STRENGTH_FIXED = "MAX_STRENGTH_FIXED";
 
   const releaseConfig = {
     targetChildWinRateMin: 0.35,
@@ -27,7 +28,8 @@
   const difficultyModes = {
     beginner: { key: "beginner", label: "入门陪练", level: 720, targetRank: 2.4, description: "只在有意义的合法候选中放松选择。" },
     basic: { key: "basic", label: "基础陪练", level: 840, targetRank: 1.8, description: "通常选择好棋，允许少量可接受变化。" },
-    advanced: { key: "advanced", label: "进阶陪练", level: 980, targetRank: 1, description: "使用最强发布候选选择。" },
+    advanced: { key: "advanced", internalMode: MAX_STRENGTH_FIXED, label: "进阶陪练", level: 980, targetRank: 1, description: "映射到固定最大棋力。" },
+    MAX_STRENGTH_FIXED: { key: MAX_STRENGTH_FIXED, label: "进阶陪练", level: 980, targetRank: 1, description: "固定选择最强合法候选，不做自适应放松。" },
     adaptive: { key: "adaptive", label: "自适应陪练", level: 880, targetRank: 1.8, description: "根据完成的真实对局缓慢调整。" }
   };
 
@@ -36,16 +38,21 @@
   }
 
   function normalizeDifficultyMode(value) {
+    if (value === "advanced" || value === MAX_STRENGTH_FIXED || value === "max_strength_fixed") return MAX_STRENGTH_FIXED;
     if (difficultyModes[value]) return value;
     const numeric = Number(value);
     if (numeric <= 760) return "beginner";
     if (numeric <= 900) return "basic";
-    if (numeric <= 980) return "advanced";
+    if (numeric <= 980) return MAX_STRENGTH_FIXED;
     return "adaptive";
   }
 
   function difficultyModeConfig(value) {
     return difficultyModes[normalizeDifficultyMode(value)];
+  }
+
+  function isMaxStrengthMode(value) {
+    return normalizeDifficultyMode(value) === MAX_STRENGTH_FIXED;
   }
 
   function adaptiveStatus(history, currentLevel) {
@@ -311,6 +318,10 @@
       restoreCount: Number(input.restoreCount) || 0,
       childIllegalAttemptCount: Number(input.childIllegalAttemptCount) || 0,
       aiRejectedCandidateCount: Number(input.aiRejectedCandidateCount) || 0,
+      adaptiveWeakeningEnabled: Boolean(input.adaptiveWeakeningEnabled),
+      randomSofteningEnabled: Boolean(input.randomSofteningEnabled),
+      selectedCandidateFinalRank: Number(input.selectedCandidateFinalRank) || 0,
+      selectedCandidateTier: input.selectedCandidateTier || "",
       appCrashRecoveryFlag: Boolean(input.appCrashRecoveryFlag)
     };
   }
@@ -327,11 +338,13 @@
     appVersion,
     engineVersion,
     buildInfo,
+    MAX_STRENGTH_FIXED,
     normalizeSnapshot,
     releaseConfig,
     difficultyModes,
     normalizeDifficultyMode,
     difficultyModeConfig,
+    isMaxStrengthMode,
     adaptiveStatus,
     boundedAdaptiveAdjustment,
     openDb,
