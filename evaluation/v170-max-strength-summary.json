@@ -1,0 +1,34 @@
+{
+  "productVersion": "1.7.0-dev",
+  "engineVersion": "max-strength-unlock-v1",
+  "noHumanRankOrEloClaimed": true,
+  "positionCount": 2747,
+  "previousAdvanced980": {
+    "rank1SelectionRate": 0.898799,
+    "averageSelectedRank": 1.101201,
+    "averageScoreLossFromStrongest": 1.262468,
+    "randomSofteningCount": 0,
+    "adaptiveWeakeningCount": 218,
+    "lowerTierSubstitutionCount": 281,
+    "unsupportedFallbackCount": 0,
+    "averageLatencyMs": 4.350978,
+    "p95LatencyMs": 4.934
+  },
+  "maxStrengthFixed": {
+    "rank1SelectionRate": 1,
+    "averageSelectedRank": 1,
+    "averageScoreLossFromStrongest": 0,
+    "randomSofteningCount": 0,
+    "adaptiveWeakeningCount": 0,
+    "deliberateMistakeCount": 0,
+    "lowerTierSubstitutionCount": 0,
+    "unsupportedFallbackCount": 0,
+    "postGuardRerankingCount": 0,
+    "deterministicRepeatabilityPassed": true,
+    "independentOfStudentModelStrengthOutput": true,
+    "averageLatencyMs": 4.299373,
+    "p95LatencyMs": 4.875
+  },
+  "finalSelectorGuardChangedCount": 5,
+  "identicalMoveRate": 0.898799
+}

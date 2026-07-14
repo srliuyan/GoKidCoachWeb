@@ -1,0 +1,57 @@
+{
+  "selectedProfile": "full_max_strength_unlock",
+  "passed": true,
+  "failedGates": [],
+  "benchmark": {
+    "exactMatchRate": 0.149,
+    "top3MatchRate": 0.216,
+    "top5MatchRate": 0.239,
+    "goodOrBetterRate": 0.216,
+    "endgameGoodOrBetterRate": 0.108,
+    "averageScoreLossFromBest": 9.513055,
+    "rejectedMoveRate": 0,
+    "phaseQualityRegressionAbove002": false
+  },
+  "tacticalSafety": {
+    "missedImmediateCaptureCount": 0,
+    "missedAtariRescueCount": 0,
+    "failedRescueSelectionCount": 0,
+    "selfAtariSelectionCount": 0,
+    "immediatelyRefutedSelectionCount": 0,
+    "tacticalOverrideMissedCount": 0,
+    "urgentCandidateCoverageRate": 1,
+    "tacticalCandidateCoverageRate": 1,
+    "top8TacticalCoverageRate": 1
+  },
+  "middlegameMetrics": {
+    "selectedCoherentMoveRate": 0.94,
+    "weakGroupCandidateCoverageRate": 1,
+    "coherentCandidateCoverageRate": 1,
+    "lowerModeBehaviorLockPassed": true
+  },
+  "endgameSafety": {
+    "calibratedEndgameBadMoveCount": 0,
+    "senteGoteMisclassificationCount": 0,
+    "rejectedMoveRate": 0
+  },
+  "performance": {
+    "averageMoveLatencyRegressionPct": -1.186,
+    "p95MoveLatencyRegressionPct": -1.196,
+    "simulation300MovesPassed": true,
+    "lateGameGrowthRegression": false,
+    "memoryListenerStabilityUnchanged": true,
+    "searchDepthUnchanged": true,
+    "top8ReadingCapUnchanged": true,
+    "opponentReplyCapUnchanged": true,
+    "aiContinuationCapUnchanged": true
+  },
+  "selfPlaySummary": {
+    "wins": 100,
+    "losses": 0,
+    "draws": 0
+  },
+  "deploymentOccurred": false,
+  "runtimeIntegrated": true,
+  "nextStrengthBottleneck": "candidate reading breadth remains capped at top 8; strongest mode can only choose among currently generated and verified candidates",
+  "v171Recommendation": "Evaluate candidate-reading expansion from top 8 to top 10 without changing scoring weights."
+}

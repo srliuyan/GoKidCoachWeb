@@ -113,6 +113,72 @@
       "tracked": false,
       "current": true,
       "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v170-max-strength-audit.json",
+      "generator": "evaluation/run-v170-max-strength-audit.js",
+      "command": "node evaluation/run-v170-max-strength-audit.js --write-reports --seed 20260713 --self-play-games 100",
+      "purpose": "V1.7.0 maximum-strength per-position comparator",
+      "requiredInputs": ["evaluation/benchmark-baseline.json", "seed:20260713", "V1.6 stress generator", "V1.6.1 endgame fixtures"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v170-max-strength-summary.json",
+      "generator": "evaluation/run-v170-max-strength-audit.js",
+      "command": "node evaluation/run-v170-max-strength-audit.js --write-reports --seed 20260713 --self-play-games 100",
+      "purpose": "V1.7.0 maximum-strength aggregate summary",
+      "requiredInputs": ["evaluation/benchmark-baseline.json", "seed:20260713"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v170-softening-path-cases.json",
+      "generator": "evaluation/run-v170-max-strength-audit.js",
+      "command": "node evaluation/run-v170-max-strength-audit.js --write-reports --seed 20260713 --self-play-games 100",
+      "purpose": "Cases where old Advanced 980 softening changed selection",
+      "requiredInputs": ["evaluation/benchmark-baseline.json", "seed:20260713"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v170-difficulty-gradient.json",
+      "generator": "evaluation/run-v170-max-strength-audit.js",
+      "command": "node evaluation/run-v170-max-strength-audit.js --write-reports --seed 20260713 --self-play-games 100",
+      "purpose": "Deterministic difficulty-gradient metrics across supported modes",
+      "requiredInputs": ["evaluation/benchmark-baseline.json", "seed:20260713"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v170-self-play-result.json",
+      "generator": "evaluation/run-v170-max-strength-audit.js",
+      "command": "node evaluation/run-v170-max-strength-audit.js --write-reports --seed 20260713 --self-play-games 100",
+      "purpose": "Deterministic MAX_STRENGTH_FIXED versus previous Advanced 980 self-play comparison",
+      "requiredInputs": ["seed:20260713", "self-play-games:100"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v170-gate-result.json",
+      "generator": "evaluation/run-v170-max-strength-audit.js",
+      "command": "node evaluation/run-v170-max-strength-audit.js --write-reports --seed 20260713 --self-play-games 100",
+      "purpose": "V1.7.0 maximum-strength gate decision",
+      "requiredInputs": ["evaluation/benchmark-baseline.json", "seed:20260713"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
     }
   ]
 }

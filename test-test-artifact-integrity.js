@@ -8,6 +8,7 @@ const path = require("path");
 const stress = require("./evaluation/run-v16-bad-move-stress.js");
 const endgame = require("./evaluation/run-v161-endgame-audit.js");
 const senteGote = require("./evaluation/run-v162-sente-gote-audit.js");
+const maxStrength = require("./evaluation/run-v170-max-strength-audit.js");
 
 const root = __dirname;
 
@@ -143,6 +144,9 @@ function testDeterministicHashesRepeat() {
   const e = senteGote.run({ seed: 20260713, positions: 300, runtimeIntegrated: true });
   const f = senteGote.run({ seed: 20260713, positions: 300, runtimeIntegrated: true });
   assert.strictEqual(deterministicHash(e.profiles), deterministicHash(f.profiles));
+  const g = maxStrength.run({ seed: 20260713, selfPlayGames: 100 });
+  const h = maxStrength.run({ seed: 20260713, selfPlayGames: 100 });
+  assert.strictEqual(deterministicHash(g.summary), deterministicHash(h.summary));
 }
 
 function testReportManifestCoversCurrentReports() {
@@ -153,6 +157,8 @@ function testReportManifestCoversCurrentReports() {
     "evaluation/v16-calibrated-category-summary.json",
     "evaluation/v161-endgame-category-summary.json",
     "evaluation/v162-correction-report.json",
+    "evaluation/v170-max-strength-summary.json",
+    "evaluation/v170-gate-result.json",
     "evaluation/long-game-performance-report.json",
     "evaluation/build-consistency-audit.json",
     "evaluation/export-integrity-report.json",

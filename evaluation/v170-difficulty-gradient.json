@@ -1,0 +1,7600 @@
+{
+  "productVersion": "1.7.0-dev",
+  "engineVersion": "max-strength-unlock-v1",
+  "noHumanRankOrEloClaimed": true,
+  "positionCount": 2747,
+  "modes": [
+    {
+      "mode": "beginner",
+      "positionCount": 2747,
+      "averageSelectedRank": 2.750273,
+      "rank1SelectionRate": 0,
+      "top3SelectionRate": 0.749909,
+      "bestTierSelectionRate": 0.008009,
+      "goodTierSelectionRate": 0.361121,
+      "acceptableTierSelectionRate": 0.376775,
+      "averageScoreLossFromStrongest": 50.553331,
+      "randomnessActivationCount": 2747,
+      "adaptiveWeakeningCount": 2747,
+      "fallbackCount": 0,
+      "identicalMoveRateVersusMax": 0
+    },
+    {
+      "mode": "easy",
+      "positionCount": 2747,
+      "averageSelectedRank": 1.666909,
+      "rank1SelectionRate": 0.533309,
+      "top3SelectionRate": 1,
+      "bestTierSelectionRate": 0.460866,
+      "goodTierSelectionRate": 0.226793,
+      "acceptableTierSelectionRate": 0.117947,
+      "averageScoreLossFromStrongest": 21.34474,
+      "randomnessActivationCount": 1282,
+      "adaptiveWeakeningCount": 1282,
+      "fallbackCount": 0,
+      "identicalMoveRateVersusMax": 0.533309
+    },
+    {
+      "mode": "normal",
+      "positionCount": 2747,
+      "averageSelectedRank": 1.111394,
+      "rank1SelectionRate": 0.888606,
+      "top3SelectionRate": 1,
+      "bestTierSelectionRate": 0.766655,
+      "goodTierSelectionRate": 0.061886,
+      "acceptableTierSelectionRate": 0.004732,
+      "averageScoreLossFromStrongest": 3.390608,
+      "randomnessActivationCount": 306,
+      "adaptiveWeakeningCount": 306,
+      "fallbackCount": 0,
+      "identicalMoveRateVersusMax": 0.888606
+    },
+    {
+      "mode": "hard",
+      "positionCount": 2747,
+      "averageSelectedRank": 1,
+      "rank1SelectionRate": 1,
+      "top3SelectionRate": 1,
+      "bestTierSelectionRate": 0.862395,
+      "goodTierSelectionRate": 0.003276,
+      "acceptableTierSelectionRate": 0,
+      "averageScoreLossFromStrongest": 0,
+      "randomnessActivationCount": 0,
+      "adaptiveWeakeningCount": 0,
+      "fallbackCount": 0,
+      "identicalMoveRateVersusMax": 1
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionCount": 2747,
+      "averageSelectedRank": 1.103021,
+      "rank1SelectionRate": 0.896979,
+      "top3SelectionRate": 1,
+      "bestTierSelectionRate": 0.775755,
+      "goodTierSelectionRate": 0.055697,
+      "acceptableTierSelectionRate": 0.003276,
+      "averageScoreLossFromStrongest": 1.271205,
+      "randomnessActivationCount": 0,
+      "adaptiveWeakeningCount": 283,
+      "fallbackCount": 0,
+      "identicalMoveRateVersusMax": 0.896979
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionCount": 2747,
+      "averageSelectedRank": 1,
+      "rank1SelectionRate": 1,
+      "top3SelectionRate": 1,
+      "bestTierSelectionRate": 0.862395,
+      "goodTierSelectionRate": 0.003276,
+      "acceptableTierSelectionRate": 0,
+      "averageScoreLossFromStrongest": 0,
+      "randomnessActivationCount": 0,
+      "adaptiveWeakeningCount": 0,
+      "fallbackCount": 0,
+      "identicalMoveRateVersusMax": 1
+    }
+  ],
+  "rows": [
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_1",
+      "selectedMove": {
+        "x": 18,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_1",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_1",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_1",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_1",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": false,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_1",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_2",
+      "selectedMove": {
+        "x": 14,
+        "y": 18
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_2",
+      "selectedMove": {
+        "x": 13,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_2",
+      "selectedMove": {
+        "x": 13,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_2",
+      "selectedMove": {
+        "x": 13,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_2",
+      "selectedMove": {
+        "x": 13,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_2",
+      "selectedMove": {
+        "x": 13,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_3",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_3",
+      "selectedMove": {
+        "x": 15,
+        "y": 6
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_3",
+      "selectedMove": {
+        "x": 15,
+        "y": 6
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_3",
+      "selectedMove": {
+        "x": 15,
+        "y": 6
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_3",
+      "selectedMove": {
+        "x": 15,
+        "y": 6
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_3",
+      "selectedMove": {
+        "x": 15,
+        "y": 6
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_4",
+      "selectedMove": {
+        "x": 0,
+        "y": 12
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_4",
+      "selectedMove": {
+        "x": 0,
+        "y": 12
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_4",
+      "selectedMove": {
+        "x": 0,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_4",
+      "selectedMove": {
+        "x": 0,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_4",
+      "selectedMove": {
+        "x": 0,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_4",
+      "selectedMove": {
+        "x": 0,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_5",
+      "selectedMove": {
+        "x": 18,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_5",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_5",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_5",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_5",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_5",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_6",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_6",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_6",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_6",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_6",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_6",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_7",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_7",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_7",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_7",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_7",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_7",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_8",
+      "selectedMove": {
+        "x": 14,
+        "y": 18
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_8",
+      "selectedMove": {
+        "x": 13,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_8",
+      "selectedMove": {
+        "x": 13,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_8",
+      "selectedMove": {
+        "x": 13,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_8",
+      "selectedMove": {
+        "x": 13,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_8",
+      "selectedMove": {
+        "x": 13,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_9",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_9",
+      "selectedMove": {
+        "x": 16,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_9",
+      "selectedMove": {
+        "x": 16,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_9",
+      "selectedMove": {
+        "x": 16,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_9",
+      "selectedMove": {
+        "x": 16,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_9",
+      "selectedMove": {
+        "x": 16,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_10",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_10",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_10",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_10",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_10",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_10",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_11",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_11",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_11",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_11",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_11",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_11",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_12",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_12",
+      "selectedMove": {
+        "x": 18,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_12",
+      "selectedMove": {
+        "x": 18,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_12",
+      "selectedMove": {
+        "x": 18,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_12",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": false,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_12",
+      "selectedMove": {
+        "x": 18,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_13",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_13",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_13",
+      "selectedMove": {
+        "x": 15,
+        "y": 14
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_13",
+      "selectedMove": {
+        "x": 15,
+        "y": 14
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_13",
+      "selectedMove": {
+        "x": 15,
+        "y": 14
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_13",
+      "selectedMove": {
+        "x": 15,
+        "y": 14
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_14",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_14",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_14",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_14",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_14",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_14",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_15",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_15",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_15",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_15",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_15",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_15",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_16",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_16",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_16",
+      "selectedMove": {
+        "x": 16,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_16",
+      "selectedMove": {
+        "x": 16,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_16",
+      "selectedMove": {
+        "x": 16,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_16",
+      "selectedMove": {
+        "x": 16,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_17",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_17",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_17",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_17",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_17",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_17",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_18",
+      "selectedMove": {
+        "x": 8,
+        "y": 15
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_18",
+      "selectedMove": {
+        "x": 2,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_18",
+      "selectedMove": {
+        "x": 2,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_18",
+      "selectedMove": {
+        "x": 2,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_18",
+      "selectedMove": {
+        "x": 2,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_18",
+      "selectedMove": {
+        "x": 2,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_19",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_19",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_19",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_19",
+      "selectedMove": {
+        "x": 15,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_19",
+      "selectedMove": {
+        "x": 15,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_19",
+      "selectedMove": {
+        "x": 15,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_20",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_20",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_20",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_20",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_20",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_20",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_21",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_21",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_21",
+      "selectedMove": {
+        "x": 16,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_21",
+      "selectedMove": {
+        "x": 16,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_21",
+      "selectedMove": {
+        "x": 16,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_21",
+      "selectedMove": {
+        "x": 16,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_22",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_22",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_22",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_22",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_22",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_22",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_23",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_23",
+      "selectedMove": {
+        "x": 2,
+        "y": 11
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_23",
+      "selectedMove": {
+        "x": 2,
+        "y": 11
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_23",
+      "selectedMove": {
+        "x": 2,
+        "y": 11
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_23",
+      "selectedMove": {
+        "x": 0,
+        "y": 12
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": false,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_23",
+      "selectedMove": {
+        "x": 2,
+        "y": 11
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_24",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_24",
+      "selectedMove": {
+        "x": 0,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_24",
+      "selectedMove": {
+        "x": 0,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_24",
+      "selectedMove": {
+        "x": 0,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_24",
+      "selectedMove": {
+        "x": 0,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_24",
+      "selectedMove": {
+        "x": 0,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_25",
+      "selectedMove": {
+        "x": 18,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_25",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_25",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_25",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_25",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_25",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_26",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_26",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_26",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_26",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_26",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_26",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_27",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_27",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_27",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_27",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_27",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_27",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_28",
+      "selectedMove": {
+        "x": 3,
+        "y": 18
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_28",
+      "selectedMove": {
+        "x": 3,
+        "y": 18
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_28",
+      "selectedMove": {
+        "x": 3,
+        "y": 18
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_28",
+      "selectedMove": {
+        "x": 1,
+        "y": 12
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_28",
+      "selectedMove": {
+        "x": 1,
+        "y": 12
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_28",
+      "selectedMove": {
+        "x": 1,
+        "y": 12
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_29",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_29",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_29",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_29",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_29",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_29",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_30",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_30",
+      "selectedMove": {
+        "x": 15,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_30",
+      "selectedMove": {
+        "x": 15,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_30",
+      "selectedMove": {
+        "x": 15,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_30",
+      "selectedMove": {
+        "x": 15,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_30",
+      "selectedMove": {
+        "x": 15,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_31",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_31",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_31",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_31",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_31",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_31",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_32",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_32",
+      "selectedMove": {
+        "x": 3,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_32",
+      "selectedMove": {
+        "x": 3,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_32",
+      "selectedMove": {
+        "x": 3,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_32",
+      "selectedMove": {
+        "x": 3,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_32",
+      "selectedMove": {
+        "x": 3,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_33",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_33",
+      "selectedMove": {
+        "x": 16,
+        "y": 14
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_33",
+      "selectedMove": {
+        "x": 16,
+        "y": 14
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_33",
+      "selectedMove": {
+        "x": 16,
+        "y": 14
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_33",
+      "selectedMove": {
+        "x": 16,
+        "y": 14
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_33",
+      "selectedMove": {
+        "x": 16,
+        "y": 14
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_34",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_34",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_34",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_34",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_34",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": false,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_34",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_35",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_35",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_35",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_35",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_35",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_35",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_36",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_36",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_36",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_36",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_36",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_36",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_37",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_37",
+      "selectedMove": {
+        "x": 18,
+        "y": 17
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_37",
+      "selectedMove": {
+        "x": 18,
+        "y": 17
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_37",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_37",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_37",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_38",
+      "selectedMove": {
+        "x": 3,
+        "y": 18
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_38",
+      "selectedMove": {
+        "x": 4,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_38",
+      "selectedMove": {
+        "x": 4,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_38",
+      "selectedMove": {
+        "x": 4,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_38",
+      "selectedMove": {
+        "x": 3,
+        "y": 18
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": false,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_38",
+      "selectedMove": {
+        "x": 4,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_39",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_39",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_39",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_39",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_39",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_39",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_40",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_40",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_40",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_40",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_40",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_40",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_41",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_41",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_41",
+      "selectedMove": {
+        "x": 18,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_41",
+      "selectedMove": {
+        "x": 18,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_41",
+      "selectedMove": {
+        "x": 18,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_41",
+      "selectedMove": {
+        "x": 18,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_42",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_42",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_42",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_42",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_42",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_42",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_43",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_43",
+      "selectedMove": {
+        "x": 15,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_43",
+      "selectedMove": {
+        "x": 16,
+        "y": 6
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_43",
+      "selectedMove": {
+        "x": 16,
+        "y": 6
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_43",
+      "selectedMove": {
+        "x": 16,
+        "y": 6
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_43",
+      "selectedMove": {
+        "x": 16,
+        "y": 6
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_44",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_44",
+      "selectedMove": {
+        "x": 2,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_44",
+      "selectedMove": {
+        "x": 2,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_44",
+      "selectedMove": {
+        "x": 2,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_44",
+      "selectedMove": {
+        "x": 2,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_44",
+      "selectedMove": {
+        "x": 2,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_45",
+      "selectedMove": {
+        "x": 18,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_45",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_45",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_45",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_45",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": false,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_45",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_46",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_46",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_46",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_46",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_46",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_46",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_47",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_47",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_47",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_47",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_47",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_47",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_48",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_48",
+      "selectedMove": {
+        "x": 15,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_48",
+      "selectedMove": {
+        "x": 15,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_48",
+      "selectedMove": {
+        "x": 15,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_48",
+      "selectedMove": {
+        "x": 15,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_48",
+      "selectedMove": {
+        "x": 15,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_49",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_49",
+      "selectedMove": {
+        "x": 17,
+        "y": 18
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_49",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_49",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_49",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_49",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_50",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_50",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_50",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_50",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_50",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_50",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_51",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_51",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_51",
+      "selectedMove": {
+        "x": 18,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_51",
+      "selectedMove": {
+        "x": 18,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_51",
+      "selectedMove": {
+        "x": 18,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_51",
+      "selectedMove": {
+        "x": 18,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_52",
+      "selectedMove": {
+        "x": 3,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_52",
+      "selectedMove": {
+        "x": 3,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_52",
+      "selectedMove": {
+        "x": 5,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_52",
+      "selectedMove": {
+        "x": 5,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_52",
+      "selectedMove": {
+        "x": 5,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_52",
+      "selectedMove": {
+        "x": 5,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_53",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_53",
+      "selectedMove": {
+        "x": 15,
+        "y": 2
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_53",
+      "selectedMove": {
+        "x": 15,
+        "y": 2
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_53",
+      "selectedMove": {
+        "x": 15,
+        "y": 2
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_53",
+      "selectedMove": {
+        "x": 15,
+        "y": 2
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_53",
+      "selectedMove": {
+        "x": 15,
+        "y": 2
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_54",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_54",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_54",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_54",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_54",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_54",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_55",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_55",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_55",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_55",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_55",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_55",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_56",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_56",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_56",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_56",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_56",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": false,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_56",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_57",
+      "selectedMove": {
+        "x": 18,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_57",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_57",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_57",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_57",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_57",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_58",
+      "selectedMove": {
+        "x": 9,
+        "y": 18
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_58",
+      "selectedMove": {
+        "x": 9,
+        "y": 18
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_58",
+      "selectedMove": {
+        "x": 8,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_58",
+      "selectedMove": {
+        "x": 8,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_58",
+      "selectedMove": {
+        "x": 8,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_58",
+      "selectedMove": {
+        "x": 8,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_59",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_59",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_59",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_59",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_59",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_59",
+      "selectedMove": {
+        "x": 16,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_60",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_60",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_60",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_60",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_60",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_60",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_61",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_61",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_61",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_61",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_61",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_61",
+      "selectedMove": {
+        "x": 18,
+        "y": 3
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_62",
+      "selectedMove": {
+        "x": 6,
+        "y": 18
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_62",
+      "selectedMove": {
+        "x": 4,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_62",
+      "selectedMove": {
+        "x": 4,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_62",
+      "selectedMove": {
+        "x": 4,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_62",
+      "selectedMove": {
+        "x": 4,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_62",
+      "selectedMove": {
+        "x": 4,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_63",
+      "selectedMove": {
+        "x": 2,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_63",
+      "selectedMove": {
+        "x": 5,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_63",
+      "selectedMove": {
+        "x": 5,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_63",
+      "selectedMove": {
+        "x": 5,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_63",
+      "selectedMove": {
+        "x": 5,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_63",
+      "selectedMove": {
+        "x": 5,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_64",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_64",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_64",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_64",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_64",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_64",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_65",
+      "selectedMove": {
+        "x": 18,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_65",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_65",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_65",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_65",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_65",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_66",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_66",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_66",
+      "selectedMove": {
+        "x": 2,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_66",
+      "selectedMove": {
+        "x": 2,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_66",
+      "selectedMove": {
+        "x": 2,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_66",
+      "selectedMove": {
+        "x": 2,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_67",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_67",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_67",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_67",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_67",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": false,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_67",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_68",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_68",
+      "selectedMove": {
+        "x": 16,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_68",
+      "selectedMove": {
+        "x": 16,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_68",
+      "selectedMove": {
+        "x": 16,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_68",
+      "selectedMove": {
+        "x": 16,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_68",
+      "selectedMove": {
+        "x": 16,
+        "y": 15
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_69",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_69",
+      "selectedMove": {
+        "x": 3,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_69",
+      "selectedMove": {
+        "x": 3,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_69",
+      "selectedMove": {
+        "x": 3,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_69",
+      "selectedMove": {
+        "x": 3,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_69",
+      "selectedMove": {
+        "x": 3,
+        "y": 18
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_70",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_70",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_70",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_70",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_70",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_70",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_71",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_71",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_71",
+      "selectedMove": {
+        "x": 13,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_71",
+      "selectedMove": {
+        "x": 13,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_71",
+      "selectedMove": {
+        "x": 13,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_71",
+      "selectedMove": {
+        "x": 13,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_72",
+      "selectedMove": {
+        "x": 18,
+        "y": 14
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_72",
+      "selectedMove": {
+        "x": 18,
+        "y": 12
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_72",
+      "selectedMove": {
+        "x": 18,
+        "y": 12
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_72",
+      "selectedMove": {
+        "x": 18,
+        "y": 12
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_72",
+      "selectedMove": {
+        "x": 18,
+        "y": 12
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_72",
+      "selectedMove": {
+        "x": 18,
+        "y": 12
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_73",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_73",
+      "selectedMove": {
+        "x": 18,
+        "y": 16
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_73",
+      "selectedMove": {
+        "x": 18,
+        "y": 16
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_73",
+      "selectedMove": {
+        "x": 15,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_73",
+      "selectedMove": {
+        "x": 15,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_73",
+      "selectedMove": {
+        "x": 15,
+        "y": 16
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_74",
+      "selectedMove": {
+        "x": 14,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_74",
+      "selectedMove": {
+        "x": 15,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_74",
+      "selectedMove": {
+        "x": 15,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_74",
+      "selectedMove": {
+        "x": 15,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_74",
+      "selectedMove": {
+        "x": 15,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_74",
+      "selectedMove": {
+        "x": 15,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_75",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_75",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_75",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_75",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_75",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": false,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_75",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_76",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_76",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_76",
+      "selectedMove": {
+        "x": 3,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_76",
+      "selectedMove": {
+        "x": 3,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_76",
+      "selectedMove": {
+        "x": 3,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_76",
+      "selectedMove": {
+        "x": 3,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_77",
+      "selectedMove": {
+        "x": 18,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_77",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_77",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_77",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_77",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_77",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_78",
+      "selectedMove": {
+        "x": 18,
+        "y": 16
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_78",
+      "selectedMove": {
+        "x": 3,
+        "y": 14
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_78",
+      "selectedMove": {
+        "x": 3,
+        "y": 14
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_78",
+      "selectedMove": {
+        "x": 3,
+        "y": 14
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_78",
+      "selectedMove": {
+        "x": 18,
+        "y": 16
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": false,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_78",
+      "selectedMove": {
+        "x": 3,
+        "y": 14
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_79",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_79",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_79",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_79",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_79",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_79",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_80",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_80",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_80",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_80",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_80",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_80",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_81",
+      "selectedMove": {
+        "x": 18,
+        "y": 18
+      },
+      "selectedRank": 4,
+      "selectedTier": "acceptable",
+      "scoreLossFromStrongest": 36,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_81",
+      "selectedMove": {
+        "x": 0,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_81",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_81",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_81",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_81",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_82",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_82",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_82",
+      "selectedMove": {
+        "x": 18,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_82",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_82",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_82",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_83",
+      "selectedMove": {
+        "x": 2,
+        "y": 18
+      },
+      "selectedRank": 3,
+      "selectedTier": "good",
+      "scoreLossFromStrongest": 24,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_83",
+      "selectedMove": {
+        "x": 2,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "normal",
+      "positionId": "benchmark_83",
+      "selectedMove": {
+        "x": 2,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "hard",
+      "positionId": "benchmark_83",
+      "selectedMove": {
+        "x": 2,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "previous_advanced_980",
+      "positionId": "benchmark_83",
+      "selectedMove": {
+        "x": 2,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "MAX_STRENGTH_FIXED",
+      "positionId": "benchmark_83",
+      "selectedMove": {
+        "x": 2,
+        "y": 1
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    },
+    {
+      "mode": "beginner",
+      "positionId": "benchmark_84",
+      "selectedMove": {
+        "x": 0,
+        "y": 0
+      },
+      "selectedRank": 2,
+      "selectedTier": "strong",
+      "scoreLossFromStrongest": 12,
+      "randomnessActivated": true,
+      "adaptiveWeakening": true,
+      "fallback": false,
+      "identicalToMax": false
+    },
+    {
+      "mode": "easy",
+      "positionId": "benchmark_84",
+      "selectedMove": {
+        "x": 14,
+        "y": 8
+      },
+      "selectedRank": 1,
+      "selectedTier": "best",
+      "scoreLossFromStrongest": 0,
+      "randomnessActivated": false,
+      "adaptiveWeakening": false,
+      "fallback": false,
+      "identicalToMax": true
+    }
+  ]
+}

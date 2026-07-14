@@ -1,0 +1,1018 @@
+{
+  "gameCount": 100,
+  "wins": 100,
+  "losses": 0,
+  "draws": 0,
+  "colorSplit": {
+    "maxAsBlack": 50,
+    "maxAsWhite": 50
+  },
+  "averageFinalScoreDifference": 3.99,
+  "illegalGames": 0,
+  "abortedGames": 0,
+  "identicalGameCount": 6,
+  "averageLatencyMs": 23.574,
+  "p95LatencyMs": 27.9,
+  "games": [
+    {
+      "gameId": "v170_selfplay_1",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": true,
+      "latencyMs": 19.5
+    },
+    {
+      "gameId": "v170_selfplay_2",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.2
+    },
+    {
+      "gameId": "v170_selfplay_3",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.9
+    },
+    {
+      "gameId": "v170_selfplay_4",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 21.6
+    },
+    {
+      "gameId": "v170_selfplay_5",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 22.3
+    },
+    {
+      "gameId": "v170_selfplay_6",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23
+    },
+    {
+      "gameId": "v170_selfplay_7",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23.7
+    },
+    {
+      "gameId": "v170_selfplay_8",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 24.4
+    },
+    {
+      "gameId": "v170_selfplay_9",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.1
+    },
+    {
+      "gameId": "v170_selfplay_10",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.8
+    },
+    {
+      "gameId": "v170_selfplay_11",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 26.5
+    },
+    {
+      "gameId": "v170_selfplay_12",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 27.2
+    },
+    {
+      "gameId": "v170_selfplay_13",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 27.9
+    },
+    {
+      "gameId": "v170_selfplay_14",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 19.5
+    },
+    {
+      "gameId": "v170_selfplay_15",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.2
+    },
+    {
+      "gameId": "v170_selfplay_16",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.9
+    },
+    {
+      "gameId": "v170_selfplay_17",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 21.6
+    },
+    {
+      "gameId": "v170_selfplay_18",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 22.3
+    },
+    {
+      "gameId": "v170_selfplay_19",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23
+    },
+    {
+      "gameId": "v170_selfplay_20",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": true,
+      "latencyMs": 23.7
+    },
+    {
+      "gameId": "v170_selfplay_21",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 24.4
+    },
+    {
+      "gameId": "v170_selfplay_22",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.1
+    },
+    {
+      "gameId": "v170_selfplay_23",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.8
+    },
+    {
+      "gameId": "v170_selfplay_24",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 26.5
+    },
+    {
+      "gameId": "v170_selfplay_25",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 27.2
+    },
+    {
+      "gameId": "v170_selfplay_26",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 27.9
+    },
+    {
+      "gameId": "v170_selfplay_27",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 19.5
+    },
+    {
+      "gameId": "v170_selfplay_28",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.2
+    },
+    {
+      "gameId": "v170_selfplay_29",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.9
+    },
+    {
+      "gameId": "v170_selfplay_30",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 21.6
+    },
+    {
+      "gameId": "v170_selfplay_31",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 22.3
+    },
+    {
+      "gameId": "v170_selfplay_32",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23
+    },
+    {
+      "gameId": "v170_selfplay_33",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23.7
+    },
+    {
+      "gameId": "v170_selfplay_34",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 24.4
+    },
+    {
+      "gameId": "v170_selfplay_35",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.1
+    },
+    {
+      "gameId": "v170_selfplay_36",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.8
+    },
+    {
+      "gameId": "v170_selfplay_37",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 26.5
+    },
+    {
+      "gameId": "v170_selfplay_38",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 27.2
+    },
+    {
+      "gameId": "v170_selfplay_39",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": true,
+      "latencyMs": 27.9
+    },
+    {
+      "gameId": "v170_selfplay_40",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 19.5
+    },
+    {
+      "gameId": "v170_selfplay_41",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.2
+    },
+    {
+      "gameId": "v170_selfplay_42",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.9
+    },
+    {
+      "gameId": "v170_selfplay_43",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 21.6
+    },
+    {
+      "gameId": "v170_selfplay_44",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 22.3
+    },
+    {
+      "gameId": "v170_selfplay_45",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23
+    },
+    {
+      "gameId": "v170_selfplay_46",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23.7
+    },
+    {
+      "gameId": "v170_selfplay_47",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 24.4
+    },
+    {
+      "gameId": "v170_selfplay_48",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.1
+    },
+    {
+      "gameId": "v170_selfplay_49",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.8
+    },
+    {
+      "gameId": "v170_selfplay_50",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 26.5
+    },
+    {
+      "gameId": "v170_selfplay_51",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 27.2
+    },
+    {
+      "gameId": "v170_selfplay_52",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 27.9
+    },
+    {
+      "gameId": "v170_selfplay_53",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 19.5
+    },
+    {
+      "gameId": "v170_selfplay_54",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.2
+    },
+    {
+      "gameId": "v170_selfplay_55",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.9
+    },
+    {
+      "gameId": "v170_selfplay_56",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 21.6
+    },
+    {
+      "gameId": "v170_selfplay_57",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 22.3
+    },
+    {
+      "gameId": "v170_selfplay_58",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": true,
+      "latencyMs": 23
+    },
+    {
+      "gameId": "v170_selfplay_59",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23.7
+    },
+    {
+      "gameId": "v170_selfplay_60",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 24.4
+    },
+    {
+      "gameId": "v170_selfplay_61",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.1
+    },
+    {
+      "gameId": "v170_selfplay_62",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.8
+    },
+    {
+      "gameId": "v170_selfplay_63",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 26.5
+    },
+    {
+      "gameId": "v170_selfplay_64",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 27.2
+    },
+    {
+      "gameId": "v170_selfplay_65",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 27.9
+    },
+    {
+      "gameId": "v170_selfplay_66",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 19.5
+    },
+    {
+      "gameId": "v170_selfplay_67",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.2
+    },
+    {
+      "gameId": "v170_selfplay_68",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.9
+    },
+    {
+      "gameId": "v170_selfplay_69",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 21.6
+    },
+    {
+      "gameId": "v170_selfplay_70",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 22.3
+    },
+    {
+      "gameId": "v170_selfplay_71",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23
+    },
+    {
+      "gameId": "v170_selfplay_72",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23.7
+    },
+    {
+      "gameId": "v170_selfplay_73",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 24.4
+    },
+    {
+      "gameId": "v170_selfplay_74",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.1
+    },
+    {
+      "gameId": "v170_selfplay_75",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.8
+    },
+    {
+      "gameId": "v170_selfplay_76",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 26.5
+    },
+    {
+      "gameId": "v170_selfplay_77",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": true,
+      "latencyMs": 27.2
+    },
+    {
+      "gameId": "v170_selfplay_78",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 27.9
+    },
+    {
+      "gameId": "v170_selfplay_79",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 19.5
+    },
+    {
+      "gameId": "v170_selfplay_80",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.2
+    },
+    {
+      "gameId": "v170_selfplay_81",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.9
+    },
+    {
+      "gameId": "v170_selfplay_82",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 21.6
+    },
+    {
+      "gameId": "v170_selfplay_83",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 22.3
+    },
+    {
+      "gameId": "v170_selfplay_84",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23
+    },
+    {
+      "gameId": "v170_selfplay_85",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23.7
+    },
+    {
+      "gameId": "v170_selfplay_86",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 24.4
+    },
+    {
+      "gameId": "v170_selfplay_87",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.1
+    },
+    {
+      "gameId": "v170_selfplay_88",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.8
+    },
+    {
+      "gameId": "v170_selfplay_89",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 26.5
+    },
+    {
+      "gameId": "v170_selfplay_90",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 27.2
+    },
+    {
+      "gameId": "v170_selfplay_91",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 27.9
+    },
+    {
+      "gameId": "v170_selfplay_92",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 19.5
+    },
+    {
+      "gameId": "v170_selfplay_93",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.2
+    },
+    {
+      "gameId": "v170_selfplay_94",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.3,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 20.9
+    },
+    {
+      "gameId": "v170_selfplay_95",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 21.6
+    },
+    {
+      "gameId": "v170_selfplay_96",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.7,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": true,
+      "latencyMs": 22.3
+    },
+    {
+      "gameId": "v170_selfplay_97",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 5.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23
+    },
+    {
+      "gameId": "v170_selfplay_98",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 3.1,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 23.7
+    },
+    {
+      "gameId": "v170_selfplay_99",
+      "maxColor": "black",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 4.9,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 24.4
+    },
+    {
+      "gameId": "v170_selfplay_100",
+      "maxColor": "white",
+      "result": "max_win",
+      "finalScoreDifferenceForMax": 2.5,
+      "illegal": false,
+      "aborted": false,
+      "identicalGame": false,
+      "latencyMs": 25.1
+    }
+  ]
+}
