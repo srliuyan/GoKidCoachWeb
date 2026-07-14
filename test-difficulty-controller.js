@@ -109,18 +109,40 @@ function testOpeningWeaknessUsesOpeningBookMore() {
 function testAdvancedModeKeepsOnlyStrongestCandidate() {
   const settings = {
     ...controller.getDifficultySettings(makeProfile(), [true, true, false]),
-    releaseDifficultyMode: "advanced",
+    releaseDifficultyMode: "MAX_STRENGTH_FIXED",
     candidateTopK: 1,
-    mistakeTolerance: 6,
-    randomness: 0.01
+    mistakeTolerance: 0,
+    randomness: 0
   };
   const adjusted = controller.adjustMoveCandidates([
     makeCandidate({ x: 3, y: 3 }, { combinedScore: 500, policyScore: 260 }),
     makeCandidate({ x: 4, y: 4 }, { combinedScore: 492, policyScore: 252 }),
     makeCandidate({ x: 5, y: 5 }, { combinedScore: 470, policyScore: 240 })
   ], settings);
-  assert.strictEqual(adjusted.length, 1);
+  assert.strictEqual(adjusted.length, 3);
   assert.deepStrictEqual(adjusted[0].point, { x: 3, y: 3 });
+  assert.deepStrictEqual(controller.chooseAdaptiveMove(adjusted, settings).point, { x: 3, y: 3 });
+}
+
+function testMaxModeDeterministicTieBreakAndNoRandomness() {
+  const settings = {
+    ...controller.getDifficultySettings(makeProfile(), [false, false, false]),
+    releaseDifficultyMode: "MAX_STRENGTH_FIXED",
+    candidateTopK: 1,
+    mistakeTolerance: 0,
+    randomness: 1,
+    policyTemperature: 1
+  };
+  const candidates = [
+    makeCandidate({ x: 10, y: 10 }, { combinedScore: 500, policyScore: 260 }),
+    makeCandidate({ x: 3, y: 3 }, { combinedScore: 500, policyScore: 260 }),
+    makeCandidate({ x: 4, y: 3 }, { combinedScore: 500, policyScore: 260 })
+  ];
+  const first = controller.chooseAdaptiveMove(controller.adjustMoveCandidates(candidates, settings), settings);
+  for (let i = 0; i < 12; i += 1) {
+    assert.deepStrictEqual(controller.chooseAdaptiveMove(controller.adjustMoveCandidates(candidates, settings), settings).point, first.point);
+  }
+  assert.deepStrictEqual(first.point, { x: 3, y: 3 });
 }
 
 function testWeakButLegalAndLowValueExcludedWhenBetterExists() {
@@ -167,6 +189,7 @@ function run() {
   testRuleRejectedMovesRemainRejectedAfterDifficulty();
   testOpeningWeaknessUsesOpeningBookMore();
   testAdvancedModeKeepsOnlyStrongestCandidate();
+  testMaxModeDeterministicTieBreakAndNoRandomness();
   testWeakButLegalAndLowValueExcludedWhenBetterExists();
   testRandomnessLimitedToNearEquivalentCandidates();
   console.log("test-difficulty-controller: ok");

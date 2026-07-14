@@ -1,0 +1,311 @@
+{
+  "productVersion": "1.7.3-dev",
+  "engineVersion": "whole-board-runtime-ab-v1",
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "deterministic": true,
+  "seed": 20260714,
+  "command": "node evaluation/run-v173-whole-board-ab-audit.js --write-reports",
+  "datasets": {
+    "benchmarkPositions": 1000,
+    "stressPositions": 907,
+    "endgamePositions": 300,
+    "v170MaxStrengthPositions": 2747,
+    "v171Top10Positions": 3047,
+    "v172AuditPositions": 3647,
+    "deterministicSelfPlayGames": 150
+  },
+  "preservedLimits": {
+    "maxModeReadingCap": 10,
+    "readingDepth": 3,
+    "opponentReplyCap": 4,
+    "aiContinuationCap": 3,
+    "scoringWeightsChanged": false,
+    "lowerDifficultyBehaviorChanged": false
+  },
+  "profiles": [
+    {
+      "name": "baseline_v172",
+      "action": "observe_existing_whole_board_strategy",
+      "phaseStats": {
+        "21-60": {
+          "generatedCount": 544,
+          "enteredTop10Count": 544,
+          "shortReadRejectedCount": 22,
+          "duplicateCount": 58,
+          "settledRegionCount": 11,
+          "finallySelectedCount": 7,
+          "improvedMoveCount": 4,
+          "worsenedMoveCount": 0,
+          "consecutiveSimilarGlobalPointCount": 0,
+          "synonymDuplicateWithExistingCandidateCount": 3,
+          "lateOpeningStyleLargePointCount": 0
+        },
+        "61-120": {
+          "generatedCount": 756,
+          "enteredTop10Count": 756,
+          "shortReadRejectedCount": 35,
+          "duplicateCount": 91,
+          "settledRegionCount": 18,
+          "finallySelectedCount": 10,
+          "improvedMoveCount": 6,
+          "worsenedMoveCount": 0,
+          "consecutiveSimilarGlobalPointCount": 0,
+          "synonymDuplicateWithExistingCandidateCount": 5,
+          "lateOpeningStyleLargePointCount": 0
+        },
+        "121-200": {
+          "generatedCount": 684,
+          "enteredTop10Count": 671,
+          "shortReadRejectedCount": 61,
+          "duplicateCount": 146,
+          "settledRegionCount": 74,
+          "finallySelectedCount": 1,
+          "improvedMoveCount": 0,
+          "worsenedMoveCount": 0,
+          "consecutiveSimilarGlobalPointCount": 6,
+          "synonymDuplicateWithExistingCandidateCount": 18,
+          "lateOpeningStyleLargePointCount": 31
+        },
+        "201-300": {
+          "generatedCount": 438,
+          "enteredTop10Count": 409,
+          "shortReadRejectedCount": 84,
+          "duplicateCount": 127,
+          "settledRegionCount": 118,
+          "finallySelectedCount": 0,
+          "improvedMoveCount": 0,
+          "worsenedMoveCount": 0,
+          "consecutiveSimilarGlobalPointCount": 13,
+          "synonymDuplicateWithExistingCandidateCount": 24,
+          "lateOpeningStyleLargePointCount": 42
+        }
+      },
+      "totals": {
+        "generatedCount": 2422,
+        "enteredTop10Count": 2380,
+        "shortReadRejectedCount": 202,
+        "duplicateCount": 422,
+        "settledRegionCount": 221,
+        "finallySelectedCount": 18,
+        "improvedMoveCount": 10,
+        "worsenedMoveCount": 0,
+        "consecutiveSimilarGlobalPointCount": 19,
+        "synonymDuplicateWithExistingCandidateCount": 50,
+        "lateOpeningStyleLargePointCount": 73
+      },
+      "evidence": {
+        "highConfidenceDuplicateEvidence": true,
+        "highConfidenceSettledRegionEvidence": true,
+        "highConfidencePhaseMismatchEvidence": true,
+        "changedSelectionsTraceable": true,
+        "equivalentMovesCountedAsWins": false,
+        "uncertainCasesActionable": false
+      },
+      "gates": {
+        "worsenedMoveCount": 0,
+        "benchmarkGoodOrBetterRate": 0.216,
+        "endgameGoodOrBetterRate": 0.108,
+        "averageScoreLossFromBest": 9.513055,
+        "tacticalAndEndgameErrorsRemainZero": true,
+        "latencyRegressionPct": 0,
+        "simulation300MovesPassed": true,
+        "lowerModesUnchanged": true,
+        "top10CapChanged": false,
+        "readingDepthChanged": false,
+        "opponentReplyCapChanged": false,
+        "aiContinuationCapChanged": false,
+        "scoringWeightsChanged": false
+      }
+    },
+    {
+      "name": "phase_gated_only",
+      "action": "disable whole_board_strategy outside moves 21-120",
+      "phaseStats": {
+        "21-60": {
+          "generatedCount": 544,
+          "enteredTop10Count": 544,
+          "shortReadRejectedCount": 22,
+          "duplicateCount": 58,
+          "settledRegionCount": 11,
+          "finallySelectedCount": 7,
+          "improvedMoveCount": 4,
+          "worsenedMoveCount": 0,
+          "consecutiveSimilarGlobalPointCount": 0,
+          "synonymDuplicateWithExistingCandidateCount": 3,
+          "lateOpeningStyleLargePointCount": 0
+        },
+        "61-120": {
+          "generatedCount": 756,
+          "enteredTop10Count": 756,
+          "shortReadRejectedCount": 35,
+          "duplicateCount": 91,
+          "settledRegionCount": 18,
+          "finallySelectedCount": 10,
+          "improvedMoveCount": 6,
+          "worsenedMoveCount": 0,
+          "consecutiveSimilarGlobalPointCount": 0,
+          "synonymDuplicateWithExistingCandidateCount": 5,
+          "lateOpeningStyleLargePointCount": 0
+        },
+        "121-200": {
+          "generatedCount": 0,
+          "enteredTop10Count": 0,
+          "shortReadRejectedCount": 0,
+          "duplicateCount": 0,
+          "settledRegionCount": 0,
+          "finallySelectedCount": 0,
+          "improvedMoveCount": 0,
+          "worsenedMoveCount": 0,
+          "consecutiveSimilarGlobalPointCount": 0,
+          "synonymDuplicateWithExistingCandidateCount": 0,
+          "lateOpeningStyleLargePointCount": 0
+        },
+        "201-300": {
+          "generatedCount": 0,
+          "enteredTop10Count": 0,
+          "shortReadRejectedCount": 0,
+          "duplicateCount": 0,
+          "settledRegionCount": 0,
+          "finallySelectedCount": 0,
+          "improvedMoveCount": 0,
+          "worsenedMoveCount": 0,
+          "consecutiveSimilarGlobalPointCount": 0,
+          "synonymDuplicateWithExistingCandidateCount": 0,
+          "lateOpeningStyleLargePointCount": 0
+        }
+      },
+      "totals": {
+        "generatedCount": 1300,
+        "enteredTop10Count": 1300,
+        "shortReadRejectedCount": 57,
+        "duplicateCount": 149,
+        "settledRegionCount": 29,
+        "finallySelectedCount": 17,
+        "improvedMoveCount": 10,
+        "worsenedMoveCount": 0,
+        "consecutiveSimilarGlobalPointCount": 0,
+        "synonymDuplicateWithExistingCandidateCount": 8,
+        "lateOpeningStyleLargePointCount": 0
+      },
+      "evidence": {
+        "highConfidenceDuplicateEvidence": true,
+        "highConfidenceSettledRegionEvidence": true,
+        "highConfidencePhaseMismatchEvidence": true,
+        "changedSelectionsTraceable": true,
+        "equivalentMovesCountedAsWins": false,
+        "uncertainCasesActionable": false
+      },
+      "gates": {
+        "worsenedMoveCount": 0,
+        "benchmarkGoodOrBetterRate": 0.216,
+        "endgameGoodOrBetterRate": 0.108,
+        "averageScoreLossFromBest": 9.513055,
+        "tacticalAndEndgameErrorsRemainZero": true,
+        "latencyRegressionPct": 2.86,
+        "simulation300MovesPassed": true,
+        "lowerModesUnchanged": true,
+        "top10CapChanged": false,
+        "readingDepthChanged": false,
+        "opponentReplyCapChanged": false,
+        "aiContinuationCapChanged": false,
+        "scoringWeightsChanged": false
+      }
+    },
+    {
+      "name": "phase_gated_dedup",
+      "action": "disable outside moves 21-120 and skip same-region/nearby global duplicates",
+      "phaseStats": {
+        "21-60": {
+          "generatedCount": 527,
+          "enteredTop10Count": 527,
+          "shortReadRejectedCount": 22,
+          "duplicateCount": 17,
+          "settledRegionCount": 11,
+          "finallySelectedCount": 7,
+          "improvedMoveCount": 4,
+          "worsenedMoveCount": 0,
+          "consecutiveSimilarGlobalPointCount": 0,
+          "synonymDuplicateWithExistingCandidateCount": 3,
+          "lateOpeningStyleLargePointCount": 0
+        },
+        "61-120": {
+          "generatedCount": 733,
+          "enteredTop10Count": 733,
+          "shortReadRejectedCount": 35,
+          "duplicateCount": 23,
+          "settledRegionCount": 18,
+          "finallySelectedCount": 10,
+          "improvedMoveCount": 6,
+          "worsenedMoveCount": 0,
+          "consecutiveSimilarGlobalPointCount": 0,
+          "synonymDuplicateWithExistingCandidateCount": 5,
+          "lateOpeningStyleLargePointCount": 0
+        },
+        "121-200": {
+          "generatedCount": 0,
+          "enteredTop10Count": 0,
+          "shortReadRejectedCount": 0,
+          "duplicateCount": 0,
+          "settledRegionCount": 0,
+          "finallySelectedCount": 0,
+          "improvedMoveCount": 0,
+          "worsenedMoveCount": 0,
+          "consecutiveSimilarGlobalPointCount": 0,
+          "synonymDuplicateWithExistingCandidateCount": 0,
+          "lateOpeningStyleLargePointCount": 0
+        },
+        "201-300": {
+          "generatedCount": 0,
+          "enteredTop10Count": 0,
+          "shortReadRejectedCount": 0,
+          "duplicateCount": 0,
+          "settledRegionCount": 0,
+          "finallySelectedCount": 0,
+          "improvedMoveCount": 0,
+          "worsenedMoveCount": 0,
+          "consecutiveSimilarGlobalPointCount": 0,
+          "synonymDuplicateWithExistingCandidateCount": 0,
+          "lateOpeningStyleLargePointCount": 0
+        }
+      },
+      "totals": {
+        "generatedCount": 1260,
+        "enteredTop10Count": 1260,
+        "shortReadRejectedCount": 57,
+        "duplicateCount": 40,
+        "settledRegionCount": 29,
+        "finallySelectedCount": 17,
+        "improvedMoveCount": 10,
+        "worsenedMoveCount": 0,
+        "consecutiveSimilarGlobalPointCount": 0,
+        "synonymDuplicateWithExistingCandidateCount": 8,
+        "lateOpeningStyleLargePointCount": 0
+      },
+      "evidence": {
+        "highConfidenceDuplicateEvidence": true,
+        "highConfidenceSettledRegionEvidence": true,
+        "highConfidencePhaseMismatchEvidence": true,
+        "changedSelectionsTraceable": true,
+        "equivalentMovesCountedAsWins": false,
+        "uncertainCasesActionable": false
+      },
+      "gates": {
+        "worsenedMoveCount": 0,
+        "benchmarkGoodOrBetterRate": 0.216,
+        "endgameGoodOrBetterRate": 0.108,
+        "averageScoreLossFromBest": 9.513055,
+        "tacticalAndEndgameErrorsRemainZero": true,
+        "latencyRegressionPct": 1.24,
+        "simulation300MovesPassed": true,
+        "lowerModesUnchanged": true,
+        "top10CapChanged": false,
+        "readingDepthChanged": false,
+        "opponentReplyCapChanged": false,
+        "aiContinuationCapChanged": false,
+        "scoringWeightsChanged": false
+      }
+    }
+  ],
+  "selectedProfile": "phase_gated_dedup",
+  "selectedAction": "disable outside moves 21-120 and skip same-region/nearby global duplicates"
+}

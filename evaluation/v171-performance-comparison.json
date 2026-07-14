@@ -1,0 +1,15 @@
+{
+  "top8AverageLatencyMs": 4.878709,
+  "top10AverageLatencyMs": 5.386121,
+  "averageLatencyRegressionPct": 10.401,
+  "top8P95LatencyMs": 4.92,
+  "top10P95LatencyMs": 5.432,
+  "p95LatencyRegressionPct": 10.407,
+  "localReadingMaximumBounded": true,
+  "simulation300MovesPassed": true,
+  "lateGameGrowthRegression": false,
+  "memoryStabilityUnchanged": true,
+  "listenerCountUnchanged": true,
+  "domCountUnchanged": true,
+  "mainThreadStallAbove250MsCausedByReadingExpansion": false
+}

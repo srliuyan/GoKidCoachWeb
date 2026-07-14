@@ -679,7 +679,7 @@ function testLocalReadingProfileValidationReports() {
   assert(bridgeSource.includes("GoKidCoachRuleEngine.evaluateLocalSequence"));
   assert(appSource.includes("applyLocalReading("));
   assert(appSource.includes("maxDepth: 3"));
-  assert(appSource.includes("maxCandidates: 8"));
+  assert(appSource.includes("maxCandidates: maxMode ? 10 : 8"));
   assert(appSource.includes("maxOpponentReplies: 4"));
   assert(appSource.includes("maxAiContinuations: 3"));
   assert(!swSource.includes("local-reading-profile-report.json"));

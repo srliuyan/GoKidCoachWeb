@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "productVersion": "1.7.0-dev",
+  "engineVersion": "max-strength-unlock-v1",
+  "generatedAt": "2026-07-14T00:00:00Z",
+  "generator": "manual-v170-difficulty-path-audit",
+  "deterministic": true,
+  "summary": {
+    "auditedFiles": [
+      "app.js",
+      "difficulty-controller.js",
+      "move-quality-controller.js",
+      "companion-engine.js",
+      "student-model.js",
+      "context-fusion.js",
+      "product-support.js"
+    ],
+    "maxMode": "MAX_STRENGTH_FIXED",
+    "highestUiDifficulty": "advanced",
+    "advanced980AffectingPaths": 10,
+    "runtimeIntegrated": true
+  },
+  "weakeningPaths": [
+    {
+      "file": "product-support.js",
+      "function": "normalizeDifficultyMode",
+      "path": "UI and saved difficulty mapping",
+      "affectedModes": ["advanced", 980],
+      "affectsAdvanced980": true,
+      "canReplaceRank1": false,
+      "usesRandomness": false,
+      "usesChildPerformance": false,
+      "actsBeforeOrAfterLocalReading": "before_local_reading",
+      "action": "bypass_for_max_mode"
+    },
+    {
+      "file": "difficulty-controller.js",
+      "function": "getDifficultySettings",
+      "path": "child profile, weak area and recent-result pressure settings",
+      "affectedModes": ["beginner", "basic", "adaptive", "advanced before V1.7"],
+      "affectsAdvanced980": true,
+      "canReplaceRank1": true,
+      "usesRandomness": false,
+      "usesChildPerformance": true,
+      "actsBeforeOrAfterLocalReading": "before_local_reading",
+      "action": "disable_for_max_mode"
+    },
+    {
+      "file": "app.js",
+      "function": "applyReleaseDifficultyMode",
+      "path": "mode-specific candidateTopK, mistakeTolerance, randomness and score-weight changes",
+      "affectedModes": ["beginner", "basic", "adaptive", "advanced before V1.7"],
+      "affectsAdvanced980": true,
+      "canReplaceRank1": true,
+      "usesRandomness": false,
+      "usesChildPerformance": true,
+      "actsBeforeOrAfterLocalReading": "before_and_after_local_reading",
+      "action": "disable_for_max_mode"
+    },
+    {
+      "file": "difficulty-controller.js",
+      "function": "adjustMoveCandidates",
+      "path": "mode cap and mistake-tolerance filtering",
+      "affectedModes": ["beginner", "basic", "adaptive", "advanced before V1.7"],
+      "affectsAdvanced980": true,
+      "canReplaceRank1": true,
+      "usesRandomness": false,
+      "usesChildPerformance": false,
+      "actsBeforeOrAfterLocalReading": "after_local_reading",
+      "action": "bypass_for_max_mode"
+    },
+    {
+      "file": "difficulty-controller.js",
+      "function": "chooseAdaptiveMove",
+      "path": "random near-equivalent weighted choice and temperature sampling",
+      "affectedModes": ["beginner", "basic", "adaptive"],
+      "affectsAdvanced980": false,
+      "canReplaceRank1": true,
+      "usesRandomness": true,
+      "usesChildPerformance": false,
+      "actsBeforeOrAfterLocalReading": "after_local_reading",
+      "action": "disable_for_max_mode"
+    },
+    {
+      "file": "move-quality-controller.js",
+      "function": "createContext",
+      "path": "recent assessment smoothing, target rank shift, confidence shift and precision softening",
+      "affectedModes": ["beginner", "basic", "adaptive", "advanced before V1.7"],
+      "affectsAdvanced980": true,
+      "canReplaceRank1": true,
+      "usesRandomness": false,
+      "usesChildPerformance": true,
+      "actsBeforeOrAfterLocalReading": "after_local_reading",
+      "action": "disable_for_max_mode"
+    },
+    {
+      "file": "move-quality-controller.js",
+      "function": "chooseMoveByQuality",
+      "path": "bucket substitution, targetMoveRank and reduced-precision acceptable/good selection",
+      "affectedModes": ["beginner", "basic", "adaptive", "advanced before V1.7"],
+      "affectsAdvanced980": true,
+      "canReplaceRank1": true,
+      "usesRandomness": false,
+      "usesChildPerformance": true,
+      "actsBeforeOrAfterLocalReading": "after_local_reading",
+      "action": "bypass_for_max_mode"
+    },
+    {
+      "file": "companion-engine.js",
+      "function": "createCompanionPlan",
+      "path": "recent win/loss trend, struggling/dominating precision band and target move rank",
+      "affectedModes": ["adaptive", "advanced before V1.7 through app integration"],
+      "affectsAdvanced980": true,
+      "canReplaceRank1": true,
+      "usesRandomness": false,
+      "usesChildPerformance": true,
+      "actsBeforeOrAfterLocalReading": "before_local_reading",
+      "action": "disable_for_max_mode"
+    },
+    {
+      "file": "context-fusion.js",
+      "function": "fuseCandidate",
+      "path": "childStrengthEstimate and aiCalibrationLevel context",
+      "affectedModes": ["all modes receiving adaptive context"],
+      "affectsAdvanced980": true,
+      "canReplaceRank1": true,
+      "usesRandomness": false,
+      "usesChildPerformance": true,
+      "actsBeforeOrAfterLocalReading": "before_local_reading",
+      "action": "bypass_for_max_mode"
+    },
+    {
+      "file": "app.js",
+      "function": "chooseLocalAIMove",
+      "path": "fallback chain preferred -> ranked[0] -> adjusted[0] -> evaluated[0]",
+      "affectedModes": ["all modes"],
+      "affectsAdvanced980": true,
+      "canReplaceRank1": true,
+      "usesRandomness": false,
+      "usesChildPerformance": false,
+      "actsBeforeOrAfterLocalReading": "after_local_reading",
+      "action": "bypass_for_max_mode"
+    },
+    {
+      "file": "app.js",
+      "function": "finalSelectorGuard",
+      "path": "urgent, profitable capture, large yose, low-value second-line and own-territory guard",
+      "affectedModes": ["all modes"],
+      "affectsAdvanced980": true,
+      "canReplaceRank1": true,
+      "usesRandomness": false,
+      "usesChildPerformance": false,
+      "actsBeforeOrAfterLocalReading": "after_local_reading",
+      "action": "preserve"
+    },
+    {
+      "file": "student-model.js",
+      "function": "getOverallLevel/getWeakAreas",
+      "path": "child-strength calibration and weak-area focus",
+      "affectedModes": ["beginner", "basic", "adaptive", "advanced before V1.7 through difficulty settings"],
+      "affectsAdvanced980": true,
+      "canReplaceRank1": true,
+      "usesRandomness": false,
+      "usesChildPerformance": true,
+      "actsBeforeOrAfterLocalReading": "before_local_reading",
+      "action": "disable_for_max_mode"
+    }
+  ]
+}

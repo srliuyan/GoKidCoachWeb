@@ -1,0 +1,119 @@
+{
+  "replyIndex": 5,
+  "baseline": "reply4_baseline",
+  "probe": "reply5_probe",
+  "cases": [
+    {
+      "positionId": "v174_case_001",
+      "phase": "21-60",
+      "aiCandidate": {
+        "x": 10,
+        "y": 14
+      },
+      "missingReply": {
+        "x": 10,
+        "y": 13
+      },
+      "category": "immediate_recapture",
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": true,
+      "confidence": "high"
+    },
+    {
+      "positionId": "v174_case_002",
+      "phase": "21-60",
+      "aiCandidate": {
+        "x": 4,
+        "y": 10
+      },
+      "missingReply": {
+        "x": 5,
+        "y": 10
+      },
+      "category": "cut",
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": false,
+      "confidence": "high"
+    },
+    {
+      "positionId": "v174_case_003",
+      "phase": "61-120",
+      "aiCandidate": {
+        "x": 13,
+        "y": 8
+      },
+      "missingReply": {
+        "x": 12,
+        "y": 8
+      },
+      "category": "escape",
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": true,
+      "confidence": "high"
+    },
+    {
+      "positionId": "v174_case_004",
+      "phase": "61-120",
+      "aiCandidate": {
+        "x": 7,
+        "y": 7
+      },
+      "missingReply": {
+        "x": 8,
+        "y": 7
+      },
+      "category": "stronger_atari",
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": true,
+      "confidence": "high"
+    },
+    {
+      "positionId": "v174_case_005",
+      "phase": "61-120",
+      "aiCandidate": {
+        "x": 15,
+        "y": 10
+      },
+      "missingReply": {
+        "x": 15,
+        "y": 11
+      },
+      "category": "double_atari",
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": false,
+      "confidence": "high"
+    },
+    {
+      "positionId": "v174_case_007",
+      "phase": "121-200",
+      "aiCandidate": {
+        "x": 3,
+        "y": 12
+      },
+      "missingReply": {
+        "x": 4,
+        "y": 12
+      },
+      "category": "sente_endgame_reply",
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": false,
+      "confidence": "high"
+    },
+    {
+      "positionId": "v174_case_008",
+      "phase": "121-200",
+      "aiCandidate": {
+        "x": 12,
+        "y": 16
+      },
+      "missingReply": {
+        "x": 12,
+        "y": 15
+      },
+      "category": "weak_group_tesuji",
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": false,
+      "confidence": "high"
+    }
+  ]
+}

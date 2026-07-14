@@ -278,7 +278,7 @@ function testLowerDifficultyMayChooseEquivalentUrgentSolution() {
 
 function testAdvancedSelectsBestOrStrongOnly() {
   const context = makeContext({
-    difficultySettings: { ...makeContext().difficultySettings, releaseDifficultyMode: "advanced" },
+    difficultySettings: { ...makeContext().difficultySettings, releaseDifficultyMode: "MAX_STRENGTH_FIXED" },
     companionPlan: { ...makeContext().companionPlan, targetMoveRank: 3, reducePrecision: true }
   });
   const ranked = controller.rankCandidates([
@@ -287,7 +287,25 @@ function testAdvancedSelectsBestOrStrongOnly() {
     makeCandidate({ x: 5, y: 5 }, { adjustedScore: 450, combinedScore: 405 })
   ], context);
   const choice = controller.chooseMoveByQuality(ranked, context);
-  assert(["bestMove", "strongMoves"].includes(choice.moveQualityBucket));
+  assert.deepStrictEqual(choice.point, { x: 3, y: 3 });
+}
+
+function testMaxModeIgnoresSofteningAndAcceptableSubstitution() {
+  const context = makeContext({
+    companionState: makeCompanionState([{ quality: "mistake" }, { quality: "blunder" }, { quality: "mistake" }]),
+    recentMoveAssessments: [{ quality: "mistake" }, { quality: "blunder" }, { quality: "mistake" }],
+    difficultySettings: { ...makeContext().difficultySettings, releaseDifficultyMode: "MAX_STRENGTH_FIXED" },
+    companionPlan: { ...makeContext().companionPlan, reducePrecision: true, targetMoveRank: 3, precisionBand: "soft" }
+  });
+  const ranked = controller.rankCandidates([
+    makeCandidate({ x: 3, y: 3 }, { adjustedScore: 500, combinedScore: 450 }),
+    makeCandidate({ x: 4, y: 4 }, { adjustedScore: 470, combinedScore: 420 }),
+    makeCandidate({ x: 5, y: 5 }, { adjustedScore: 410, combinedScore: 360 })
+  ], context);
+  const choice = controller.chooseMoveByQuality(ranked, context);
+  assert.deepStrictEqual(choice.point, { x: 3, y: 3 });
+  assert.strictEqual(ranked.context.maxStrengthFixed, true);
+  assert.strictEqual(ranked.context.reducePrecision, false);
 }
 
 function testBasicAvoidsLooseAcceptableWhenGoodExists() {
@@ -331,6 +349,7 @@ function run() {
   testSofteningCannotChooseUnsafeOverUrgent();
   testLowerDifficultyMayChooseEquivalentUrgentSolution();
   testAdvancedSelectsBestOrStrongOnly();
+  testMaxModeIgnoresSofteningAndAcceptableSubstitution();
   testBasicAvoidsLooseAcceptableWhenGoodExists();
   testWeakButLegalOnlyWhenNoAcceptableExists();
   console.log("test-move-quality-controller: ok");

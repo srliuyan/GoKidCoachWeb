@@ -420,6 +420,32 @@
       .slice(0, limit);
   }
 
+  function conditionalReply5Reason(candidate, first, ownBefore, oppBefore, firstOutcome, context = {}) {
+    if (!context.allowConditionalReply5 || context.difficultyMode !== "MAX_STRENGTH_FIXED") return null;
+    if (first.koStateAfter) return null;
+    const sourceText = [
+      candidate?.candidateSource,
+      candidate?.source,
+      candidate?.generationReason,
+      ...(candidate?.sourceTags || []),
+      ...(candidate?.purposeLabels || [])
+    ].filter(Boolean).join(" ");
+    const endangeredOwn = ownBefore.some(group => group.liberties.size <= 2);
+    const ownAtari = ownBefore.some(group => group.liberties.size === 1);
+    const opponentAtari = oppBefore.some(group => group.liberties.size === 1);
+    if (first.capturedStoneCount > 0 && (first.immediateRecaptureAvailable || first.ownLibertiesAfter <= 2)) return "immediate_recapture";
+    if (first.selfAtari || first.ownLibertiesAfter <= 2 || opponentAtari) return "stronger_atari";
+    if (ownBefore.length >= 2) return "connection";
+    if (oppBefore.length >= 2) return "cut";
+    if (endangeredOwn || firstOutcome.ownUnsafeAfter) return "escape";
+    if (/weak_group|rescue|tesuji|critical/.test(sourceText)) return "weak_group_tesuji";
+    if (/invasion/.test(sourceText)) return "invasion_response";
+    if (/reduction/.test(sourceText)) return "reduction_response";
+    if (/sente|endgame|yose/.test(sourceText)) return "sente_endgame_reply";
+    if (/attack|counter|seal|block|whole_board_strategy/.test(sourceText)) return "counterattack";
+    return null;
+  }
+
   function localRegionPoints(board, anchors, radius = 4, cap = 48) {
     const points = new Map();
     function add(point, priority = 0) {
@@ -581,16 +607,18 @@
       ...ownBefore.flatMap(group => group.stones),
       ...oppBefore.flatMap(group => group.stones)
     ];
+    const reply5Reason = conditionalReply5Reason(move, first, ownBefore, oppBefore, firstOutcome, context);
+    const runtimeReplyCap = reply5Reason ? 5 : Math.min(4, Number(context.maxOpponentReplies) || 4);
     let replies = depthLimit >= 2
-      ? directOpponentReplies(first.boardAfter, point, player, first, Math.min(4, Number(context.maxOpponentReplies) || 4), { ...context, affectedOwnBefore: ownBefore })
+      ? directOpponentReplies(first.boardAfter, point, player, first, runtimeReplyCap, { ...context, affectedOwnBefore: ownBefore })
       : [];
-    if (depthLimit >= 2 && replies.length < 4) {
-      for (const reply of localTacticalMoves(first.boardAfter, opponent(player), anchors, context, 4)) {
+    if (depthLimit >= 2 && replies.length < runtimeReplyCap) {
+      for (const reply of localTacticalMoves(first.boardAfter, opponent(player), anchors, context, runtimeReplyCap)) {
         if (!replies.some(item => samePoint(item.point, reply.point))) replies.push(reply);
       }
       replies = replies
         .sort((a, b) => (b.priority || 0) - (a.priority || 0) || (b.captures || 0) - (a.captures || 0) || a.point.y - b.point.y || a.point.x - b.point.x)
-        .slice(0, 4);
+        .slice(0, runtimeReplyCap);
     }
 
     let worstLine = null;
@@ -728,6 +756,8 @@
       },
       unresolved: false,
       repliesConsidered: replies.length,
+      conditionalReply5Used: Boolean(reply5Reason),
+      conditionalReply5Reason: reply5Reason,
       continuationsConsidered,
       latencyMs: Number(elapsed.toFixed(4)),
       fallback: elapsed > Number(context.timeBudgetMs || 120)
@@ -939,7 +969,7 @@
 
   function applyLocalReading(candidates, board, color, context = {}) {
     const started = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
-    const maxCandidates = Math.min(8, Math.max(1, Number(context.maxCandidates) || 6));
+    const maxCandidates = Math.min(10, Math.max(1, Number(context.maxCandidates) || 6));
     const budgetMs = Math.max(1, Number(context.timeBudgetMs) || 120);
     const sorted = (Array.isArray(candidates) ? candidates : [])
       .filter(candidate => candidate && candidate.legal !== false && candidate.ruleLegal !== false)

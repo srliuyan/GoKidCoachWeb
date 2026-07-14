@@ -1,0 +1,21 @@
+{
+  "productVersion": "1.7.1-dev",
+  "engineVersion": "top10-candidate-reading-v1",
+  "noHumanRankOrEloClaimed": true,
+  "positionsEvaluated": 3047,
+  "rank9EnteredReadingCount": 3047,
+  "rank10EnteredReadingCount": 3047,
+  "rank9BecameFinalChoiceCount": 61,
+  "rank10BecameFinalChoiceCount": 42,
+  "rank9Or10ImprovedMoveCount": 103,
+  "rank9Or10WorsenedMoveCount": 0,
+  "identicalMoveRateTop8VsTop10": 0.966196,
+  "top8AverageScoreLoss": 1.460453,
+  "top10AverageScoreLoss": 0,
+  "top8Rank1Rate": 0.966196,
+  "top10Rank1Rate": 1,
+  "tacticalImprovementCount": 0,
+  "weakGroupImprovementCount": 0,
+  "wholeBoardImprovementCount": 0,
+  "endgameImprovementCount": 0
+}

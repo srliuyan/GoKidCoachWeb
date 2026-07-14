@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "caseId": "v172_selected_1",
+      "source": "whole_board_strategy",
+      "before": "missing high-confidence whole-board candidate",
+      "after": "whole_board_strategy candidate enters top10 with post-reading evidence",
+      "improved": true,
+      "worsened": false
+    }
+  ]
+}

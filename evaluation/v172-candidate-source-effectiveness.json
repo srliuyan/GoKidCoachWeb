@@ -1,0 +1,52 @@
+{
+  "sources": [
+    {
+      "source": "whole_board_strategy",
+      "activationCount": 2,
+      "candidatesGenerated": 2,
+      "candidatesDeduplicated": 0,
+      "candidatesEnteringTop10": 2,
+      "candidatesEnteringTop3AfterReading": 2,
+      "candidatesBecomingFinalRank1": 2,
+      "candidatesFinallySelected": 2,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 2,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0.42,
+      "overlapWithOtherSources": 0,
+      "uniqueContributionCount": 2
+    },
+    {
+      "source": "strategic_invasion_reduction",
+      "activationCount": 2,
+      "candidatesGenerated": 1,
+      "candidatesDeduplicated": 0,
+      "candidatesEnteringTop10": 1,
+      "candidatesEnteringTop3AfterReading": 1,
+      "candidatesBecomingFinalRank1": 1,
+      "candidatesFinallySelected": 1,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 1,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0.31,
+      "overlapWithOtherSources": 1,
+      "uniqueContributionCount": 0
+    },
+    {
+      "source": "strategic_tenuki",
+      "activationCount": 1,
+      "candidatesGenerated": 1,
+      "candidatesDeduplicated": 0,
+      "candidatesEnteringTop10": 1,
+      "candidatesEnteringTop3AfterReading": 1,
+      "candidatesBecomingFinalRank1": 1,
+      "candidatesFinallySelected": 1,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 1,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0.22,
+      "overlapWithOtherSources": 1,
+      "uniqueContributionCount": 0
+    }
+  ]
+}

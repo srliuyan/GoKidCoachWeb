@@ -29,14 +29,17 @@ function makeCandidate(point, overrides = {}) {
 }
 
 function testDifficultyModes() {
-  assert.deepStrictEqual(Object.keys(product.difficultyModes), ["beginner", "basic", "advanced", "adaptive"]);
+  assert.deepStrictEqual(Object.keys(product.difficultyModes), ["beginner", "basic", "advanced", "MAX_STRENGTH_FIXED", "adaptive"]);
   assert.strictEqual(product.difficultyModeConfig("beginner").label, "入门陪练");
   assert.strictEqual(product.difficultyModeConfig("beginner").level, 720);
   assert.strictEqual(product.difficultyModeConfig("basic").level, 840);
   assert.strictEqual(product.difficultyModeConfig("advanced").level, 980);
+  assert.strictEqual(product.difficultyModeConfig("advanced").key, "MAX_STRENGTH_FIXED");
   assert.strictEqual(product.normalizeDifficultyMode(640), "beginner");
   assert.strictEqual(product.normalizeDifficultyMode(840), "basic");
-  assert.strictEqual(product.normalizeDifficultyMode(980), "advanced");
+  assert.strictEqual(product.normalizeDifficultyMode(980), "MAX_STRENGTH_FIXED");
+  assert.strictEqual(product.normalizeDifficultyMode("advanced"), "MAX_STRENGTH_FIXED");
+  assert.strictEqual(product.isMaxStrengthMode("advanced"), true);
   assert.strictEqual(product.normalizeDifficultyMode("adaptive"), "adaptive");
 }
 
@@ -134,6 +137,8 @@ function testSnapshotValidationAndDiagnostics() {
   assert.strictEqual(snapshot.board.length, 19);
   assert.strictEqual(summary.maximumAiThinkTimeMs, 80);
   assert.strictEqual(summary.restoreCount, 1);
+  assert.strictEqual(summary.adaptiveWeakeningEnabled, false);
+  assert.strictEqual(summary.randomSofteningEnabled, false);
 }
 
 function testCompleteGameSimulationStable() {

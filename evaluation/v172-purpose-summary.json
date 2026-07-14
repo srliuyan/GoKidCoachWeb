@@ -1,0 +1,104 @@
+{
+  "purposes": [
+    {
+      "purpose": "urgent_capture",
+      "generatedCount": 6482,
+      "top10EntryCount": 5969
+    },
+    {
+      "purpose": "urgent_rescue",
+      "generatedCount": 1942,
+      "top10EntryCount": 1942
+    },
+    {
+      "purpose": "connection",
+      "generatedCount": 2699,
+      "top10EntryCount": 2536
+    },
+    {
+      "purpose": "cut",
+      "generatedCount": 2418,
+      "top10EntryCount": 2375
+    },
+    {
+      "purpose": "attack_weak_group",
+      "generatedCount": 6271,
+      "top10EntryCount": 5204
+    },
+    {
+      "purpose": "settle_own_weak_group",
+      "generatedCount": 2510,
+      "top10EntryCount": 2436
+    },
+    {
+      "purpose": "sacrifice_or_tenuki",
+      "generatedCount": 1995,
+      "top10EntryCount": 1883
+    },
+    {
+      "purpose": "global_large_point",
+      "generatedCount": 3170,
+      "top10EntryCount": 2841
+    },
+    {
+      "purpose": "invade",
+      "generatedCount": 1658,
+      "top10EntryCount": 1582
+    },
+    {
+      "purpose": "reduce",
+      "generatedCount": 1209,
+      "top10EntryCount": 1209
+    },
+    {
+      "purpose": "extend",
+      "generatedCount": 1218,
+      "top10EntryCount": 1218
+    },
+    {
+      "purpose": "approach",
+      "generatedCount": 2122,
+      "top10EntryCount": 776
+    },
+    {
+      "purpose": "enclosure",
+      "generatedCount": 1267,
+      "top10EntryCount": 0
+    },
+    {
+      "purpose": "develop_influence",
+      "generatedCount": 900,
+      "top10EntryCount": 750
+    },
+    {
+      "purpose": "expand_moyo",
+      "generatedCount": 0,
+      "top10EntryCount": 0
+    },
+    {
+      "purpose": "defend_boundary",
+      "generatedCount": 0,
+      "top10EntryCount": 0
+    },
+    {
+      "purpose": "endgame",
+      "generatedCount": 451,
+      "top10EntryCount": 375
+    },
+    {
+      "purpose": "tactical_probe",
+      "generatedCount": 0,
+      "top10EntryCount": 0
+    },
+    {
+      "purpose": "fallback",
+      "generatedCount": 450,
+      "top10EntryCount": 374
+    },
+    {
+      "purpose": "unknown",
+      "generatedCount": 0,
+      "top10EntryCount": 0
+    }
+  ]
+}

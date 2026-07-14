@@ -246,6 +246,26 @@ function testCapsAndDeterminism() {
   );
 }
 
+function testExplicitTop10CapReadsRankTen() {
+  const board = emptyBoard();
+  setStone(board, { x: 1, y: 1 }, white);
+  setStone(board, { x: 0, y: 1 }, black);
+  setStone(board, { x: 1, y: 0 }, black);
+  setStone(board, { x: 2, y: 1 }, black);
+  const candidates = Array.from({ length: 12 }, (_, index) => candidate({ x: index % 19, y: Math.floor(index / 19) }, {
+    combinedScore: 220 - index,
+    sourceTags: ["top10_test"],
+    initialRank: index + 1
+  }));
+  candidates[9] = candidate({ x: 1, y: 2 }, { captures: 1, combinedScore: 120, sourceTags: ["rank10_capture"], initialRank: 10 });
+  const result = ruleEngine.applyLocalReading(candidates, board, black, { maxCandidates: 10, maxOpponentReplies: 4, maxAiContinuations: 3 });
+  assert(result.diagnostics.candidatesRead <= 10);
+  assert.notStrictEqual(result.candidates[9].localReadingStatus, "not_read");
+  assert.strictEqual(result.candidates[10].localReadingStatus, "not_read");
+  assert.deepStrictEqual(result.candidates[9].sourceTags, ["rank10_capture"]);
+  assert.strictEqual(result.candidates[9].initialRank, 10);
+}
+
 function testTimeBudgetFallbackPreservesBaseline() {
   const board = emptyBoard();
   const candidates = Array.from({ length: 8 }, (_, index) => candidate({ x: index, y: 0 }, { combinedScore: 100 - index }));
@@ -395,6 +415,7 @@ function run() {
   testShortLadderSignalHandledWithinLimit();
   testUnresolvedLongLadderFallsBackSafely();
   testCapsAndDeterminism();
+  testExplicitTop10CapReadsRankTen();
   testTimeBudgetFallbackPreservesBaseline();
   testRuleEngineLegalityAuthoritative();
   testRejectedMovesRemainRejected();

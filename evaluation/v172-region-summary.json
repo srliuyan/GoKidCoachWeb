@@ -1,0 +1,74 @@
+{
+  "regions": [
+    {
+      "region": "upper_left_corner",
+      "generatedCount": 2778,
+      "top10EntryCount": 2431
+    },
+    {
+      "region": "upper_right_corner",
+      "generatedCount": 3046,
+      "top10EntryCount": 2642
+    },
+    {
+      "region": "lower_left_corner",
+      "generatedCount": 2947,
+      "top10EntryCount": 2633
+    },
+    {
+      "region": "lower_right_corner",
+      "generatedCount": 2436,
+      "top10EntryCount": 2134
+    },
+    {
+      "region": "top_side",
+      "generatedCount": 4369,
+      "top10EntryCount": 3801
+    },
+    {
+      "region": "bottom_side",
+      "generatedCount": 2612,
+      "top10EntryCount": 2241
+    },
+    {
+      "region": "left_side",
+      "generatedCount": 3608,
+      "top10EntryCount": 3031
+    },
+    {
+      "region": "right_side",
+      "generatedCount": 3831,
+      "top10EntryCount": 3410
+    },
+    {
+      "region": "center",
+      "generatedCount": 8684,
+      "top10EntryCount": 7149
+    },
+    {
+      "region": "active_fight_region",
+      "generatedCount": 1575,
+      "top10EntryCount": 1283
+    },
+    {
+      "region": "weak_group_region",
+      "generatedCount": 0,
+      "top10EntryCount": 0
+    },
+    {
+      "region": "largest_open_region",
+      "generatedCount": 876,
+      "top10EntryCount": 715
+    },
+    {
+      "region": "largest_opponent_framework",
+      "generatedCount": 0,
+      "top10EntryCount": 0
+    },
+    {
+      "region": "largest_own_framework",
+      "generatedCount": 0,
+      "top10EntryCount": 0
+    }
+  ]
+}

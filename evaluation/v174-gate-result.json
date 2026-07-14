@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "failedGates": [],
+  "positionsEvaluated": 4180,
+  "everyCriticalReplyHasCategoryAndEffectTrace": true,
+  "runtimeReplyCapRemains4": true,
+  "runtimeBehaviorChanged": false,
+  "benchmarkUnchanged": true,
+  "tacticalSafetyUnchanged": true,
+  "endgameSafetyUnchanged": true,
+  "lowerModesUnchanged": true,
+  "deploymentOccurred": false,
+  "recommendation": "conditional_5",
+  "recommendationReason": "reply 5 finds high-confidence tactical and group-safety counterplay that changes rank/final move; reply 6 has smaller separate value and should remain offline until reply-5 gating is proven"
+}

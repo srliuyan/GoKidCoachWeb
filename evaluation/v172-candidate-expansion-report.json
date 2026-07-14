@@ -1,0 +1,1738 @@
+{
+  "productVersion": "1.7.2-dev",
+  "engineVersion": "candidate-breadth-audit-v1",
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "deterministic": true,
+  "command": "node evaluation/run-v172-candidate-expansion.js --write-reports",
+  "runtimeBehaviorChanged": true,
+  "runtimeScope": "MAX_STRENGTH_FIXED whole_board_strategy only",
+  "top10ReadingCapChanged": false,
+  "finalSelectorGuardChanged": false,
+  "profiles": [
+    {
+      "profileName": "baseline_v171",
+      "enabledSources": [],
+      "generatedCountBeforeDedup": 0,
+      "generatedCountAfterDedup": 0,
+      "sourceActivationCounts": {},
+      "candidates": [],
+      "top10Preservation": {
+        "urgentCandidateDisplaced": false,
+        "strategicCandidatePreserved": false,
+        "top10": [
+          {
+            "slot": 1,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 2,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 3,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 4,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 5,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 6,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 7,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 8,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 9,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 10,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "profileName": "invasion_reduction_only",
+      "enabledSources": [
+        "strategic_invasion_reduction"
+      ],
+      "generatedCountBeforeDedup": 2,
+      "generatedCountAfterDedup": 1,
+      "sourceActivationCounts": {
+        "strategic_invasion_reduction": 2
+      },
+      "candidates": [
+        {
+          "point": {
+            "x": 13,
+            "y": 5
+          },
+          "sourceTags": [
+            "invasion_reduction_probe",
+            "strategic_invasion_reduction"
+          ],
+          "purposeLabels": [
+            "invade"
+          ],
+          "generationReason": "invade opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_opponent_framework",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 12,
+          "preReadingScore": 805,
+          "postReadingRank": 1,
+          "readingOutcome": "rank1",
+          "finalSelectionReason": "offline_probe_rank1",
+          "source": "strategic_invasion_reduction",
+          "wholeBoardCandidate": false,
+          "invasionReductionCandidate": true,
+          "tenukiCandidate": false
+        }
+      ],
+      "top10Preservation": {
+        "urgentCandidateDisplaced": false,
+        "strategicCandidatePreserved": true,
+        "top10": [
+          {
+            "slot": 1,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 2,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 3,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 4,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 5,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 6,
+            "urgent": false,
+            "strategic": true,
+            "sourceTags": [
+              "invasion_reduction_probe",
+              "strategic_invasion_reduction"
+            ],
+            "point": {
+              "x": 13,
+              "y": 5
+            }
+          },
+          {
+            "slot": 7,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 8,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 9,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 10,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "profileName": "tenuki_only",
+      "enabledSources": [
+        "strategic_tenuki"
+      ],
+      "generatedCountBeforeDedup": 1,
+      "generatedCountAfterDedup": 1,
+      "sourceActivationCounts": {
+        "strategic_tenuki": 1
+      },
+      "candidates": [
+        {
+          "point": {
+            "x": 4,
+            "y": 15
+          },
+          "sourceTags": [
+            "tenuki_probe",
+            "strategic_tenuki"
+          ],
+          "purposeLabels": [
+            "sacrifice_or_tenuki"
+          ],
+          "generationReason": "sacrifice_or_tenuki opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_open_region",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 13,
+          "preReadingScore": 850,
+          "postReadingRank": 1,
+          "readingOutcome": "rank1",
+          "finalSelectionReason": "offline_probe_rank1",
+          "source": "strategic_tenuki",
+          "wholeBoardCandidate": false,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": true
+        }
+      ],
+      "top10Preservation": {
+        "urgentCandidateDisplaced": false,
+        "strategicCandidatePreserved": true,
+        "top10": [
+          {
+            "slot": 1,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 2,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 3,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 4,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 5,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 6,
+            "urgent": false,
+            "strategic": true,
+            "sourceTags": [
+              "tenuki_probe",
+              "strategic_tenuki"
+            ],
+            "point": {
+              "x": 4,
+              "y": 15
+            }
+          },
+          {
+            "slot": 7,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 8,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 9,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 10,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "profileName": "whole_board_only",
+      "enabledSources": [
+        "whole_board_strategy"
+      ],
+      "generatedCountBeforeDedup": 2,
+      "generatedCountAfterDedup": 2,
+      "sourceActivationCounts": {
+        "whole_board_strategy": 2
+      },
+      "candidates": [
+        {
+          "point": {
+            "x": 10,
+            "y": 14
+          },
+          "sourceTags": [
+            "whole_board_strategy"
+          ],
+          "purposeLabels": [
+            "develop_influence"
+          ],
+          "generationReason": "develop_influence opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_own_framework",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 14,
+          "preReadingScore": 850,
+          "postReadingRank": 1,
+          "readingOutcome": "rank1",
+          "finalSelectionReason": "offline_probe_rank1",
+          "source": "whole_board_strategy",
+          "wholeBoardCandidate": true,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": false
+        },
+        {
+          "point": {
+            "x": 10,
+            "y": 3
+          },
+          "sourceTags": [
+            "whole_board_strategy"
+          ],
+          "purposeLabels": [
+            "global_large_point"
+          ],
+          "generationReason": "global_large_point opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_open_region",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 11,
+          "preReadingScore": 805,
+          "postReadingRank": 3,
+          "readingOutcome": "top3",
+          "finalSelectionReason": "offline_probe_top3",
+          "source": "whole_board_strategy",
+          "wholeBoardCandidate": true,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": false
+        }
+      ],
+      "top10Preservation": {
+        "urgentCandidateDisplaced": false,
+        "strategicCandidatePreserved": true,
+        "top10": [
+          {
+            "slot": 1,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 2,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 3,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 4,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 5,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 6,
+            "urgent": false,
+            "strategic": true,
+            "sourceTags": [
+              "whole_board_strategy"
+            ],
+            "point": {
+              "x": 10,
+              "y": 14
+            }
+          },
+          {
+            "slot": 7,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 8,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 9,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 10,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "profileName": "invasion_plus_whole_board",
+      "enabledSources": [
+        "strategic_invasion_reduction",
+        "whole_board_strategy"
+      ],
+      "generatedCountBeforeDedup": 4,
+      "generatedCountAfterDedup": 3,
+      "sourceActivationCounts": {
+        "strategic_invasion_reduction": 2,
+        "whole_board_strategy": 2
+      },
+      "candidates": [
+        {
+          "point": {
+            "x": 13,
+            "y": 5
+          },
+          "sourceTags": [
+            "invasion_reduction_probe",
+            "strategic_invasion_reduction"
+          ],
+          "purposeLabels": [
+            "invade"
+          ],
+          "generationReason": "invade opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_opponent_framework",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 12,
+          "preReadingScore": 805,
+          "postReadingRank": 1,
+          "readingOutcome": "rank1",
+          "finalSelectionReason": "offline_probe_rank1",
+          "source": "strategic_invasion_reduction",
+          "wholeBoardCandidate": false,
+          "invasionReductionCandidate": true,
+          "tenukiCandidate": false
+        },
+        {
+          "point": {
+            "x": 10,
+            "y": 14
+          },
+          "sourceTags": [
+            "whole_board_strategy"
+          ],
+          "purposeLabels": [
+            "develop_influence"
+          ],
+          "generationReason": "develop_influence opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_own_framework",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 14,
+          "preReadingScore": 850,
+          "postReadingRank": 1,
+          "readingOutcome": "rank1",
+          "finalSelectionReason": "offline_probe_rank1",
+          "source": "whole_board_strategy",
+          "wholeBoardCandidate": true,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": false
+        },
+        {
+          "point": {
+            "x": 10,
+            "y": 3
+          },
+          "sourceTags": [
+            "whole_board_strategy"
+          ],
+          "purposeLabels": [
+            "global_large_point"
+          ],
+          "generationReason": "global_large_point opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_open_region",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 11,
+          "preReadingScore": 805,
+          "postReadingRank": 3,
+          "readingOutcome": "top3",
+          "finalSelectionReason": "offline_probe_top3",
+          "source": "whole_board_strategy",
+          "wholeBoardCandidate": true,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": false
+        }
+      ],
+      "top10Preservation": {
+        "urgentCandidateDisplaced": false,
+        "strategicCandidatePreserved": true,
+        "top10": [
+          {
+            "slot": 1,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 2,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 3,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 4,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 5,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 6,
+            "urgent": false,
+            "strategic": true,
+            "sourceTags": [
+              "invasion_reduction_probe",
+              "strategic_invasion_reduction"
+            ],
+            "point": {
+              "x": 13,
+              "y": 5
+            }
+          },
+          {
+            "slot": 7,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 8,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 9,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 10,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "profileName": "tenuki_plus_whole_board",
+      "enabledSources": [
+        "strategic_tenuki",
+        "whole_board_strategy"
+      ],
+      "generatedCountBeforeDedup": 3,
+      "generatedCountAfterDedup": 3,
+      "sourceActivationCounts": {
+        "whole_board_strategy": 2,
+        "strategic_tenuki": 1
+      },
+      "candidates": [
+        {
+          "point": {
+            "x": 10,
+            "y": 14
+          },
+          "sourceTags": [
+            "whole_board_strategy"
+          ],
+          "purposeLabels": [
+            "develop_influence"
+          ],
+          "generationReason": "develop_influence opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_own_framework",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 14,
+          "preReadingScore": 850,
+          "postReadingRank": 1,
+          "readingOutcome": "rank1",
+          "finalSelectionReason": "offline_probe_rank1",
+          "source": "whole_board_strategy",
+          "wholeBoardCandidate": true,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": false
+        },
+        {
+          "point": {
+            "x": 4,
+            "y": 15
+          },
+          "sourceTags": [
+            "tenuki_probe",
+            "strategic_tenuki"
+          ],
+          "purposeLabels": [
+            "sacrifice_or_tenuki"
+          ],
+          "generationReason": "sacrifice_or_tenuki opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_open_region",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 13,
+          "preReadingScore": 850,
+          "postReadingRank": 1,
+          "readingOutcome": "rank1",
+          "finalSelectionReason": "offline_probe_rank1",
+          "source": "strategic_tenuki",
+          "wholeBoardCandidate": false,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": true
+        },
+        {
+          "point": {
+            "x": 10,
+            "y": 3
+          },
+          "sourceTags": [
+            "whole_board_strategy"
+          ],
+          "purposeLabels": [
+            "global_large_point"
+          ],
+          "generationReason": "global_large_point opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_open_region",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 11,
+          "preReadingScore": 805,
+          "postReadingRank": 3,
+          "readingOutcome": "top3",
+          "finalSelectionReason": "offline_probe_top3",
+          "source": "whole_board_strategy",
+          "wholeBoardCandidate": true,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": false
+        }
+      ],
+      "top10Preservation": {
+        "urgentCandidateDisplaced": false,
+        "strategicCandidatePreserved": true,
+        "top10": [
+          {
+            "slot": 1,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 2,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 3,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 4,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 5,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 6,
+            "urgent": false,
+            "strategic": true,
+            "sourceTags": [
+              "whole_board_strategy"
+            ],
+            "point": {
+              "x": 10,
+              "y": 14
+            }
+          },
+          {
+            "slot": 7,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 8,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 9,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 10,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "profileName": "all_three_sources",
+      "enabledSources": [
+        "strategic_invasion_reduction",
+        "strategic_tenuki",
+        "whole_board_strategy"
+      ],
+      "generatedCountBeforeDedup": 5,
+      "generatedCountAfterDedup": 4,
+      "sourceActivationCounts": {
+        "strategic_invasion_reduction": 2,
+        "whole_board_strategy": 2,
+        "strategic_tenuki": 1
+      },
+      "candidates": [
+        {
+          "point": {
+            "x": 13,
+            "y": 5
+          },
+          "sourceTags": [
+            "invasion_reduction_probe",
+            "strategic_invasion_reduction"
+          ],
+          "purposeLabels": [
+            "invade"
+          ],
+          "generationReason": "invade opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_opponent_framework",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 12,
+          "preReadingScore": 805,
+          "postReadingRank": 1,
+          "readingOutcome": "rank1",
+          "finalSelectionReason": "offline_probe_rank1",
+          "source": "strategic_invasion_reduction",
+          "wholeBoardCandidate": false,
+          "invasionReductionCandidate": true,
+          "tenukiCandidate": false
+        },
+        {
+          "point": {
+            "x": 10,
+            "y": 14
+          },
+          "sourceTags": [
+            "whole_board_strategy"
+          ],
+          "purposeLabels": [
+            "develop_influence"
+          ],
+          "generationReason": "develop_influence opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_own_framework",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 14,
+          "preReadingScore": 850,
+          "postReadingRank": 1,
+          "readingOutcome": "rank1",
+          "finalSelectionReason": "offline_probe_rank1",
+          "source": "whole_board_strategy",
+          "wholeBoardCandidate": true,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": false
+        },
+        {
+          "point": {
+            "x": 4,
+            "y": 15
+          },
+          "sourceTags": [
+            "tenuki_probe",
+            "strategic_tenuki"
+          ],
+          "purposeLabels": [
+            "sacrifice_or_tenuki"
+          ],
+          "generationReason": "sacrifice_or_tenuki opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_open_region",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 13,
+          "preReadingScore": 850,
+          "postReadingRank": 1,
+          "readingOutcome": "rank1",
+          "finalSelectionReason": "offline_probe_rank1",
+          "source": "strategic_tenuki",
+          "wholeBoardCandidate": false,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": true
+        },
+        {
+          "point": {
+            "x": 10,
+            "y": 3
+          },
+          "sourceTags": [
+            "whole_board_strategy"
+          ],
+          "purposeLabels": [
+            "global_large_point"
+          ],
+          "generationReason": "global_large_point opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_open_region",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 11,
+          "preReadingScore": 805,
+          "postReadingRank": 3,
+          "readingOutcome": "top3",
+          "finalSelectionReason": "offline_probe_top3",
+          "source": "whole_board_strategy",
+          "wholeBoardCandidate": true,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": false
+        }
+      ],
+      "top10Preservation": {
+        "urgentCandidateDisplaced": false,
+        "strategicCandidatePreserved": true,
+        "top10": [
+          {
+            "slot": 1,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 2,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 3,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 4,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 5,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 6,
+            "urgent": false,
+            "strategic": true,
+            "sourceTags": [
+              "invasion_reduction_probe",
+              "strategic_invasion_reduction"
+            ],
+            "point": {
+              "x": 13,
+              "y": 5
+            }
+          },
+          {
+            "slot": 7,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 8,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 9,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 10,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "profileName": "smallest_passing_combination",
+      "enabledSources": [
+        "strategic_invasion_reduction",
+        "strategic_tenuki",
+        "whole_board_strategy"
+      ],
+      "generatedCountBeforeDedup": 5,
+      "generatedCountAfterDedup": 4,
+      "sourceActivationCounts": {
+        "strategic_invasion_reduction": 2,
+        "whole_board_strategy": 2,
+        "strategic_tenuki": 1
+      },
+      "candidates": [
+        {
+          "point": {
+            "x": 13,
+            "y": 5
+          },
+          "sourceTags": [
+            "invasion_reduction_probe",
+            "strategic_invasion_reduction"
+          ],
+          "purposeLabels": [
+            "invade"
+          ],
+          "generationReason": "invade opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_opponent_framework",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 12,
+          "preReadingScore": 805,
+          "postReadingRank": 1,
+          "readingOutcome": "rank1",
+          "finalSelectionReason": "offline_probe_rank1",
+          "source": "strategic_invasion_reduction",
+          "wholeBoardCandidate": false,
+          "invasionReductionCandidate": true,
+          "tenukiCandidate": false
+        },
+        {
+          "point": {
+            "x": 10,
+            "y": 14
+          },
+          "sourceTags": [
+            "whole_board_strategy"
+          ],
+          "purposeLabels": [
+            "develop_influence"
+          ],
+          "generationReason": "develop_influence opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_own_framework",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 14,
+          "preReadingScore": 850,
+          "postReadingRank": 1,
+          "readingOutcome": "rank1",
+          "finalSelectionReason": "offline_probe_rank1",
+          "source": "whole_board_strategy",
+          "wholeBoardCandidate": true,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": false
+        },
+        {
+          "point": {
+            "x": 4,
+            "y": 15
+          },
+          "sourceTags": [
+            "tenuki_probe",
+            "strategic_tenuki"
+          ],
+          "purposeLabels": [
+            "sacrifice_or_tenuki"
+          ],
+          "generationReason": "sacrifice_or_tenuki opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_open_region",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 13,
+          "preReadingScore": 850,
+          "postReadingRank": 1,
+          "readingOutcome": "rank1",
+          "finalSelectionReason": "offline_probe_rank1",
+          "source": "strategic_tenuki",
+          "wholeBoardCandidate": false,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": true
+        },
+        {
+          "point": {
+            "x": 10,
+            "y": 3
+          },
+          "sourceTags": [
+            "whole_board_strategy"
+          ],
+          "purposeLabels": [
+            "global_large_point"
+          ],
+          "generationReason": "global_large_point opportunity absent from generated candidate purposes",
+          "confidence": "high",
+          "primaryRegion": "largest_open_region",
+          "affectedGroups": [],
+          "phase": "diagnostic_profile",
+          "tacticalSafety": {
+            "urgentFight": false,
+            "legal": true,
+            "immediateSelfAtari": false,
+            "unsafeDeepInvasion": false,
+            "localFightUrgent": false
+          },
+          "initialRank": 11,
+          "preReadingScore": 805,
+          "postReadingRank": 3,
+          "readingOutcome": "top3",
+          "finalSelectionReason": "offline_probe_top3",
+          "source": "whole_board_strategy",
+          "wholeBoardCandidate": true,
+          "invasionReductionCandidate": false,
+          "tenukiCandidate": false
+        }
+      ],
+      "top10Preservation": {
+        "urgentCandidateDisplaced": false,
+        "strategicCandidatePreserved": true,
+        "top10": [
+          {
+            "slot": 1,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 2,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 3,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 4,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 5,
+            "urgent": true,
+            "sourceTags": [
+              "verified_tactical"
+            ]
+          },
+          {
+            "slot": 6,
+            "urgent": false,
+            "strategic": true,
+            "sourceTags": [
+              "invasion_reduction_probe",
+              "strategic_invasion_reduction"
+            ],
+            "point": {
+              "x": 13,
+              "y": 5
+            }
+          },
+          {
+            "slot": 7,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 8,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 9,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          },
+          {
+            "slot": 10,
+            "urgent": false,
+            "sourceTags": [
+              "ordinary_candidate"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "profileComparison": [
+    {
+      "profileName": "baseline_v171",
+      "enabledSources": [],
+      "activationCount": 0,
+      "candidatesGenerated": 0,
+      "candidatesDeduplicated": 0,
+      "candidatesEnteringTop10": 0,
+      "candidatesEnteringTop3AfterReading": 0,
+      "candidatesBecomingFinalRank1": 0,
+      "candidatesFinallySelected": 0,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 0,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0,
+      "overlapWithOtherSources": 0,
+      "uniqueContributionCount": 0,
+      "passesSafetyAndQuality": true
+    },
+    {
+      "profileName": "invasion_reduction_only",
+      "enabledSources": [
+        "strategic_invasion_reduction"
+      ],
+      "activationCount": 2,
+      "candidatesGenerated": 2,
+      "candidatesDeduplicated": 1,
+      "candidatesEnteringTop10": 1,
+      "candidatesEnteringTop3AfterReading": 1,
+      "candidatesBecomingFinalRank1": 1,
+      "candidatesFinallySelected": 1,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 1,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0.31,
+      "overlapWithOtherSources": 1,
+      "uniqueContributionCount": 0,
+      "passesSafetyAndQuality": false
+    },
+    {
+      "profileName": "tenuki_only",
+      "enabledSources": [
+        "strategic_tenuki"
+      ],
+      "activationCount": 1,
+      "candidatesGenerated": 1,
+      "candidatesDeduplicated": 0,
+      "candidatesEnteringTop10": 1,
+      "candidatesEnteringTop3AfterReading": 1,
+      "candidatesBecomingFinalRank1": 1,
+      "candidatesFinallySelected": 1,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 1,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0.22,
+      "overlapWithOtherSources": 1,
+      "uniqueContributionCount": 0,
+      "passesSafetyAndQuality": false
+    },
+    {
+      "profileName": "whole_board_only",
+      "enabledSources": [
+        "whole_board_strategy"
+      ],
+      "activationCount": 2,
+      "candidatesGenerated": 2,
+      "candidatesDeduplicated": 0,
+      "candidatesEnteringTop10": 2,
+      "candidatesEnteringTop3AfterReading": 2,
+      "candidatesBecomingFinalRank1": 2,
+      "candidatesFinallySelected": 2,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 2,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0.42,
+      "overlapWithOtherSources": 0,
+      "uniqueContributionCount": 2,
+      "passesSafetyAndQuality": true
+    },
+    {
+      "profileName": "invasion_plus_whole_board",
+      "enabledSources": [
+        "strategic_invasion_reduction",
+        "whole_board_strategy"
+      ],
+      "activationCount": 4,
+      "candidatesGenerated": 4,
+      "candidatesDeduplicated": 1,
+      "candidatesEnteringTop10": 3,
+      "candidatesEnteringTop3AfterReading": 3,
+      "candidatesBecomingFinalRank1": 3,
+      "candidatesFinallySelected": 3,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 3,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0.73,
+      "overlapWithOtherSources": 1,
+      "uniqueContributionCount": 2,
+      "passesSafetyAndQuality": true
+    },
+    {
+      "profileName": "tenuki_plus_whole_board",
+      "enabledSources": [
+        "strategic_tenuki",
+        "whole_board_strategy"
+      ],
+      "activationCount": 3,
+      "candidatesGenerated": 3,
+      "candidatesDeduplicated": 0,
+      "candidatesEnteringTop10": 3,
+      "candidatesEnteringTop3AfterReading": 3,
+      "candidatesBecomingFinalRank1": 3,
+      "candidatesFinallySelected": 3,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 3,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0.64,
+      "overlapWithOtherSources": 1,
+      "uniqueContributionCount": 2,
+      "passesSafetyAndQuality": true
+    },
+    {
+      "profileName": "all_three_sources",
+      "enabledSources": [
+        "strategic_invasion_reduction",
+        "strategic_tenuki",
+        "whole_board_strategy"
+      ],
+      "activationCount": 5,
+      "candidatesGenerated": 5,
+      "candidatesDeduplicated": 1,
+      "candidatesEnteringTop10": 4,
+      "candidatesEnteringTop3AfterReading": 4,
+      "candidatesBecomingFinalRank1": 4,
+      "candidatesFinallySelected": 4,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 4,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0.95,
+      "overlapWithOtherSources": 2,
+      "uniqueContributionCount": 2,
+      "passesSafetyAndQuality": true
+    },
+    {
+      "profileName": "smallest_passing_combination",
+      "enabledSources": [
+        "strategic_invasion_reduction",
+        "strategic_tenuki",
+        "whole_board_strategy"
+      ],
+      "activationCount": 5,
+      "candidatesGenerated": 5,
+      "candidatesDeduplicated": 1,
+      "candidatesEnteringTop10": 4,
+      "candidatesEnteringTop3AfterReading": 4,
+      "candidatesBecomingFinalRank1": 4,
+      "candidatesFinallySelected": 4,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 4,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0.95,
+      "overlapWithOtherSources": 2,
+      "uniqueContributionCount": 2,
+      "passesSafetyAndQuality": true
+    }
+  ],
+  "sourceEffectiveness": [
+    {
+      "source": "whole_board_strategy",
+      "activationCount": 2,
+      "candidatesGenerated": 2,
+      "candidatesDeduplicated": 0,
+      "candidatesEnteringTop10": 2,
+      "candidatesEnteringTop3AfterReading": 2,
+      "candidatesBecomingFinalRank1": 2,
+      "candidatesFinallySelected": 2,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 2,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0.42,
+      "overlapWithOtherSources": 0,
+      "uniqueContributionCount": 2
+    },
+    {
+      "source": "strategic_invasion_reduction",
+      "activationCount": 2,
+      "candidatesGenerated": 1,
+      "candidatesDeduplicated": 0,
+      "candidatesEnteringTop10": 1,
+      "candidatesEnteringTop3AfterReading": 1,
+      "candidatesBecomingFinalRank1": 1,
+      "candidatesFinallySelected": 1,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 1,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0.31,
+      "overlapWithOtherSources": 1,
+      "uniqueContributionCount": 0
+    },
+    {
+      "source": "strategic_tenuki",
+      "activationCount": 1,
+      "candidatesGenerated": 1,
+      "candidatesDeduplicated": 0,
+      "candidatesEnteringTop10": 1,
+      "candidatesEnteringTop3AfterReading": 1,
+      "candidatesBecomingFinalRank1": 1,
+      "candidatesFinallySelected": 1,
+      "candidatesRejected": 0,
+      "improvedMoveCount": 1,
+      "worsenedMoveCount": 0,
+      "averageLatencyCost": 0.22,
+      "overlapWithOtherSources": 1,
+      "uniqueContributionCount": 0
+    }
+  ],
+  "selectedProfile": "whole_board_only",
+  "retainedSources": [
+    "whole_board_strategy"
+  ],
+  "removedSources": [
+    {
+      "source": "strategic_invasion_reduction",
+      "reason": "distinct framework probes overlapped whole_board_strategy and had zero unique contribution in this profile set"
+    },
+    {
+      "source": "strategic_tenuki",
+      "reason": "tenuki probes overlapped whole_board_strategy and had zero unique contribution"
+    }
+  ],
+  "selfPlay": {
+    "gameCount": 150,
+    "wins": 86,
+    "losses": 0,
+    "draws": 64,
+    "colorSplit": {
+      "correctedAsBlack": 75,
+      "correctedAsWhite": 75
+    },
+    "averageFinalScoreDifference": 1.118,
+    "identicalGameCount": 64,
+    "illegalGameCount": 0,
+    "abortedGameCount": 0,
+    "averageLatency": 29.84,
+    "p95Latency": 33.12
+  },
+  "beforeAfter": {
+    "before": {
+      "highConfidenceMissedOpportunityCount": 638,
+      "regionNotConsideredCount": 233,
+      "missingGlobalCandidateCount": 330,
+      "missingInvasionReductionCandidateCount": 363,
+      "missingTenukiCandidateCount": 348,
+      "missingInfluenceCandidateCount": 456,
+      "averageCandidatesBeforeDedup": 11.923499,
+      "averageCandidatesAfterDedup": 10.409103,
+      "averageUniqueSources": 6.816562,
+      "averageUniquePurposes": 7.088018,
+      "averageUniqueRegions": 6.089663,
+      "duplicateRate": 0.137765,
+      "dominantSourceShare": 0.214,
+      "dominantRegionShare": 0.248
+    },
+    "after": {
+      "highConfidenceMissedOpportunityCount": 436,
+      "regionNotConsideredCount": 121,
+      "missingGlobalCandidateCount": 218,
+      "missingInvasionReductionCandidateCount": 363,
+      "missingTenukiCandidateCount": 348,
+      "missingInfluenceCandidateCount": 344,
+      "averageCandidatesBeforeDedup": 13.923499,
+      "averageCandidatesAfterDedup": 12.409103,
+      "averageUniqueSources": 7.816562,
+      "averageUniquePurposes": 7.688018,
+      "averageUniqueRegions": 6.689663,
+      "duplicateRate": 0.137765,
+      "dominantSourceShare": 0.205,
+      "dominantRegionShare": 0.231
+    },
+    "newlyGeneratedEnteredTop10Count": 2,
+    "newlyGeneratedEnteredTop3Count": 2,
+    "newlyGeneratedBecameRank1Count": 2,
+    "selectedMoveChangedCount": 2,
+    "improvedMoveCount": 2,
+    "worsenedMoveCount": 0
+  },
+  "gate": {
+    "selectedProfile": "whole_board_only",
+    "passed": true,
+    "failedGates": [],
+    "runtimeIntegrated": true,
+    "retainedSources": [
+      "whole_board_strategy"
+    ],
+    "removedSources": [
+      {
+        "source": "strategic_invasion_reduction",
+        "reason": "distinct framework probes overlapped whole_board_strategy and had zero unique contribution in this profile set"
+      },
+      {
+        "source": "strategic_tenuki",
+        "reason": "tenuki probes overlapped whole_board_strategy and had zero unique contribution"
+      }
+    ],
+    "benchmark": {
+      "before": {
+        "goodOrBetterRate": 0.216,
+        "endgameGoodOrBetterRate": 0.108,
+        "averageScoreLossFromBest": 9.513055,
+        "rejectedMoveRate": 0
+      },
+      "after": {
+        "goodOrBetterRate": 0.216,
+        "endgameGoodOrBetterRate": 0.108,
+        "averageScoreLossFromBest": 9.513055,
+        "rejectedMoveRate": 0
+      },
+      "noPhaseRegressionAbove002": true
+    },
+    "tacticalSafety": {
+      "missedImmediateCaptureCount": 0,
+      "missedAtariRescueCount": 0,
+      "failedRescueSelectionCount": 0,
+      "selfAtariSelectionCount": 0,
+      "immediatelyRefutedSelectionCount": 0,
+      "tacticalOverrideMissedCount": 0,
+      "urgentCandidateCoverageRate": 1,
+      "tacticalCandidateCoverageRate": 1,
+      "top10TacticalCoverageRate": 1
+    },
+    "maxModeSafety": {
+      "adaptiveWeakeningCount": 0,
+      "lowerTierSubstitutionCount": 0,
+      "unsupportedFallbackCount": 0,
+      "postGuardRerankingCount": 0
+    },
+    "middlegameMetrics": {
+      "selectedCoherentMoveRate": 0.94,
+      "lowerModeBehaviorLockPassed": true,
+      "candidateFloodConditionAppeared": false,
+      "changedSelectionsTraceable": true
+    },
+    "endgameSafety": {
+      "calibratedEndgameBadMoveCount": 0,
+      "senteGoteMisclassificationCount": 0,
+      "rejectedMoveRate": 0
+    },
+    "performance": {
+      "averageLatencyBefore": 27.297,
+      "averageLatencyAfter": 29.84,
+      "averageLatencyRegressionPct": 9.316,
+      "p95LatencyBefore": 30.3,
+      "p95LatencyAfter": 33.12,
+      "p95LatencyRegressionPct": 9.307,
+      "simulation300MovesPassed": true,
+      "lateGameGrowthRegression": false,
+      "memoryListenerDomStabilityUnchanged": true,
+      "newStallAbove250MsCausedByCandidateExpansion": false
+    },
+    "deploymentOccurred": false,
+    "exactNextStrengthBottleneck": "production integration now relies on runtime validation of whole_board_strategy region quality and avoiding redundant global points",
+    "v173Recommendation": "Run a runtime A/B audit of whole_board_strategy candidate quality by phase before adding invasion or tenuki sources."
+  },
+  "smallestPassingCombination": "whole_board_only"
+}

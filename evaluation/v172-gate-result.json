@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "failedGates": [],
+  "benchmark": {
+    "goodOrBetterRate": 0.216,
+    "endgameGoodOrBetterRate": 0.108,
+    "averageScoreLossFromBest": 9.513055,
+    "rejectedMoveRate": 0,
+    "unchanged": true
+  },
+  "tacticalSafety": {
+    "missedImmediateCaptureCount": 0,
+    "missedAtariRescueCount": 0,
+    "failedRescueSelectionCount": 0,
+    "selfAtariSelectionCount": 0,
+    "immediatelyRefutedSelectionCount": 0,
+    "tacticalOverrideMissedCount": 0,
+    "urgentCandidateCoverageRate": 1,
+    "tacticalCandidateCoverageRate": 1,
+    "top10TacticalCoverageRate": 1
+  },
+  "middlegameMetrics": {
+    "selectedCoherentMoveRate": 0.94,
+    "sourcePurposeRegionDiversityMeasured": true,
+    "lowerModeBehaviorLockPassed": true
+  },
+  "endgameSafety": {
+    "calibratedEndgameBadMoveCount": 0,
+    "senteGoteMisclassificationCount": 0,
+    "rejectedMoveRate": 0
+  },
+  "performance": {
+    "simulation300MovesPassed": true,
+    "averageAuditLatencyMs": 6.8,
+    "p95AuditLatencyMs": 9.4,
+    "buildConsistencyPassed": true,
+    "exportIntegrityPassed": true,
+    "phaseTransitionPassed": true
+  },
+  "top10ReadingBehaviorUnchanged": true,
+  "runtimeCandidateGenerationChanged": false,
+  "deploymentOccurred": false,
+  "recommendedCommand2Sources": [
+    "invasion_reduction_probe",
+    "tenuki_probe",
+    "whole_board_strategy"
+  ]
+}

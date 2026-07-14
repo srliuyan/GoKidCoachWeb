@@ -1,0 +1,100 @@
+{
+  "categories": {
+    "immediate_recapture": {
+      "fifthReplyCount": 6,
+      "sixthReplyCount": 1,
+      "changedCandidateRankCount": 5,
+      "changedFinalMoveCount": 0
+    },
+    "stronger_atari": {
+      "fifthReplyCount": 3,
+      "sixthReplyCount": 1,
+      "changedCandidateRankCount": 2,
+      "changedFinalMoveCount": 0
+    },
+    "double_atari": {
+      "fifthReplyCount": 2,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 2,
+      "changedFinalMoveCount": 0
+    },
+    "cut": {
+      "fifthReplyCount": 5,
+      "sixthReplyCount": 2,
+      "changedCandidateRankCount": 4,
+      "changedFinalMoveCount": 1
+    },
+    "connection": {
+      "fifthReplyCount": 2,
+      "sixthReplyCount": 1,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 1
+    },
+    "escape": {
+      "fifthReplyCount": 3,
+      "sixthReplyCount": 1,
+      "changedCandidateRankCount": 2,
+      "changedFinalMoveCount": 0
+    },
+    "seal_or_block": {
+      "fifthReplyCount": 1,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 0
+    },
+    "counterattack": {
+      "fifthReplyCount": 2,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 0
+    },
+    "invasion_response": {
+      "fifthReplyCount": 1,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 0
+    },
+    "reduction_response": {
+      "fifthReplyCount": 1,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 0
+    },
+    "weak_group_tesuji": {
+      "fifthReplyCount": 1,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 0
+    },
+    "sente_endgame_reply": {
+      "fifthReplyCount": 1,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 0
+    },
+    "ko_or_threat": {
+      "fifthReplyCount": 0,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 0,
+      "changedFinalMoveCount": 0
+    },
+    "equivalent_reply": {
+      "fifthReplyCount": 8145,
+      "sixthReplyCount": 3868,
+      "changedCandidateRankCount": 0,
+      "changedFinalMoveCount": 0
+    },
+    "noncritical_reply": {
+      "fifthReplyCount": 16543,
+      "sixthReplyCount": 5734,
+      "changedCandidateRankCount": 0,
+      "changedFinalMoveCount": 0
+    },
+    "uncertain": {
+      "fifthReplyCount": 688,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 0,
+      "changedFinalMoveCount": 0
+    }
+  }
+}

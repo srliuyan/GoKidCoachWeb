@@ -1,0 +1,58 @@
+{
+  "selectedProfile": "phase_gated_dedup",
+  "passed": true,
+  "failedGates": [],
+  "runtimeIntegrated": true,
+  "deploymentOccurred": false,
+  "safety": {
+    "missedImmediateCaptureCount": 0,
+    "missedAtariRescueCount": 0,
+    "failedRescueSelectionCount": 0,
+    "selfAtariSelectionCount": 0,
+    "immediatelyRefutedSelectionCount": 0,
+    "tacticalOverrideMissedCount": 0,
+    "calibratedEndgameBadMoveCount": 0,
+    "senteGoteMisclassificationCount": 0,
+    "rejectedMoveRate": 0
+  },
+  "benchmark": {
+    "before": {
+      "goodOrBetterRate": 0.216,
+      "endgameGoodOrBetterRate": 0.108,
+      "averageScoreLossFromBest": 9.513055
+    },
+    "after": {
+      "goodOrBetterRate": 0.216,
+      "endgameGoodOrBetterRate": 0.108,
+      "averageScoreLossFromBest": 9.513055
+    },
+    "regressed": false
+  },
+  "performance": {
+    "averageLatencyBefore": 29.84,
+    "averageLatencyAfter": 30.21,
+    "averageLatencyRegressionPct": 1.24,
+    "p95LatencyBefore": 33.12,
+    "p95LatencyAfter": 33.94,
+    "p95LatencyRegressionPct": 2.48,
+    "simulation300MovesPassed": true,
+    "noLateGameGrowthRegression": true
+  },
+  "selfPlay": {
+    "gameCount": 150,
+    "wins": 61,
+    "losses": 0,
+    "draws": 89,
+    "colorSplit": {
+      "correctedAsBlack": 75,
+      "correctedAsWhite": 75
+    },
+    "averageFinalScoreDifference": 0.64,
+    "identicalGameCount": 89,
+    "illegalGameCount": 0,
+    "abortedGameCount": 0,
+    "averageLatency": 30.21,
+    "p95Latency": 33.94
+  },
+  "nextBottleneck": "opponent reply coverage appears to be the next strength bottleneck after whole_board_strategy phase/duplicate cleanup"
+}
