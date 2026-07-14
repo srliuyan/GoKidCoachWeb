@@ -454,6 +454,72 @@
       "tracked": true,
       "current": true,
       "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v174-opponent-reply-audit.json",
+      "generator": "evaluation/run-v174-opponent-reply-audit.js",
+      "command": "node evaluation/run-v174-opponent-reply-audit.js --write-reports",
+      "purpose": "V1.7.4 offline opponent reply4/reply5/reply6 coverage audit",
+      "requiredInputs": ["evaluation/v173-whole-board-gate-result.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v174-reply-category-summary.json",
+      "generator": "evaluation/run-v174-opponent-reply-audit.js",
+      "command": "node evaluation/run-v174-opponent-reply-audit.js --write-reports",
+      "purpose": "V1.7.4 missing opponent reply category summary",
+      "requiredInputs": ["evaluation/v173-whole-board-gate-result.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v174-critical-reply-cases.json",
+      "generator": "evaluation/run-v174-opponent-reply-audit.js",
+      "command": "node evaluation/run-v174-opponent-reply-audit.js --write-reports",
+      "purpose": "V1.7.4 high-confidence critical reply cases",
+      "requiredInputs": ["evaluation/v173-whole-board-gate-result.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v174-reply4-vs-reply5.json",
+      "generator": "evaluation/run-v174-opponent-reply-audit.js",
+      "command": "node evaluation/run-v174-opponent-reply-audit.js --write-reports",
+      "purpose": "V1.7.4 reply4 baseline versus offline reply5 comparison",
+      "requiredInputs": ["evaluation/v173-whole-board-gate-result.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v174-reply5-vs-reply6.json",
+      "generator": "evaluation/run-v174-opponent-reply-audit.js",
+      "command": "node evaluation/run-v174-opponent-reply-audit.js --write-reports",
+      "purpose": "V1.7.4 offline reply5 versus reply6 comparison",
+      "requiredInputs": ["evaluation/v173-whole-board-gate-result.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v174-gate-result.json",
+      "generator": "evaluation/run-v174-opponent-reply-audit.js",
+      "command": "node evaluation/run-v174-opponent-reply-audit.js --write-reports",
+      "purpose": "V1.7.4 opponent reply coverage audit gate result",
+      "requiredInputs": ["evaluation/v173-whole-board-gate-result.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
     }
   ]
 }

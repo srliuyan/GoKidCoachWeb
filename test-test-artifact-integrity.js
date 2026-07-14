@@ -13,6 +13,7 @@ const top10Reading = require("./evaluation/run-v171-top10-reading-audit.js");
 const breadthAudit = require("./evaluation/run-v172-candidate-breadth-audit.js");
 const candidateExpansion = require("./evaluation/run-v172-candidate-expansion.js");
 const wholeBoardAbAudit = require("./evaluation/run-v173-whole-board-ab-audit.js");
+const opponentReplyAudit = require("./evaluation/run-v174-opponent-reply-audit.js");
 
 const root = __dirname;
 
@@ -163,6 +164,9 @@ function testDeterministicHashesRepeat() {
   const o = wholeBoardAbAudit.run();
   const p = wholeBoardAbAudit.run();
   assert.strictEqual(deterministicHash(o.summary), deterministicHash(p.summary));
+  const q = opponentReplyAudit.run();
+  const r = opponentReplyAudit.run();
+  assert.strictEqual(deterministicHash(q.summary), deterministicHash(r.summary));
 }
 
 function testReportManifestCoversCurrentReports() {
@@ -184,6 +188,12 @@ function testReportManifestCoversCurrentReports() {
     "evaluation/v173-whole-board-ab-audit.json",
     "evaluation/v173-whole-board-phase-summary.json",
     "evaluation/v173-whole-board-gate-result.json",
+    "evaluation/v174-opponent-reply-audit.json",
+    "evaluation/v174-reply-category-summary.json",
+    "evaluation/v174-critical-reply-cases.json",
+    "evaluation/v174-reply4-vs-reply5.json",
+    "evaluation/v174-reply5-vs-reply6.json",
+    "evaluation/v174-gate-result.json",
     "evaluation/long-game-performance-report.json",
     "evaluation/build-consistency-audit.json",
     "evaluation/export-integrity-report.json",

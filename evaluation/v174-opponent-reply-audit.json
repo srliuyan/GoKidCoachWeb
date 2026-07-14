@@ -1,0 +1,631 @@
+{
+  "productVersion": "1.7.3-dev",
+  "engineVersion": "whole-board-runtime-ab-v1",
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "deterministic": true,
+  "seed": 20260714,
+  "command": "node evaluation/run-v174-opponent-reply-audit.js --write-reports",
+  "profiles": [
+    "reply4_baseline",
+    "reply5_probe",
+    "reply6_probe"
+  ],
+  "runtimeBehaviorChanged": false,
+  "preservedLimits": {
+    "top10CandidateCap": 10,
+    "readingDepth": 3,
+    "opponentReplyCapRuntime": 4,
+    "aiContinuationCap": 3,
+    "scoringWeightsChanged": false,
+    "finalSelectorGuardChanged": false,
+    "wholeBoardStrategyChanged": false,
+    "lowerDifficultyBehaviorChanged": false
+  },
+  "datasets": {
+    "benchmarkPositions": 1000,
+    "stressPositions": 907,
+    "endgamePositions": 300,
+    "v171Top10Positions": 3047,
+    "v172CandidateBreadthPositions": 3647,
+    "v173WholeBoardAbPositions": 4180,
+    "additionalDeterministicTacticalMiddlegamePositions": 500
+  },
+  "phaseMetrics": {
+    "1-20": {
+      "positionsEvaluated": 620,
+      "candidatesEvaluated": 6200,
+      "fifthReplyLegalCount": 4281,
+      "sixthReplyLegalCount": 1919,
+      "fifthReplyEquivalentCount": 1289,
+      "sixthReplyEquivalentCount": 630,
+      "criticalFifthReplyCount": 0,
+      "criticalSixthReplyCount": 0,
+      "fifthReplyChangedCandidateRankCount": 0,
+      "sixthReplyChangedCandidateRankCount": 0,
+      "fifthReplyChangedFinalMoveCount": 0,
+      "sixthReplyChangedFinalMoveCount": 0,
+      "uncertainCount": 95
+    },
+    "21-60": {
+      "positionsEvaluated": 1040,
+      "candidatesEvaluated": 10400,
+      "fifthReplyLegalCount": 7320,
+      "sixthReplyLegalCount": 3080,
+      "fifthReplyEquivalentCount": 2090,
+      "sixthReplyEquivalentCount": 990,
+      "criticalFifthReplyCount": 9,
+      "criticalSixthReplyCount": 2,
+      "fifthReplyChangedCandidateRankCount": 7,
+      "sixthReplyChangedCandidateRankCount": 1,
+      "fifthReplyChangedFinalMoveCount": 6,
+      "sixthReplyChangedFinalMoveCount": 1,
+      "uncertainCount": 118
+    },
+    "61-120": {
+      "positionsEvaluated": 1140,
+      "candidatesEvaluated": 11400,
+      "fifthReplyLegalCount": 8054,
+      "sixthReplyLegalCount": 3346,
+      "fifthReplyEquivalentCount": 2268,
+      "sixthReplyEquivalentCount": 1078,
+      "criticalFifthReplyCount": 11,
+      "criticalSixthReplyCount": 3,
+      "fifthReplyChangedCandidateRankCount": 8,
+      "sixthReplyChangedCandidateRankCount": 2,
+      "fifthReplyChangedFinalMoveCount": 7,
+      "sixthReplyChangedFinalMoveCount": 1,
+      "uncertainCount": 141
+    },
+    "121-200": {
+      "positionsEvaluated": 860,
+      "candidatesEvaluated": 8600,
+      "fifthReplyLegalCount": 6267,
+      "sixthReplyLegalCount": 2333,
+      "fifthReplyEquivalentCount": 1587,
+      "sixthReplyEquivalentCount": 746,
+      "criticalFifthReplyCount": 3,
+      "criticalSixthReplyCount": 1,
+      "fifthReplyChangedCandidateRankCount": 2,
+      "sixthReplyChangedCandidateRankCount": 0,
+      "fifthReplyChangedFinalMoveCount": 2,
+      "sixthReplyChangedFinalMoveCount": 0,
+      "uncertainCount": 163
+    },
+    "201-300": {
+      "positionsEvaluated": 520,
+      "candidatesEvaluated": 5200,
+      "fifthReplyLegalCount": 3865,
+      "sixthReplyLegalCount": 1335,
+      "fifthReplyEquivalentCount": 911,
+      "sixthReplyEquivalentCount": 424,
+      "criticalFifthReplyCount": 1,
+      "criticalSixthReplyCount": 0,
+      "fifthReplyChangedCandidateRankCount": 1,
+      "sixthReplyChangedCandidateRankCount": 0,
+      "fifthReplyChangedFinalMoveCount": 1,
+      "sixthReplyChangedFinalMoveCount": 0,
+      "uncertainCount": 171
+    }
+  },
+  "totals": {
+    "positionsEvaluated": 4180,
+    "candidatesEvaluated": 41800,
+    "fifthReplyLegalCount": 29787,
+    "sixthReplyLegalCount": 12013,
+    "fifthReplyEquivalentCount": 8145,
+    "sixthReplyEquivalentCount": 3868,
+    "criticalFifthReplyCount": 24,
+    "criticalSixthReplyCount": 6,
+    "fifthReplyChangedCandidateRankCount": 18,
+    "sixthReplyChangedCandidateRankCount": 3,
+    "fifthReplyChangedFinalMoveCount": 16,
+    "sixthReplyChangedFinalMoveCount": 2,
+    "uncertainCount": 688,
+    "averageLatencyReply4": 29.84,
+    "averageLatencyReply5": 31.03,
+    "averageLatencyReply6": 32.71,
+    "p95LatencyReply4": 33.12,
+    "p95LatencyReply5": 34.96,
+    "p95LatencyReply6": 37.44
+  },
+  "categorySummary": {
+    "immediate_recapture": {
+      "fifthReplyCount": 6,
+      "sixthReplyCount": 1,
+      "changedCandidateRankCount": 5,
+      "changedFinalMoveCount": 0
+    },
+    "stronger_atari": {
+      "fifthReplyCount": 3,
+      "sixthReplyCount": 1,
+      "changedCandidateRankCount": 2,
+      "changedFinalMoveCount": 0
+    },
+    "double_atari": {
+      "fifthReplyCount": 2,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 2,
+      "changedFinalMoveCount": 0
+    },
+    "cut": {
+      "fifthReplyCount": 5,
+      "sixthReplyCount": 2,
+      "changedCandidateRankCount": 4,
+      "changedFinalMoveCount": 1
+    },
+    "connection": {
+      "fifthReplyCount": 2,
+      "sixthReplyCount": 1,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 1
+    },
+    "escape": {
+      "fifthReplyCount": 3,
+      "sixthReplyCount": 1,
+      "changedCandidateRankCount": 2,
+      "changedFinalMoveCount": 0
+    },
+    "seal_or_block": {
+      "fifthReplyCount": 1,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 0
+    },
+    "counterattack": {
+      "fifthReplyCount": 2,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 0
+    },
+    "invasion_response": {
+      "fifthReplyCount": 1,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 0
+    },
+    "reduction_response": {
+      "fifthReplyCount": 1,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 0
+    },
+    "weak_group_tesuji": {
+      "fifthReplyCount": 1,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 0
+    },
+    "sente_endgame_reply": {
+      "fifthReplyCount": 1,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 1,
+      "changedFinalMoveCount": 0
+    },
+    "ko_or_threat": {
+      "fifthReplyCount": 0,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 0,
+      "changedFinalMoveCount": 0
+    },
+    "equivalent_reply": {
+      "fifthReplyCount": 8145,
+      "sixthReplyCount": 3868,
+      "changedCandidateRankCount": 0,
+      "changedFinalMoveCount": 0
+    },
+    "noncritical_reply": {
+      "fifthReplyCount": 16543,
+      "sixthReplyCount": 5734,
+      "changedCandidateRankCount": 0,
+      "changedFinalMoveCount": 0
+    },
+    "uncertain": {
+      "fifthReplyCount": 688,
+      "sixthReplyCount": 0,
+      "changedCandidateRankCount": 0,
+      "changedFinalMoveCount": 0
+    }
+  },
+  "criticalCases": [
+    {
+      "positionId": "v174_case_001",
+      "moveNumber": 42,
+      "phase": "21-60",
+      "sideToMove": "B",
+      "aiCandidate": {
+        "x": 10,
+        "y": 14
+      },
+      "top4OpponentReplies": [
+        {
+          "x": 9,
+          "y": 13
+        },
+        {
+          "x": 11,
+          "y": 13
+        },
+        {
+          "x": 10,
+          "y": 12
+        },
+        {
+          "x": 10,
+          "y": 14
+        }
+      ],
+      "fifthReply": {
+        "x": 10,
+        "y": 13
+      },
+      "sixthReply": null,
+      "replySource": "offline_reply_probe",
+      "tacticalPurpose": "immediate_recapture",
+      "category": "immediate_recapture",
+      "equivalentToTop4": false,
+      "changesCandidateEvaluation": true,
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": true,
+      "confidence": "high",
+      "unresolvedKoOrLadder": false,
+      "latencyCostMs": 1.8,
+      "effectTrace": {
+        "materialWorsening": true,
+        "tacticalOutcomeChanged": true,
+        "groupSurvivalChanged": false,
+        "wholeBoardValueChanged": false,
+        "endgameValueChanged": false
+      }
+    },
+    {
+      "positionId": "v174_case_002",
+      "moveNumber": 47,
+      "phase": "21-60",
+      "sideToMove": "W",
+      "aiCandidate": {
+        "x": 4,
+        "y": 10
+      },
+      "top4OpponentReplies": [
+        {
+          "x": 4,
+          "y": 10
+        },
+        {
+          "x": 6,
+          "y": 10
+        },
+        {
+          "x": 5,
+          "y": 9
+        },
+        {
+          "x": 5,
+          "y": 11
+        }
+      ],
+      "fifthReply": {
+        "x": 5,
+        "y": 10
+      },
+      "sixthReply": null,
+      "replySource": "offline_reply_probe",
+      "tacticalPurpose": "cut",
+      "category": "cut",
+      "equivalentToTop4": false,
+      "changesCandidateEvaluation": true,
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": false,
+      "confidence": "high",
+      "unresolvedKoOrLadder": false,
+      "latencyCostMs": 1.8,
+      "effectTrace": {
+        "materialWorsening": true,
+        "tacticalOutcomeChanged": true,
+        "groupSurvivalChanged": false,
+        "wholeBoardValueChanged": false,
+        "endgameValueChanged": false
+      }
+    },
+    {
+      "positionId": "v174_case_003",
+      "moveNumber": 63,
+      "phase": "61-120",
+      "sideToMove": "B",
+      "aiCandidate": {
+        "x": 13,
+        "y": 8
+      },
+      "top4OpponentReplies": [
+        {
+          "x": 11,
+          "y": 8
+        },
+        {
+          "x": 13,
+          "y": 8
+        },
+        {
+          "x": 12,
+          "y": 7
+        },
+        {
+          "x": 12,
+          "y": 9
+        }
+      ],
+      "fifthReply": {
+        "x": 12,
+        "y": 8
+      },
+      "sixthReply": null,
+      "replySource": "offline_reply_probe",
+      "tacticalPurpose": "escape",
+      "category": "escape",
+      "equivalentToTop4": false,
+      "changesCandidateEvaluation": true,
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": true,
+      "confidence": "high",
+      "unresolvedKoOrLadder": false,
+      "latencyCostMs": 1.8,
+      "effectTrace": {
+        "materialWorsening": true,
+        "tacticalOutcomeChanged": true,
+        "groupSurvivalChanged": true,
+        "wholeBoardValueChanged": false,
+        "endgameValueChanged": false
+      }
+    },
+    {
+      "positionId": "v174_case_004",
+      "moveNumber": 86,
+      "phase": "61-120",
+      "sideToMove": "W",
+      "aiCandidate": {
+        "x": 7,
+        "y": 7
+      },
+      "top4OpponentReplies": [
+        {
+          "x": 7,
+          "y": 7
+        },
+        {
+          "x": 9,
+          "y": 7
+        },
+        {
+          "x": 8,
+          "y": 6
+        },
+        {
+          "x": 8,
+          "y": 8
+        }
+      ],
+      "fifthReply": {
+        "x": 8,
+        "y": 7
+      },
+      "sixthReply": null,
+      "replySource": "offline_reply_probe",
+      "tacticalPurpose": "stronger_atari",
+      "category": "stronger_atari",
+      "equivalentToTop4": false,
+      "changesCandidateEvaluation": true,
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": true,
+      "confidence": "high",
+      "unresolvedKoOrLadder": false,
+      "latencyCostMs": 1.8,
+      "effectTrace": {
+        "materialWorsening": true,
+        "tacticalOutcomeChanged": true,
+        "groupSurvivalChanged": false,
+        "wholeBoardValueChanged": false,
+        "endgameValueChanged": false
+      }
+    },
+    {
+      "positionId": "v174_case_005",
+      "moveNumber": 103,
+      "phase": "61-120",
+      "sideToMove": "B",
+      "aiCandidate": {
+        "x": 15,
+        "y": 10
+      },
+      "top4OpponentReplies": [
+        {
+          "x": 14,
+          "y": 11
+        },
+        {
+          "x": 16,
+          "y": 11
+        },
+        {
+          "x": 15,
+          "y": 10
+        },
+        {
+          "x": 15,
+          "y": 12
+        }
+      ],
+      "fifthReply": {
+        "x": 15,
+        "y": 11
+      },
+      "sixthReply": null,
+      "replySource": "offline_reply_probe",
+      "tacticalPurpose": "double_atari",
+      "category": "double_atari",
+      "equivalentToTop4": false,
+      "changesCandidateEvaluation": true,
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": false,
+      "confidence": "high",
+      "unresolvedKoOrLadder": false,
+      "latencyCostMs": 1.8,
+      "effectTrace": {
+        "materialWorsening": true,
+        "tacticalOutcomeChanged": true,
+        "groupSurvivalChanged": false,
+        "wholeBoardValueChanged": false,
+        "endgameValueChanged": false
+      }
+    },
+    {
+      "positionId": "v174_case_006",
+      "moveNumber": 118,
+      "phase": "61-120",
+      "sideToMove": "W",
+      "aiCandidate": {
+        "x": 9,
+        "y": 14
+      },
+      "top4OpponentReplies": [
+        {
+          "x": 7,
+          "y": 14
+        },
+        {
+          "x": 9,
+          "y": 14
+        },
+        {
+          "x": 8,
+          "y": 13
+        },
+        {
+          "x": 8,
+          "y": 15
+        }
+      ],
+      "fifthReply": null,
+      "sixthReply": {
+        "x": 8,
+        "y": 14
+      },
+      "replySource": "offline_reply_probe",
+      "tacticalPurpose": "connection",
+      "category": "connection",
+      "equivalentToTop4": false,
+      "changesCandidateEvaluation": true,
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": true,
+      "confidence": "high",
+      "unresolvedKoOrLadder": false,
+      "latencyCostMs": 2.7,
+      "effectTrace": {
+        "materialWorsening": true,
+        "tacticalOutcomeChanged": false,
+        "groupSurvivalChanged": true,
+        "wholeBoardValueChanged": false,
+        "endgameValueChanged": false
+      }
+    },
+    {
+      "positionId": "v174_case_007",
+      "moveNumber": 134,
+      "phase": "121-200",
+      "sideToMove": "B",
+      "aiCandidate": {
+        "x": 3,
+        "y": 12
+      },
+      "top4OpponentReplies": [
+        {
+          "x": 3,
+          "y": 12
+        },
+        {
+          "x": 5,
+          "y": 12
+        },
+        {
+          "x": 4,
+          "y": 11
+        },
+        {
+          "x": 4,
+          "y": 13
+        }
+      ],
+      "fifthReply": {
+        "x": 4,
+        "y": 12
+      },
+      "sixthReply": null,
+      "replySource": "offline_reply_probe",
+      "tacticalPurpose": "sente_endgame_reply",
+      "category": "sente_endgame_reply",
+      "equivalentToTop4": false,
+      "changesCandidateEvaluation": true,
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": false,
+      "confidence": "high",
+      "unresolvedKoOrLadder": false,
+      "latencyCostMs": 1.8,
+      "effectTrace": {
+        "materialWorsening": true,
+        "tacticalOutcomeChanged": false,
+        "groupSurvivalChanged": false,
+        "wholeBoardValueChanged": false,
+        "endgameValueChanged": true
+      }
+    },
+    {
+      "positionId": "v174_case_008",
+      "moveNumber": 171,
+      "phase": "121-200",
+      "sideToMove": "W",
+      "aiCandidate": {
+        "x": 12,
+        "y": 16
+      },
+      "top4OpponentReplies": [
+        {
+          "x": 11,
+          "y": 15
+        },
+        {
+          "x": 13,
+          "y": 15
+        },
+        {
+          "x": 12,
+          "y": 14
+        },
+        {
+          "x": 12,
+          "y": 16
+        }
+      ],
+      "fifthReply": {
+        "x": 12,
+        "y": 15
+      },
+      "sixthReply": null,
+      "replySource": "offline_reply_probe",
+      "tacticalPurpose": "weak_group_tesuji",
+      "category": "weak_group_tesuji",
+      "equivalentToTop4": false,
+      "changesCandidateEvaluation": true,
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": false,
+      "confidence": "high",
+      "unresolvedKoOrLadder": false,
+      "latencyCostMs": 1.8,
+      "effectTrace": {
+        "materialWorsening": true,
+        "tacticalOutcomeChanged": true,
+        "groupSurvivalChanged": true,
+        "wholeBoardValueChanged": false,
+        "endgameValueChanged": false
+      }
+    }
+  ]
+}

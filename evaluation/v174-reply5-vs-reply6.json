@@ -1,0 +1,23 @@
+{
+  "replyIndex": 6,
+  "baseline": "reply4_baseline",
+  "probe": "reply6_probe",
+  "cases": [
+    {
+      "positionId": "v174_case_006",
+      "phase": "61-120",
+      "aiCandidate": {
+        "x": 9,
+        "y": 14
+      },
+      "missingReply": {
+        "x": 8,
+        "y": 14
+      },
+      "category": "connection",
+      "changesCandidateRank": true,
+      "changesFinalSelectedMove": true,
+      "confidence": "high"
+    }
+  ]
+}
