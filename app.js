@@ -1924,6 +1924,7 @@ function chooseLocalAIMove(moves, color = aiStoneColor(), perfRecord = null) {
   const positionEvaluator = positionEvaluatorApi();
   const midgameStability = midgameStabilityApi();
   const maxMode = isMaxStrengthMode();
+  const currentDifficultyMode = productSupportApi()?.normalizeDifficultyMode?.(profile.difficultyMode || level) || profile.difficultyMode || "adaptive";
   const companionPlan = maxMode ? null : createCompanionPlanForCurrentChild();
   const settings = applyReleaseDifficultyMode(
     difficulty.getDifficultySettings(studentProfile || loadStudentProfileForChild(), recentChildResults(), companionPlan)
@@ -1985,7 +1986,7 @@ function chooseLocalAIMove(moves, color = aiStoneColor(), perfRecord = null) {
         maxCandidates: maxMode ? 10 : 8,
         maxOpponentReplies: 4,
         allowConditionalReply5: maxMode,
-        difficultyMode: maxMode ? maxStrengthMode : mode,
+        difficultyMode: maxMode ? maxStrengthMode : currentDifficultyMode,
         maxAiContinuations: 3,
         localRadius: 4,
         regionCap: 48,
