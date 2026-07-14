@@ -1,0 +1,58 @@
+{
+  "productVersion": "1.7.1-dev",
+  "engineVersion": "top10-candidate-reading-v1",
+  "deterministic": true,
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "paths": [
+    {
+      "file": "app.js",
+      "function": "chooseLocalAIMove -> applyLocalReading",
+      "currentLimit": "V1.7.0 maxCandidates: 8; V1.7.1 maxMode ? 10 : 8",
+      "affectedDifficultyModes": ["MAX_STRENGTH_FIXED"],
+      "urgentCandidatesBypassTheCap": "preserved before local reading by shallow verification and candidate ordering",
+      "sourceTagsSurviveTrimming": true,
+      "rank9Or10CanCurrentlyBeLost": true,
+      "proposedV171Action": "set localReadingCandidateCap to 10 only for MAX_STRENGTH_FIXED"
+    },
+    {
+      "file": "rule-engine.js",
+      "function": "applyLocalReading",
+      "currentLimit": "Math.min(10, context.maxCandidates); callers preserve mode-specific caps",
+      "affectedDifficultyModes": ["caller controlled"],
+      "urgentCandidatesBypassTheCap": "priority sort keeps verified tactical candidates ahead of ordinary candidates",
+      "sourceTagsSurviveTrimming": true,
+      "rank9Or10CanCurrentlyBeLost": false,
+      "proposedV171Action": "allow caller-requested cap up to 10 without changing depth/reply/continuation limits"
+    },
+    {
+      "file": "evaluation/run-local-reading-profile.js",
+      "function": "profile limits",
+      "currentLimit": 8,
+      "affectedDifficultyModes": ["offline V1.4/V1.5 profile audits"],
+      "urgentCandidatesBypassTheCap": "unchanged",
+      "sourceTagsSurviveTrimming": true,
+      "rank9Or10CanCurrentlyBeLost": true,
+      "proposedV171Action": "preserve historical profile cap at 8"
+    },
+    {
+      "file": "evaluation/run-long-game-performance.js",
+      "function": "synthetic diagnostics.candidatesRead",
+      "currentLimit": 8,
+      "affectedDifficultyModes": ["performance audit fixture"],
+      "urgentCandidatesBypassTheCap": "not applicable",
+      "sourceTagsSurviveTrimming": "not applicable",
+      "rank9Or10CanCurrentlyBeLost": "not applicable",
+      "proposedV171Action": "preserve existing benchmarked fixture output"
+    },
+    {
+      "file": "difficulty-controller.js",
+      "function": "adjustMoveCandidates / chooseAdaptiveMove",
+      "currentLimit": "candidateTopK, not local-reading cap",
+      "affectedDifficultyModes": ["lower adaptive modes"],
+      "urgentCandidatesBypassTheCap": "not applicable",
+      "sourceTagsSurviveTrimming": true,
+      "rank9Or10CanCurrentlyBeLost": false,
+      "proposedV171Action": "no change"
+    }
+  ]
+}

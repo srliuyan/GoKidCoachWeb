@@ -1,10 +1,10 @@
 (function (root) {
   const BUILD_INFO = {
-    productVersion: "1.7.0-dev",
-    appVersion: "1.7.0-dev",
-    engineVersion: "max-strength-unlock-v1",
-    buildId: "gokidcoach-1.7.0-dev-max-strength-unlock-v1-20260714",
-    serviceWorkerCache: "gokidcoach-web-v170-dev-max-strength-unlock-20260714",
+    productVersion: "1.7.1-dev",
+    appVersion: "1.7.1-dev",
+    engineVersion: "top10-candidate-reading-v1",
+    buildId: "gokidcoach-1.7.1-dev-top10-candidate-reading-v1-20260714",
+    serviceWorkerCache: "gokidcoach-web-v171-dev-top10-candidate-reading-20260714",
     schemaVersion: 3,
     generatedAt: "2026-07-13T00:00:00Z"
   };

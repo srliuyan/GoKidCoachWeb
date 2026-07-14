@@ -939,7 +939,7 @@
 
   function applyLocalReading(candidates, board, color, context = {}) {
     const started = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
-    const maxCandidates = Math.min(8, Math.max(1, Number(context.maxCandidates) || 6));
+    const maxCandidates = Math.min(10, Math.max(1, Number(context.maxCandidates) || 6));
     const budgetMs = Math.max(1, Number(context.timeBudgetMs) || 120);
     const sorted = (Array.isArray(candidates) ? candidates : [])
       .filter(candidate => candidate && candidate.legal !== false && candidate.ruleLegal !== false)

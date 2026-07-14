@@ -179,6 +179,72 @@
       "tracked": true,
       "current": true,
       "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v171-candidate-reading-path-audit.json",
+      "generator": "manual source audit",
+      "command": "source audit during V1.7.1 implementation",
+      "purpose": "V1.7.1 top-8/top-10 candidate-reading path audit",
+      "requiredInputs": ["app.js", "rule-engine.js", "evaluation/run-local-reading-profile.js"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v171-top10-reading-audit.json",
+      "generator": "evaluation/run-v171-top10-reading-audit.js",
+      "command": "node evaluation/run-v171-top10-reading-audit.js --write-reports --seed 20260713 --self-play-games 100",
+      "purpose": "V1.7.1 per-position top8/top9/top10 reading comparison",
+      "requiredInputs": ["evaluation/benchmark-baseline.json", "V1.7.0 maximum-strength position set", "seed:20260713"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v171-top10-reading-summary.json",
+      "generator": "evaluation/run-v171-top10-reading-audit.js",
+      "command": "node evaluation/run-v171-top10-reading-audit.js --write-reports --seed 20260713 --self-play-games 100",
+      "purpose": "V1.7.1 aggregate top10 reading value summary",
+      "requiredInputs": ["evaluation/benchmark-baseline.json", "seed:20260713"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v171-rank9-rank10-winners.json",
+      "generator": "evaluation/run-v171-top10-reading-audit.js",
+      "command": "node evaluation/run-v171-top10-reading-audit.js --write-reports --seed 20260713 --self-play-games 100",
+      "purpose": "V1.7.1 cases where rank 9 or 10 becomes final selected move after reading",
+      "requiredInputs": ["evaluation/benchmark-baseline.json", "seed:20260713"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v171-performance-comparison.json",
+      "generator": "evaluation/run-v171-top10-reading-audit.js",
+      "command": "node evaluation/run-v171-top10-reading-audit.js --write-reports --seed 20260713 --self-play-games 100",
+      "purpose": "V1.7.1 top8/top10 latency comparison",
+      "requiredInputs": ["seed:20260713"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v171-gate-result.json",
+      "generator": "evaluation/run-v171-top10-reading-audit.js",
+      "command": "node evaluation/run-v171-top10-reading-audit.js --write-reports --seed 20260713 --self-play-games 100",
+      "purpose": "V1.7.1 top10 reading gate decision",
+      "requiredInputs": ["evaluation/benchmark-baseline.json", "seed:20260713"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
     }
   ]
 }

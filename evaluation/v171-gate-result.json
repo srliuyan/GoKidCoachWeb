@@ -1,0 +1,79 @@
+{
+  "selectedProfile": "top10_reading",
+  "evaluatedProfiles": [
+    "top8_baseline",
+    "top9_reading",
+    "top10_reading"
+  ],
+  "passed": true,
+  "failedGates": [],
+  "top10Integrated": true,
+  "benchmark": {
+    "top8": {
+      "goodOrBetterRate": 0.216,
+      "endgameGoodOrBetterRate": 0.108,
+      "averageScoreLossFromBest": 9.513055,
+      "rejectedMoveRate": 0
+    },
+    "top10": {
+      "goodOrBetterRate": 0.216,
+      "endgameGoodOrBetterRate": 0.108,
+      "averageScoreLossFromBest": 9.513055,
+      "rejectedMoveRate": 0
+    },
+    "noPhaseRegressionAbove002": true
+  },
+  "tacticalSafety": {
+    "missedImmediateCaptureCount": 0,
+    "missedAtariRescueCount": 0,
+    "failedRescueSelectionCount": 0,
+    "selfAtariSelectionCount": 0,
+    "immediatelyRefutedSelectionCount": 0,
+    "tacticalOverrideMissedCount": 0,
+    "urgentCandidateCoverageRate": 1,
+    "tacticalCandidateCoverageRate": 1,
+    "top10TacticalCoverageRate": 1
+  },
+  "middlegameMetrics": {
+    "selectedCoherentMoveRate": 0.94,
+    "weakGroupCandidateCoverageRate": 1,
+    "coherentCandidateCoverageRate": 1,
+    "lowerModeBehaviorLockPassed": true
+  },
+  "endgameSafety": {
+    "calibratedEndgameBadMoveCount": 0,
+    "senteGoteMisclassificationCount": 0,
+    "rejectedMoveRate": 0
+  },
+  "maxModeSafety": {
+    "adaptiveWeakeningCount": 0,
+    "lowerTierSubstitutionCount": 0,
+    "randomSofteningCount": 0,
+    "unsupportedFallbackCount": 0,
+    "postGuardRerankingCount": 0
+  },
+  "performance": {
+    "top8AverageLatencyMs": 4.878709,
+    "top10AverageLatencyMs": 5.386121,
+    "averageLatencyRegressionPct": 10.401,
+    "top8P95LatencyMs": 4.92,
+    "top10P95LatencyMs": 5.432,
+    "p95LatencyRegressionPct": 10.407,
+    "localReadingMaximumBounded": true,
+    "simulation300MovesPassed": true,
+    "lateGameGrowthRegression": false,
+    "memoryStabilityUnchanged": true,
+    "listenerCountUnchanged": true,
+    "domCountUnchanged": true,
+    "mainThreadStallAbove250MsCausedByReadingExpansion": false
+  },
+  "selfPlaySummary": {
+    "wins": 92,
+    "losses": 0,
+    "draws": 8
+  },
+  "deploymentOccurred": false,
+  "runtimeIntegrated": true,
+  "exactNextBottleneck": "candidate generation still limits which moves can enter the top-10 reading set",
+  "v172Recommendation": "Audit candidate generation breadth and source diversity before increasing reading depth or changing scoring weights."
+}

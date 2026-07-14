@@ -1892,7 +1892,7 @@ function chooseLocalAIMove(moves, color = aiStoneColor(), perfRecord = null) {
         positionHashes,
         moveNumber: moveHistory.length,
         maxDepth: 3,
-        maxCandidates: 8,
+        maxCandidates: maxMode ? 10 : 8,
         maxOpponentReplies: 4,
         maxAiContinuations: 3,
         localRadius: 4,
