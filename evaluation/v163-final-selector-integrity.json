@@ -1,0 +1,25 @@
+{
+  "productVersion": "1.6.3-rc1",
+  "engineVersion": "coherent-stress-hardened-v1",
+  "buildId": "gokidcoach-1.6.3-rc1-coherent-stress-hardened-v1-20260714",
+  "generatedAt": "2026-07-14T03:56:22.224Z",
+  "finalSelectorGuardCount": 1,
+  "authoritativeGuard": "finalSelectorGuard",
+  "approvedCategories": [
+    "verified urgent move",
+    "verified profitable capture",
+    "own-territory fill",
+    "tactical override in endgame",
+    "low-value second-line",
+    "verified large yose",
+    "V1.6.2 sente/gote confidence exclusion"
+  ],
+  "noDuplicateSelector": true,
+  "obsoleteSelectorReachable": false,
+  "noFinalResortAfterGuard": true,
+  "advanced980RespectsGuardedRank": true,
+  "equivalentSolutionsPreserved": true,
+  "uncertainCasesPreserveBaseline": true,
+  "emergencyFallbackUnreachableWhenMeaningfulCandidatesExist": true,
+  "passed": true
+}

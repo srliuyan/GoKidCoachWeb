@@ -23,8 +23,9 @@ const ranges = [
   ["251-300", 251, 300]
 ];
 
-function write(name, payload) {
-  fs.writeFileSync(path.join(__dirname, name), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+function write(name, payload, outputDir = __dirname) {
+  fs.mkdirSync(outputDir, { recursive: true });
+  fs.writeFileSync(path.join(outputDir, name), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 }
 
 function emptyBoard() {
@@ -293,7 +294,9 @@ function hotspotReport(moves) {
   };
 }
 
-function run() {
+function run(options = {}) {
+  const writeReports = options.writeReports === true;
+  const outputDir = options.outputDir || __dirname;
   const game = simulateLongGame(300);
   const beforeByRange = rangeRows(game.moves, "beforeLatencyMs");
   const afterByRange = rangeRows(game.moves, "afterLatencyMs");
@@ -359,9 +362,11 @@ function run() {
   };
 
   const hotspots = hotspotReport(game.moves);
-  write("long-game-performance-report.json", report);
-  write("move-stage-latency-report.json", stageReport);
-  write("performance-hotspots.json", hotspots);
+  if (writeReports) {
+    write("long-game-performance-report.json", report, outputDir);
+    write("move-stage-latency-report.json", stageReport, outputDir);
+    write("performance-hotspots.json", hotspots, outputDir);
+  }
   process.stdout.write(JSON.stringify({
     moveCount: report.moveCount,
     passed: report.performanceAcceptance.passed,
@@ -371,7 +376,10 @@ function run() {
   return { report, stageReport, hotspots };
 }
 
-if (require.main === module) run();
+if (require.main === module) {
+  const outputDir = process.argv.includes("--output-dir") ? process.argv[process.argv.indexOf("--output-dir") + 1] : undefined;
+  run({ writeReports: process.argv.includes("--write-reports"), outputDir });
+}
 
 module.exports = {
   simulateLongGame,

@@ -1,0 +1,176 @@
+{
+  "productVersion": "1.6.2-dev",
+  "engineVersion": "sente-gote-fix-v1",
+  "generator": "manual-v163-report-writer-audit",
+  "generatorVersion": "1",
+  "generatedAt": "2026-07-14T00:00:00Z",
+  "deterministic": true,
+  "writers": [
+    {
+      "script": "evaluation/run-v16-bad-move-stress.js",
+      "outputFiles": [
+        "evaluation/v16-stress-results.json",
+        "evaluation/v16-bad-move-cases.json",
+        "evaluation/v16-category-summary.json",
+        "evaluation/v16-selection-pipeline-trace.json",
+        "evaluation/v16-endgame-stress.json",
+        "evaluation/v16-repetitive-local-play.json",
+        "evaluation/v16-calibrated-stress-results.json",
+        "evaluation/v16-calibrated-category-summary.json",
+        "evaluation/v16-calibrated-bad-move-cases.json",
+        "evaluation/v16-calibrated-pipeline-trace.json",
+        "evaluation/v16-detector-calibration-sample.json",
+        "evaluation/v16-detector-calibration-sample.txt",
+        "evaluation/v16-correction-report.json",
+        "evaluation/v16-before-after-cases.json",
+        "evaluation/v16-gate-result.json"
+      ],
+      "calledByTestLoop": true,
+      "calledByBenchmark": false,
+      "calledManually": true,
+      "deterministic": true,
+      "overwritesTrackedFile": false,
+      "recommendedMode": "dual_mode",
+      "classification": "dual_mode"
+    },
+    {
+      "script": "evaluation/run-v161-endgame-audit.js",
+      "outputFiles": [
+        "evaluation/v161-endgame-pipeline-trace.json",
+        "evaluation/v161-endgame-category-summary.json",
+        "evaluation/v161-endgame-bad-move-cases.json",
+        "evaluation/v161-endgame-calibration-sample.json",
+        "evaluation/v161-endgame-calibration-sample.txt",
+        "evaluation/v161-tactical-override-trace.json",
+        "evaluation/v161-correction-report.json",
+        "evaluation/v161-before-after-cases.json",
+        "evaluation/v161-gate-result.json",
+        "evaluation/v161-final-selector-audit.json"
+      ],
+      "calledByTestLoop": true,
+      "calledByBenchmark": false,
+      "calledManually": true,
+      "deterministic": true,
+      "overwritesTrackedFile": false,
+      "recommendedMode": "dual_mode",
+      "classification": "dual_mode"
+    },
+    {
+      "script": "evaluation/run-v162-sente-gote-audit.js",
+      "outputFiles": [
+        "evaluation/v162-sente-gote-trace.json",
+        "evaluation/v162-correction-report.json",
+        "evaluation/v162-before-after-cases.json",
+        "evaluation/v162-gate-result.json",
+        "evaluation/v162-final-selector-audit.json"
+      ],
+      "calledByTestLoop": true,
+      "calledByBenchmark": false,
+      "calledManually": true,
+      "deterministic": true,
+      "overwritesTrackedFile": false,
+      "recommendedMode": "dual_mode",
+      "classification": "dual_mode"
+    },
+    {
+      "script": "evaluation/run-long-game-performance.js",
+      "outputFiles": [
+        "evaluation/long-game-performance-report.json",
+        "evaluation/move-stage-latency-report.json",
+        "evaluation/performance-hotspots.json"
+      ],
+      "calledByTestLoop": true,
+      "calledByBenchmark": false,
+      "calledManually": true,
+      "deterministic": true,
+      "overwritesTrackedFile": false,
+      "recommendedMode": "dual_mode",
+      "classification": "dual_mode"
+    },
+    {
+      "script": "evaluation/run-v14-audits.js",
+      "outputFiles": [
+        "evaluation/build-consistency-audit.json",
+        "evaluation/export-integrity-report.json",
+        "evaluation/phase-transition-audit.json",
+        "evaluation/weak-group-analysis-report.json"
+      ],
+      "calledByTestLoop": true,
+      "calledByBenchmark": false,
+      "calledManually": true,
+      "deterministic": true,
+      "overwritesTrackedFile": false,
+      "recommendedMode": "dual_mode",
+      "classification": "dual_mode"
+    },
+    {
+      "script": "evaluation/run-v15-middlegame-audit.js",
+      "outputFiles": [
+        "evaluation/middlegame-candidate-coverage.json",
+        "evaluation/middlegame-failure-classification.json",
+        "evaluation/weak-group-classification-audit.json",
+        "evaluation/tactical-opportunity-coverage.json",
+        "evaluation/whole-board-strategy-audit.json",
+        "evaluation/v15-profile-report.json",
+        "evaluation/v15-selection-diff.json",
+        "evaluation/v15-gate-result.json",
+        "evaluation/v151-candidate-pipeline-trace.json",
+        "evaluation/v151-final-ranking-audit.json",
+        "evaluation/v151-profile-report.json",
+        "evaluation/v151-gate-result.json"
+      ],
+      "calledByTestLoop": true,
+      "calledByBenchmark": false,
+      "calledManually": true,
+      "deterministic": true,
+      "overwritesTrackedFile": false,
+      "recommendedMode": "dual_mode",
+      "classification": "dual_mode"
+    },
+    {
+      "script": "evaluation/run-cleanup-audit.js",
+      "outputFiles": [
+        "evaluation/active-dependency-map.json",
+        "evaluation/unused-code-audit.json",
+        "evaluation/service-worker-asset-audit.json",
+        "evaluation/cleanup-manifest.json",
+        "evaluation/pre-cleanup-behavior-lock.json",
+        "evaluation/post-cleanup-behavior-lock.json",
+        "evaluation/cleanup-behavior-comparison.json"
+      ],
+      "calledByTestLoop": true,
+      "calledByBenchmark": false,
+      "calledManually": true,
+      "deterministic": true,
+      "overwritesTrackedFile": false,
+      "recommendedMode": "dual_mode",
+      "classification": "dual_mode"
+    },
+    {
+      "script": "evaluation/run-opening-coherence-audit.js",
+      "outputFiles": [
+        "evaluation/opening-coherence-audit.json"
+      ],
+      "calledByTestLoop": true,
+      "calledByBenchmark": false,
+      "calledManually": true,
+      "deterministic": true,
+      "overwritesTrackedFile": false,
+      "recommendedMode": "dual_mode",
+      "classification": "dual_mode"
+    },
+    {
+      "script": "evaluation/generate-bad-move-stress-positions.js",
+      "outputFiles": [
+        "evaluation/v16-stress-positions.json"
+      ],
+      "calledByTestLoop": false,
+      "calledByBenchmark": false,
+      "calledManually": true,
+      "deterministic": true,
+      "overwritesTrackedFile": false,
+      "recommendedMode": "report_only",
+      "classification": "report_only"
+    }
+  ]
+}

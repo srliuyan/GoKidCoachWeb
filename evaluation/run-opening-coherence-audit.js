@@ -429,7 +429,9 @@ function rate(count, total) {
   return total ? Number((count / total).toFixed(6)) : 0;
 }
 
-function runAudit() {
+function runAudit(options = {}) {
+  const writeReports = options.writeReports === true;
+  const outputDir = options.outputDir || __dirname;
   const openingBook = readJson("opening-book.json");
   fuseki.resetForTests(readJson("fuseki-db.json"));
   joseki.resetForTests(readJson("joseki-db.json"));
@@ -519,20 +521,25 @@ function runAudit() {
       ? "Retain current opening system; focus next development on tactical reading integration."
       : `Recommend one narrow correction targeting ${dominantWeakness}; do not add a new opening database or globally increase book/fuseki weights.`
   };
-  const outPath = path.join(__dirname, "opening-coherence-audit.json");
-  fs.writeFileSync(outPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
-  return {
-    positionsAudited: total,
-    openingCoherentMoveRate: metrics.openingCoherentMoveRate,
-    selectedCoherentMoveRate: coverage.selectedCoherentMoveRate,
-    openingSourceConflictFrequency: metrics.openingSourceConflictFrequency,
-    passed: payload.gates.passed,
-    dominantOpeningWeakness: payload.dominantOpeningWeakness
-  };
+  if (writeReports) {
+    fs.mkdirSync(outputDir, { recursive: true });
+    const outPath = path.join(outputDir, "opening-coherence-audit.json");
+    fs.writeFileSync(outPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+  }
+  return payload;
 }
 
 function main() {
-  process.stdout.write(JSON.stringify(runAudit()));
+  const outputDir = process.argv.includes("--output-dir") ? process.argv[process.argv.indexOf("--output-dir") + 1] : undefined;
+  const payload = runAudit({ writeReports: process.argv.includes("--write-reports"), outputDir });
+  process.stdout.write(JSON.stringify({
+    positionsAudited: payload.positionsAudited,
+    openingCoherentMoveRate: payload.metrics.openingCoherentMoveRate,
+    selectedCoherentMoveRate: payload.candidateCoverage.selectedCoherentMoveRate,
+    openingSourceConflictFrequency: payload.metrics.openingSourceConflictFrequency,
+    passed: payload.gates.passed,
+    dominantOpeningWeakness: payload.dominantOpeningWeakness
+  }));
 }
 
 if (require.main === module) main();

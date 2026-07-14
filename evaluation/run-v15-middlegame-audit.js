@@ -11,8 +11,9 @@ const EMPTY = 0;
 const BLACK = 1;
 const WHITE = 2;
 
-function write(name, payload) {
-  fs.writeFileSync(path.join(__dirname, name), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+function write(name, payload, outputDir = __dirname) {
+  fs.mkdirSync(outputDir, { recursive: true });
+  fs.writeFileSync(path.join(outputDir, name), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 }
 
 function emptyBoard() {
@@ -707,7 +708,9 @@ function v151GateResult(profileReport) {
   };
 }
 
-function run() {
+function run(options = {}) {
+  const writeReports = options.writeReports === true;
+  const outputDir = options.outputDir || __dirname;
   const coverage = candidateCoverageReport();
   const failures = failureClassificationReport(coverage);
   const weak = weakGroupClassificationAudit();
@@ -720,18 +723,20 @@ function run() {
   const ranking151 = v151FinalRankingAudit();
   const profiles151 = v151ProfileReport(coverage, tactical, wholeBoard);
   const gates151 = v151GateResult(profiles151);
-  write("middlegame-candidate-coverage.json", coverage);
-  write("middlegame-failure-classification.json", failures);
-  write("weak-group-classification-audit.json", weak);
-  write("tactical-opportunity-coverage.json", tactical);
-  write("whole-board-strategy-audit.json", wholeBoard);
-  write("v15-profile-report.json", profiles);
-  write("v15-selection-diff.json", diff);
-  write("v15-gate-result.json", gates);
-  write("v151-candidate-pipeline-trace.json", trace151);
-  write("v151-final-ranking-audit.json", ranking151);
-  write("v151-profile-report.json", profiles151);
-  write("v151-gate-result.json", gates151);
+  if (writeReports) {
+    write("middlegame-candidate-coverage.json", coverage, outputDir);
+    write("middlegame-failure-classification.json", failures, outputDir);
+    write("weak-group-classification-audit.json", weak, outputDir);
+    write("tactical-opportunity-coverage.json", tactical, outputDir);
+    write("whole-board-strategy-audit.json", wholeBoard, outputDir);
+    write("v15-profile-report.json", profiles, outputDir);
+    write("v15-selection-diff.json", diff, outputDir);
+    write("v15-gate-result.json", gates, outputDir);
+    write("v151-candidate-pipeline-trace.json", trace151, outputDir);
+    write("v151-final-ranking-audit.json", ranking151, outputDir);
+    write("v151-profile-report.json", profiles151, outputDir);
+    write("v151-gate-result.json", gates151, outputDir);
+  }
   process.stdout.write(JSON.stringify({
     coherentCandidateCoverageRate: coverage.coherentCandidateCoverageRate,
     dominantCause: failures.dominantCause,
@@ -743,7 +748,10 @@ function run() {
   return { coverage, failures, weak, tactical, wholeBoard, profiles, diff, gates, trace151, ranking151, profiles151, gates151 };
 }
 
-if (require.main === module) run();
+if (require.main === module) {
+  const outputDir = process.argv.includes("--output-dir") ? process.argv[process.argv.indexOf("--output-dir") + 1] : undefined;
+  run({ writeReports: process.argv.includes("--write-reports"), outputDir });
+}
 
 module.exports = {
   generateCandidates,

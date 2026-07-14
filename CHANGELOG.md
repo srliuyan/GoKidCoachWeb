@@ -1,5 +1,14 @@
 # Changelog
 
+## V1.6.3-rc1 Release Candidate - 2026-07-14
+
+- Froze release-candidate metadata at productVersion `1.6.3-rc1`, engineVersion `coherent-stress-hardened-v1`, buildId `gokidcoach-1.6.3-rc1-coherent-stress-hardened-v1-20260714`.
+- Integrated the V1.6 tactical final-selector guard, V1.6.1 endgame selector corrections, V1.6.2 sente/gote confidence correction and V1.6.3 test/report separation.
+- Preserved benchmark quality: exactMatchRate `0.149`, goodOrBetterRate `0.216`, endgameGoodOrBetterRate `0.108`, averageScoreLossFromBest `9.513055`, rejectedMoveRate `0`.
+- Verified clean test mode: two full normal test loops produced zero tracked-file hash changes and zero canonical report hash changes.
+- Added V1.6.3 full-regression behavior, final-selector and release-artifact audits.
+- No deployment.
+
 ## V1.5.1 Safe Legacy Cleanup - 2026-07-13
 
 - Promoted release metadata to productVersion `1.5.1`, engineVersion `candidate-coverage-v1`, buildId `gokidcoach-1.5.1-candidate-coverage-v1-20260713`.

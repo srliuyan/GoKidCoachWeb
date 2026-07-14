@@ -1,13 +1,11 @@
 const assert = require("assert");
-const fs = require("fs");
-const path = require("path");
 const openingAudit = require("./evaluation/run-opening-coherence-audit.js");
 
-const reportPath = path.join(__dirname, "evaluation", "opening-coherence-audit.json");
+let cachedReport = null;
 
 function loadReport() {
-  if (!fs.existsSync(reportPath)) openingAudit.runAudit();
-  return JSON.parse(fs.readFileSync(reportPath, "utf8"));
+  if (!cachedReport) cachedReport = openingAudit.runAudit();
+  return cachedReport;
 }
 
 function byId(report, id) {
@@ -123,10 +121,8 @@ function testOpeningTransitionAudited() {
 }
 
 function testDeterministicAudit() {
-  openingAudit.runAudit();
-  const first = fs.readFileSync(reportPath, "utf8");
-  openingAudit.runAudit();
-  const second = fs.readFileSync(reportPath, "utf8");
+  const first = JSON.stringify(openingAudit.runAudit());
+  const second = JSON.stringify(openingAudit.runAudit());
   assert.strictEqual(first, second);
 }
 

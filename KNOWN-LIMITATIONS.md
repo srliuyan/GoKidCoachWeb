@@ -1,5 +1,13 @@
 # GoKidCoach V1.0 Known Engine Limitations
 
+## V1.6.3-rc1 Notes
+
+- V1.6.3-rc1 is a release candidate, not a deployed release.
+- Benchmark quality is intentionally unchanged from the frozen baseline.
+- Local reading remains bounded and does not attempt long ladders, complex semeai, full-board search, MCTS or neural evaluation.
+- The first 20-move synthetic performance range includes known setup outliers above 200 ms in the test harness; late-game p95 ratios pass the release gate.
+- Evaluation reports are generated only by explicit `--write-reports` commands; normal tests use check mode.
+
 The V1.0 engine is frozen on the verified baseline runtime. The following limitations are known and accepted for the first playable release.
 
 ## Urgent Source Generation

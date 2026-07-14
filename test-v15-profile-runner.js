@@ -6,16 +6,14 @@ const audit = require("./evaluation/run-v15-middlegame-audit.js");
 const v14 = require("./evaluation/run-v14-audits.js");
 const longGame = require("./evaluation/run-long-game-performance.js");
 
-function load(name) {
-  return JSON.parse(fs.readFileSync(path.join(__dirname, "evaluation", name), "utf8"));
-}
+let reports = null;
 
 function ensureReports() {
-  audit.run();
+  reports = audit.run();
 }
 
 function testProfileRunnerUsesRealJsEngine() {
-  const report = load("v15-profile-report.json");
+  const report = reports.profiles;
   assert.strictEqual(report.usesRealJavaScriptEngine, true);
   assert.strictEqual(report.limits.maxDepth, 3);
   assert.strictEqual(report.limits.maxCandidates, 8);
@@ -24,7 +22,7 @@ function testProfileRunnerUsesRealJsEngine() {
 }
 
 function testBaselineV14Unchanged() {
-  const report = load("v15-profile-report.json");
+  const report = reports.profiles;
   const baseline = report.profiles.baseline_v14;
   assert.strictEqual(baseline.overall.goodOrBetterRate, 0.216);
   assert.strictEqual(baseline.overall.averageScoreLossFromBest, 9.513055);
@@ -32,20 +30,20 @@ function testBaselineV14Unchanged() {
 }
 
 function testWeakGroupOnlyDoesNotAlterTacticalOnlyIncorrectly() {
-  const report = load("v15-profile-report.json");
+  const report = reports.profiles;
   const weak = report.profiles.weak_group_only;
   assert(weak.tactical.missedImmediateCaptureCount >= report.profiles.full_middlegame_conservative.tactical.missedImmediateCaptureCount);
   assert.strictEqual(weak.tactical.falseTacticalProtectionCount, 0);
 }
 
 function testTacticalProfileNoTunnelVision() {
-  const report = load("v15-profile-report.json");
+  const report = reports.profiles;
   const tactical = report.profiles.tactical_capture_rescue;
   assert(tactical.strategy.localTunnelVisionCount <= report.profiles.baseline_v14.strategy.localTunnelVisionCount);
 }
 
 function testFullProfilePreservesGlobalCandidate() {
-  const whole = load("whole-board-strategy-audit.json");
+  const whole = reports.wholeBoard;
   assert.strictEqual(whole.largeGlobalCandidateCoverageRate, 1);
   assert.strictEqual(whole.unsupportedFallbackCount, 0);
 }
@@ -57,8 +55,8 @@ function testSelectionDiffDeterministic() {
 }
 
 function testTacticalAndWeakGroupMetrics() {
-  const tactical = load("tactical-opportunity-coverage.json");
-  const weak = load("weak-group-classification-audit.json");
+  const tactical = reports.tactical;
+  const weak = reports.weak;
   assert.strictEqual(tactical.terminalClassificationAccuracy, 1);
   assert(tactical.effectiveRerankRate > 0);
   assert(tactical.correctedSelectionRate > 0);
@@ -66,7 +64,7 @@ function testTacticalAndWeakGroupMetrics() {
 }
 
 function testGateResultAndRuntimeDecision() {
-  const gate = load("v15-gate-result.json");
+  const gate = reports.gates;
   assert.strictEqual(gate.bestProfile, "full_middlegame_conservative");
   assert.strictEqual(gate.passed, true);
   assert.deepStrictEqual(gate.failedGates, []);

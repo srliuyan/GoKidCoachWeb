@@ -6,12 +6,10 @@ const v14 = require("./evaluation/run-v14-audits.js");
 const longGame = require("./evaluation/run-long-game-performance.js");
 const product = require("./product-support.js");
 
-function load(name) {
-  return JSON.parse(fs.readFileSync(path.join(__dirname, "evaluation", name), "utf8"));
-}
+let reports = null;
 
 function ensureReports() {
-  audit.run();
+  reports = audit.run();
 }
 
 function testProfileResultsDeterministic() {
@@ -21,7 +19,7 @@ function testProfileResultsDeterministic() {
 }
 
 function testBestProfilePassesGates() {
-  const gate = load("v151-gate-result.json");
+  const gate = reports.gates151;
   assert.strictEqual(gate.bestProfile, "full_candidate_coverage_conservative");
   assert.strictEqual(gate.passed, true);
   assert.deepStrictEqual(gate.failedGates, []);
@@ -31,7 +29,7 @@ function testBestProfilePassesGates() {
 }
 
 function testCoverageTargetsMet() {
-  const report = load("v151-profile-report.json");
+  const report = reports.profiles151;
   const best = report.profiles.full_candidate_coverage_conservative;
   assert.strictEqual(best.coherentCandidateCoverageRate, 1);
   assert(best.urgentCandidateCoverageRate >= 0.95);
@@ -44,7 +42,7 @@ function testCoverageTargetsMet() {
 }
 
 function testStrategyAndRankingTargetsMet() {
-  const report = load("v151-profile-report.json");
+  const report = reports.profiles151;
   const best = report.profiles.full_candidate_coverage_conservative;
   assert(best.selectedCoherentMoveRate >= 0.93);
   assert.strictEqual(best.largeWeakGroupIgnoredCount, 0);
@@ -56,7 +54,7 @@ function testStrategyAndRankingTargetsMet() {
 }
 
 function testBenchmarkAndGuardrails() {
-  const report = load("v151-profile-report.json");
+  const report = reports.profiles151;
   const best = report.profiles.full_candidate_coverage_conservative;
   assert.strictEqual(best.benchmark.goodOrBetterRate, 0.216);
   assert.strictEqual(best.benchmark.endgameGoodOrBetterRate, 0.108);
@@ -69,7 +67,7 @@ function testBenchmarkAndGuardrails() {
 }
 
 function testAdvancedAndNoFallback() {
-  const ranking = load("v151-final-ranking-audit.json");
+  const ranking = reports.ranking151;
   assert.strictEqual(product.difficultyModes.advanced.level, 980);
   assert.strictEqual(ranking.advancedRespectsPostReadingRank, true);
   assert.strictEqual(ranking.oldFallbackBypassCount, 0);

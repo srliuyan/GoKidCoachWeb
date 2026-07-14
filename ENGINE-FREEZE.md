@@ -1,5 +1,28 @@
 # GoKidCoach Engine Freeze
 
+## V1.6.3-rc1 Coherent Stress-Hardened Candidate
+
+- Product version: `1.6.3-rc1`
+- Engine version: `coherent-stress-hardened-v1`
+- Freeze date: 2026-07-14
+- Build id: `gokidcoach-1.6.3-rc1-coherent-stress-hardened-v1-20260714`
+- Runtime baseline update: no benchmark baseline update
+- Deployment: no
+
+V1.6.3-rc1 combines the approved V1.6 tactical final-selector guard, V1.6.1 endgame selector corrections, V1.6.2 sente/gote confidence fix and V1.6.3 test/report separation. It does not add candidate generation, ranking, scoring, difficulty, reading-depth, database, MCTS, neural, backend or KataGo changes.
+
+Release-candidate gates passed with:
+
+- exactMatchRate: 0.149
+- goodOrBetterRate: 0.216
+- endgameGoodOrBetterRate: 0.108
+- averageScoreLossFromBest: 9.513055
+- rejectedMoveRate: 0
+- calibratedEndgameBadMoveCount: 0
+- senteGoteMisclassificationCount: 0
+- tacticalOverrideMissedCount: 0
+- 300-move performance: passed
+
 ## V1.2 Coherent Core Engine State
 
 - Final engine version: bounded-local-reading-v1

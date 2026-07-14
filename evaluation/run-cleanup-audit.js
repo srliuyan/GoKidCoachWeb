@@ -22,8 +22,9 @@ function exists(file) {
   return fs.existsSync(path.join(root, file));
 }
 
-function write(name, payload) {
-  fs.writeFileSync(path.join(evaluationDir, name), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+function write(name, payload, outputDir = evaluationDir) {
+  fs.mkdirSync(outputDir, { recursive: true });
+  fs.writeFileSync(path.join(outputDir, name), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 }
 
 function sha(value) {
@@ -269,7 +270,9 @@ function compareLocks(pre, post) {
   };
 }
 
-function main() {
+function main(options = {}) {
+  const writeReports = options.writeReports === true;
+  const outputDir = options.outputDir || evaluationDir;
   const dependency = activeDependencyMap();
   const unused = unusedCodeAudit();
   const swAudit = serviceWorkerAssetAudit();
@@ -283,22 +286,28 @@ function main() {
     && comparison.sgfHashIdentical
     && comparison.benchmarkMetricsIdentical;
 
-  write("active-dependency-map.json", dependency);
-  write("unused-code-audit.json", unused);
-  write("service-worker-asset-audit.json", swAudit);
-  write("cleanup-manifest.json", cleanupManifest());
-  write("pre-cleanup-behavior-lock.json", pre);
-  write("post-cleanup-behavior-lock.json", post);
-  write("cleanup-behavior-comparison.json", comparison);
+  const manifest = cleanupManifest();
+  if (writeReports) {
+    write("active-dependency-map.json", dependency, outputDir);
+    write("unused-code-audit.json", unused, outputDir);
+    write("service-worker-asset-audit.json", swAudit, outputDir);
+    write("cleanup-manifest.json", manifest, outputDir);
+    write("pre-cleanup-behavior-lock.json", pre, outputDir);
+    write("post-cleanup-behavior-lock.json", post, outputDir);
+    write("cleanup-behavior-comparison.json", comparison, outputDir);
+  }
   process.stdout.write(JSON.stringify({
     dependencyUnknownCount: dependency.unknownFiles.length,
     serviceWorkerAssetAuditPassed: swAudit.passed,
     behaviorLockPassed: comparison.passed
   }));
-  return { dependency, unused, swAudit, pre, post, comparison };
+  return { dependency, unused, swAudit, manifest, pre, post, comparison };
 }
 
-if (require.main === module) main();
+if (require.main === module) {
+  const outputDir = process.argv.includes("--output-dir") ? process.argv[process.argv.indexOf("--output-dir") + 1] : undefined;
+  main({ writeReports: process.argv.includes("--write-reports"), outputDir });
+}
 
 module.exports = {
   activeDependencyMap,

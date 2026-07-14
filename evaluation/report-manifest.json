@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "productVersion": "1.6.2-dev",
+  "engineVersion": "sente-gote-fix-v1",
+  "generatedAt": "2026-07-14T00:00:00Z",
+  "reports": [
+    {
+      "path": "evaluation/v16-calibrated-category-summary.json",
+      "generator": "evaluation/run-v16-bad-move-stress.js",
+      "command": "node evaluation/run-v16-bad-move-stress.js --write-reports --seed 20260713 --positions 907",
+      "purpose": "V1.6 calibrated 907-position stress summary",
+      "requiredInputs": ["seed:20260713", "positions:907"],
+      "deterministic": true,
+      "tracked": false,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v16-correction-report.json",
+      "generator": "evaluation/run-v16-bad-move-stress.js",
+      "command": "node evaluation/run-v16-bad-move-stress.js --write-reports --seed 20260713 --positions 907",
+      "purpose": "V1.6 correction profile summary",
+      "requiredInputs": ["seed:20260713", "positions:907"],
+      "deterministic": true,
+      "tracked": false,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v161-endgame-category-summary.json",
+      "generator": "evaluation/run-v161-endgame-audit.js",
+      "command": "node evaluation/run-v161-endgame-audit.js --write-reports --seed 20260713 --positions 300",
+      "purpose": "V1.6.1 300-position endgame audit summary",
+      "requiredInputs": ["seed:20260713", "positions:300"],
+      "deterministic": true,
+      "tracked": false,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v161-correction-report.json",
+      "generator": "evaluation/run-v161-endgame-audit.js",
+      "command": "node evaluation/run-v161-endgame-audit.js --write-reports --seed 20260713 --positions 300",
+      "purpose": "V1.6.1 endgame correction profile summary",
+      "requiredInputs": ["seed:20260713", "positions:300"],
+      "deterministic": true,
+      "tracked": false,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v162-correction-report.json",
+      "generator": "evaluation/run-v162-sente-gote-audit.js",
+      "command": "node evaluation/run-v162-sente-gote-audit.js --write-reports --seed 20260713 --positions 300 --runtime-integrated",
+      "purpose": "V1.6.2 sente/gote correction profile summary",
+      "requiredInputs": ["seed:20260713", "positions:300", "runtime-integrated"],
+      "deterministic": true,
+      "tracked": false,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v162-sente-gote-trace.json",
+      "generator": "evaluation/run-v162-sente-gote-audit.js",
+      "command": "node evaluation/run-v162-sente-gote-audit.js --write-reports --seed 20260713 --positions 300 --runtime-integrated",
+      "purpose": "Detailed trace for the two V1.6.2 sente/gote cases",
+      "requiredInputs": ["seed:20260713", "positions:300", "runtime-integrated"],
+      "deterministic": true,
+      "tracked": false,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/long-game-performance-report.json",
+      "generator": "evaluation/run-long-game-performance.js",
+      "command": "node evaluation/run-long-game-performance.js --write-reports",
+      "purpose": "300-move performance report",
+      "requiredInputs": ["deterministic long-game simulation"],
+      "deterministic": true,
+      "tracked": false,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/build-consistency-audit.json",
+      "generator": "evaluation/run-v14-audits.js",
+      "command": "node evaluation/run-v14-audits.js --write-reports",
+      "purpose": "Build metadata consistency audit",
+      "requiredInputs": ["active web sources"],
+      "deterministic": true,
+      "tracked": false,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/export-integrity-report.json",
+      "generator": "evaluation/run-v14-audits.js",
+      "command": "node evaluation/run-v14-audits.js --write-reports",
+      "purpose": "SGF/debug export integrity audit",
+      "requiredInputs": ["active web sources"],
+      "deterministic": true,
+      "tracked": false,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/benchmark-report.json",
+      "generator": "test-evaluation-framework.js",
+      "command": "node test-evaluation-framework.js",
+      "purpose": "Frozen 1000-position benchmark baseline",
+      "requiredInputs": ["evaluation/benchmark-config.json", "clean_sgf"],
+      "deterministic": true,
+      "tracked": false,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    }
+  ]
+}

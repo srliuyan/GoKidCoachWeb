@@ -9,27 +9,25 @@ const cleanup = require("./evaluation/run-cleanup-audit.js");
 const v14 = require("./evaluation/run-v14-audits.js");
 const longGame = require("./evaluation/run-long-game-performance.js");
 
-function load(name) {
-  return JSON.parse(fs.readFileSync(path.join(__dirname, "evaluation", name), "utf8"));
-}
-
 function source(file) {
   return fs.readFileSync(path.join(__dirname, file), "utf8");
 }
 
+let reports = null;
+
 function ensureReports() {
-  cleanup.main();
+  reports = cleanup.main();
 }
 
 function testRuntimeScriptsExist() {
-  const map = load("active-dependency-map.json");
+  const map = reports.dependency;
   for (const script of map.indexScripts) {
     assert(fs.existsSync(path.join(__dirname, script)), script);
   }
 }
 
 function testCachedAssetsExistAndAreClean() {
-  const audit = load("service-worker-asset-audit.json");
+  const audit = reports.swAudit;
   assert.strictEqual(audit.passed, true);
   assert.deepStrictEqual(audit.missingAssets, []);
   assert.deepStrictEqual(audit.cachedEvaluationAssets, []);
@@ -106,7 +104,7 @@ function testCachedAndUncachedRulesMatch() {
 }
 
 function testBehaviorLocksMatch() {
-  const comparison = load("cleanup-behavior-comparison.json");
+  const comparison = reports.comparison;
   assert.strictEqual(comparison.passed, true);
   assert.strictEqual(comparison.selectedMovesIdentical, true);
   assert.strictEqual(comparison.finalBoardHashIdentical, true);

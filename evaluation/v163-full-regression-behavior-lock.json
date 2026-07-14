@@ -1,0 +1,18 @@
+{
+  "productVersion": "1.6.3-rc1",
+  "engineVersion": "coherent-stress-hardened-v1",
+  "buildId": "gokidcoach-1.6.3-rc1-coherent-stress-hardened-v1-20260714",
+  "generatedAt": "2026-07-14T03:56:22.224Z",
+  "generator": "v163-full-regression-check-mode",
+  "deterministic": true,
+  "openingFixtureSelectionsUnchanged": true,
+  "tacticalOutcomesUnchanged": true,
+  "weakGroupClassificationsUnchanged": true,
+  "endgameClassificationsReflectApprovedV162Only": true,
+  "candidateOrderUnchangedOutsideApprovedCorrections": true,
+  "finalBoardHashesStable": true,
+  "sgfHashesStable": true,
+  "deterministicRepeatedRunsMatch": true,
+  "previousBehaviorLock": "cleanup behavior lock / V1.6.2 approved local behavior",
+  "passed": true
+}

@@ -17,8 +17,9 @@ function read(file) {
   return fs.readFileSync(path.join(root, file), "utf8");
 }
 
-function write(name, payload) {
-  fs.writeFileSync(path.join(__dirname, name), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+function write(name, payload, outputDir = __dirname) {
+  fs.mkdirSync(outputDir, { recursive: true });
+  fs.writeFileSync(path.join(outputDir, name), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 }
 
 function emptyBoard() {
@@ -273,24 +274,32 @@ function weakGroupAnalysisReport() {
   };
 }
 
-function main() {
+function main(options = {}) {
+  const writeReports = options.writeReports === true;
+  const outputDir = options.outputDir || __dirname;
   const build = buildConsistencyAudit();
   const integrity = exportIntegrityReport();
   const phase = phaseTransitionAudit();
   const weak = weakGroupAnalysisReport();
-  write("build-consistency-audit.json", build);
-  write("export-integrity-report.json", integrity);
-  write("phase-transition-audit.json", phase);
-  write("weak-group-analysis-report.json", weak);
+  if (writeReports) {
+    write("build-consistency-audit.json", build, outputDir);
+    write("export-integrity-report.json", integrity, outputDir);
+    write("phase-transition-audit.json", phase, outputDir);
+    write("weak-group-analysis-report.json", weak, outputDir);
+  }
   process.stdout.write(JSON.stringify({
     buildConsistencyPassed: build.passed,
     exportIntegrityPassed: integrity.passed,
     phaseTransitionPassed: phase.passed,
     weakGroupsAnalyzed: weak.groups.length
   }));
+  return { build, integrity, phase, weak };
 }
 
-if (require.main === module) main();
+if (require.main === module) {
+  const outputDir = process.argv.includes("--output-dir") ? process.argv[process.argv.indexOf("--output-dir") + 1] : undefined;
+  main({ writeReports: process.argv.includes("--write-reports"), outputDir });
+}
 
 module.exports = {
   buildConsistencyAudit,

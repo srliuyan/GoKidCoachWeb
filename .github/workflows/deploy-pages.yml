@@ -25,6 +25,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate check mode
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check *.js
+          node test-evaluation-framework.js
+          node evaluation/run-v16-bad-move-stress.js --check --seed 20260713 --positions 907
+          node evaluation/run-v161-endgame-audit.js --check --seed 20260713 --positions 300
+          node evaluation/run-v162-sente-gote-audit.js --check --seed 20260713 --positions 300 --runtime-integrated
+          node evaluation/run-long-game-performance.js --check
+
       - name: Prepare runtime artifact
         shell: bash
         run: |

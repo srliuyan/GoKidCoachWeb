@@ -521,6 +521,141 @@ function classifyCoherentCandidate(candidate) {
   return "meaningfulAlternative";
 }
 
+function candidateKey(candidate) {
+  const point = candidate?.point || candidate;
+  return point && Number.isInteger(point.x) && Number.isInteger(point.y) ? `${point.x},${point.y}` : "";
+}
+
+function highConfidenceLocalOutcome(candidate, outcomes) {
+  const reading = candidate?.localReading;
+  if (!candidate || !reading || reading.confidenceLevel !== "high" || reading.unresolved || reading.koResult?.created) return false;
+  return outcomes.includes(reading.hardOutcome);
+}
+
+function concreteTacticalGain(candidate) {
+  if (!candidate) return 0;
+  const reading = candidate.localReading || {};
+  let gain = 0;
+  gain += Math.max(0, Number(candidate.captures || reading.opponentStonesCaptured || 0)) * 2;
+  gain += Math.max(0, Number(candidate.rescueValue || 0)) * 3;
+  if (candidate.verifiedCapture || reading.hardOutcome === "verified_capture") gain += 4;
+  if (candidate.verifiedRescue || reading.hardOutcome === "verified_rescue") gain += 6;
+  if (candidate.verifiedUrgent || candidate.coherentClass === "protectedUrgent") gain += 3;
+  if (candidate.immediatelyRefuted || reading.refuted || ["failed_rescue", "uncompensated_self_atari", "immediately_refuted"].includes(reading.hardOutcome)) gain -= 20;
+  return gain;
+}
+
+function equivalentOrBetterTacticalSelection(selected, challenger) {
+  if (!selected || !challenger) return false;
+  if (candidateKey(selected) === candidateKey(challenger)) return true;
+  if (highConfidenceLocalOutcome(selected, ["verified_capture", "verified_rescue"])) {
+    return concreteTacticalGain(selected) >= concreteTacticalGain(challenger);
+  }
+  if (selected.verifiedUrgent && concreteTacticalGain(selected) >= concreteTacticalGain(challenger)) return true;
+  return false;
+}
+
+function highConfidenceOwnTerritoryFill(candidate, color) {
+  const point = candidate?.point;
+  if (!point || moveHistory.length < 120) return false;
+  if (candidate.verifiedUrgent || candidate.verifiedCapture || candidate.verifiedRescue) return false;
+  if (Number(candidate.captures || 0) > 0 || Number(candidate.rescueValue || 0) > 0 || Number(candidate.connectionValue || 0) > 0) return false;
+  if (Number(candidate.tacticalPressure || 0) > 0 || Number(candidate.endgameValue || 0) > 2) return false;
+  let ownAdjacent = 0;
+  let opponentAdjacent = 0;
+  let emptyAdjacent = 0;
+  for (const next of neighbors(point)) {
+    const value = board[next.y][next.x];
+    if (value === color) ownAdjacent += 1;
+    else if (value === opponent(color)) opponentAdjacent += 1;
+    else emptyAdjacent += 1;
+  }
+  return ownAdjacent >= 3 && opponentAdjacent === 0 && emptyAdjacent <= 1;
+}
+
+function highConfidenceLowValueSecondLine(candidate, color) {
+  const point = candidate?.point;
+  if (!point || moveHistory.length < 120) return false;
+  const edge = Math.min(point.x, point.y, size - 1 - point.x, size - 1 - point.y);
+  if (edge !== 1) return false;
+  if (candidate.verifiedUrgent || candidate.verifiedCapture || candidate.verifiedRescue || candidate.verifiedNecessaryConnection) return false;
+  if (Number(candidate.captures || 0) > 0 || Number(candidate.rescueValue || 0) > 0 || Number(candidate.connectionValue || 0) > 0 || Number(candidate.cutOpportunity || 0) > 0) return false;
+  if (Number(candidate.tacticalPressure || 0) > 0 || Number(candidate.endgameValue || 0) > 2) return false;
+  if (candidate.localReading && candidate.localReading.confidenceLevel !== "high" && candidate.localReading.hardOutcome !== "unresolved") return false;
+  let ownAdjacent = 0;
+  let opponentAdjacent = 0;
+  let emptyAdjacent = 0;
+  for (const next of neighbors(point)) {
+    const value = board[next.y][next.x];
+    if (value === color) ownAdjacent += 1;
+    else if (value === opponent(color)) opponentAdjacent += 1;
+    else emptyAdjacent += 1;
+  }
+  return opponentAdjacent === 0 && emptyAdjacent >= 2 && ownAdjacent <= 1;
+}
+
+function verifiedLargeYoseCandidate(candidate) {
+  if (!candidate) return false;
+  if (candidate.verifiedUrgent || candidate.verifiedCapture || candidate.verifiedRescue) return false;
+  if (candidate.immediatelyRefuted || candidate.localReading?.refuted || candidate.localReading?.unresolved) return false;
+  const endgameScore = Number(candidate.endgameScore || 0);
+  const endgameValue = Number(candidate.endgameValue || 0);
+  const territoryValue = Number(candidate.territoryValue || 0);
+  const sourceTags = Array.isArray(candidate.sourceTags) ? candidate.sourceTags.join(" ") : String(candidate.candidateSource || "");
+  return moveHistory.length >= 120
+    && (endgameScore >= 8 || endgameValue >= 4 || territoryValue >= 3 || /large_yose|meaningful_yose|boundary|endgame/.test(sourceTags))
+    && !highConfidenceLowValueSecondLine(candidate, candidate.color || aiStoneColor());
+}
+
+function equivalentOrBetterEndgameSelection(selected, challenger) {
+  if (!selected || !challenger) return false;
+  if (candidateKey(selected) === candidateKey(challenger)) return true;
+  const selectedValue = Number(selected.endgameScore || 0) + Number(selected.endgameValue || 0) * 2 + Number(selected.territoryValue || 0);
+  const challengerValue = Number(challenger.endgameScore || 0) + Number(challenger.endgameValue || 0) * 2 + Number(challenger.territoryValue || 0);
+  return selectedValue >= challengerValue - 1.5 && !highConfidenceLowValueSecondLine(selected, selected.color || aiStoneColor());
+}
+
+function finalSelectorGuard(selected, rankedCandidates, color) {
+  if (!selected || !Array.isArray(rankedCandidates) || !rankedCandidates.length) return selected;
+  const candidates = rankedCandidates.filter(candidate => {
+    if (!candidate || candidate.legal === false || candidate.ruleLegal === false) return false;
+    if (candidate.coherentClass === "rejected" || candidate.moveQualityBucket === "rejectedMoves") return false;
+    return candidateKey(candidate);
+  });
+  if (!candidates.length) return selected;
+
+  const urgent = candidates
+    .filter(candidate => highConfidenceLocalOutcome(candidate, ["verified_rescue", "verified_capture"]) || (candidate.verifiedUrgent && highConfidenceLocalOutcome(candidate, ["verified_rescue", "verified_capture"])))
+    .sort((a, b) => concreteTacticalGain(b) - concreteTacticalGain(a) || Number(b.moveQualityScore || b.adjustedScore || 0) - Number(a.moveQualityScore || a.adjustedScore || 0));
+  if (urgent.length && !equivalentOrBetterTacticalSelection(selected, urgent[0])) return urgent[0];
+
+  const profitableCapture = candidates
+    .filter(candidate => highConfidenceLocalOutcome(candidate, ["verified_capture"]))
+    .filter(candidate => Number(candidate.captures || candidate.localReading?.opponentStonesCaptured || 0) > 0)
+    .filter(candidate => concreteTacticalGain(candidate) - concreteTacticalGain(selected) >= 2)
+    .sort((a, b) => concreteTacticalGain(b) - concreteTacticalGain(a) || Number(b.moveQualityScore || b.adjustedScore || 0) - Number(a.moveQualityScore || a.adjustedScore || 0));
+  if (profitableCapture.length && !equivalentOrBetterTacticalSelection(selected, profitableCapture[0])) return profitableCapture[0];
+
+  const largeYose = candidates
+    .filter(verifiedLargeYoseCandidate)
+    .sort((a, b) => (Number(b.endgameScore || 0) + Number(b.endgameValue || 0) * 2 + Number(b.territoryValue || 0))
+      - (Number(a.endgameScore || 0) + Number(a.endgameValue || 0) * 2 + Number(a.territoryValue || 0)));
+  if (largeYose.length && !equivalentOrBetterEndgameSelection(selected, largeYose[0]) && !concreteTacticalGain(selected)) return largeYose[0];
+
+  if (highConfidenceLowValueSecondLine(selected, color)) {
+    const alternative = candidates.find(candidate => candidateKey(candidate) !== candidateKey(selected)
+      && !highConfidenceLowValueSecondLine(candidate, color)
+      && !highConfidenceOwnTerritoryFill(candidate, color));
+    if (alternative) return alternative;
+  }
+
+  if (highConfidenceOwnTerritoryFill(selected, color)) {
+    const alternative = candidates.find(candidate => candidateKey(candidate) !== candidateKey(selected) && !highConfidenceOwnTerritoryFill(candidate, color));
+    if (alternative) return alternative;
+  }
+  return selected;
+}
+
 function observeChildMove(point, candidates) {
   const api = companionEngineApi();
   if (!api || typeof api.observeStudentMove !== "function") return;
@@ -1747,19 +1882,20 @@ function chooseLocalAIMove(moves, color = aiStoneColor(), perfRecord = null) {
     || ranked.ranked?.[0]
     || adjusted[0]
     || evaluated.sort((a, b) => b.combinedScore - a.combinedScore)[0];
-  if (choice) {
+  const guardedChoice = finalSelectorGuard(choice, ranked.ranked || adjusted, color);
+  if (guardedChoice) {
     currentCompanionPlan = companionPlan;
     currentMoveQualityPlan = ranked.context || moveQualityContext;
     previousPositionEval = smoothedPositionEval;
     lastAdaptiveSummary = {
       summary: moveQuality && typeof moveQuality.explainMoveQuality === "function"
-        ? moveQuality.explainMoveQuality(choice)
+        ? moveQuality.explainMoveQuality(guardedChoice)
         : "",
-      confidence: choice.confidence || 0,
+      confidence: guardedChoice.confidence || 0,
       precisionBand: (ranked.context || moveQualityContext)?.precisionBand || "balanced"
     };
   }
-  return choice?.point || null;
+  return guardedChoice?.point || null;
 }
 
 async function requestRemoteAIMove() {
