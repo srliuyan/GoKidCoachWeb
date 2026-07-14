@@ -1,5 +1,12 @@
 # Changelog
 
+## V1.6.3 Stable Release - 2026-07-14
+
+- Promoted the validated V1.6.3-rc1 state to final productVersion `1.6.3`, engineVersion `coherent-stress-hardened-v1`, buildId `gokidcoach-1.6.3-coherent-stress-hardened-v1-20260714-final`.
+- Includes the V1.6 verified urgent/profitable tactical final guard, V1.6.1 endgame tactical precedence, low-value second-line and large-yose fixes, V1.6.2 sente/gote detector-confidence correction and V1.6.3 test/report separation.
+- Kept engine behavior, candidate generation, ranking, scoring weights, difficulty mappings, reading limits and benchmark baseline unchanged from the validated release candidate.
+- Final release validation passed before deployment.
+
 ## V1.6.3-rc1 Release Candidate - 2026-07-14
 
 - Froze release-candidate metadata at productVersion `1.6.3-rc1`, engineVersion `coherent-stress-hardened-v1`, buildId `gokidcoach-1.6.3-rc1-coherent-stress-hardened-v1-20260714`.

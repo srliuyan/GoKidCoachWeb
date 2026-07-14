@@ -1,5 +1,13 @@
 # GoKidCoach V1.0 Known Engine Limitations
 
+## V1.6.3 Stable Notes
+
+- V1.6.3 is the stable promotion of the validated V1.6.3-rc1 state.
+- Benchmark quality is intentionally unchanged from the frozen baseline.
+- Local reading remains bounded and does not attempt long ladders, complex semeai, full-board search, MCTS or neural evaluation.
+- The first 20-move synthetic performance range includes known setup outliers above 200 ms in the test harness; late-game p95 ratios pass the release gate.
+- Evaluation reports are generated only by explicit `--write-reports` commands; normal tests use check mode.
+
 ## V1.6.3-rc1 Notes
 
 - V1.6.3-rc1 is a release candidate, not a deployed release.

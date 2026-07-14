@@ -1,10 +1,10 @@
-# GoKidCoach V1.6.3-rc1 Release Checklist
+# GoKidCoach V1.6.3 Release Checklist
 
 - Branch: `dev/v1.6-bad-move-stress`
-- Product version: `1.6.3-rc1`
+- Product version: `1.6.3`
 - Engine version: `coherent-stress-hardened-v1`
-- Build id: `gokidcoach-1.6.3-rc1-coherent-stress-hardened-v1-20260714`
-- Deployment occurred: no
+- Build id: `gokidcoach-1.6.3-coherent-stress-hardened-v1-20260714-final`
+- Deployment target: GitHub Pages
 
 ## Required Gates
 
@@ -24,6 +24,13 @@
 - Final selector integrity: passed
 - Release artifact audit: passed
 
+## Included Corrections
+
+- V1.6 verified urgent/profitable tactical final guard
+- V1.6.1 endgame tactical precedence, low-value second-line and large-yose fixes
+- V1.6.2 sente/gote detector-confidence correction
+- V1.6.3 test/report separation and clean validation workflow
+
 ## Release Decision
 
-V1.6.3-rc1 is safe to publish from a regression standpoint. Publishing still requires an explicit deploy command.
+V1.6.3 is safe to publish from the validated release-candidate state. Final deployment requires successful branch/tag push, main update, GitHub Pages deployment and production verification.
