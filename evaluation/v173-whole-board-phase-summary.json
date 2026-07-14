@@ -1,0 +1,117 @@
+{
+  "selectedProfile": "phase_gated_dedup",
+  "phaseStats": {
+    "21-60": {
+      "generatedCount": 527,
+      "enteredTop10Count": 527,
+      "shortReadRejectedCount": 22,
+      "duplicateCount": 17,
+      "settledRegionCount": 11,
+      "finallySelectedCount": 7,
+      "improvedMoveCount": 4,
+      "worsenedMoveCount": 0,
+      "consecutiveSimilarGlobalPointCount": 0,
+      "synonymDuplicateWithExistingCandidateCount": 3,
+      "lateOpeningStyleLargePointCount": 0
+    },
+    "61-120": {
+      "generatedCount": 733,
+      "enteredTop10Count": 733,
+      "shortReadRejectedCount": 35,
+      "duplicateCount": 23,
+      "settledRegionCount": 18,
+      "finallySelectedCount": 10,
+      "improvedMoveCount": 6,
+      "worsenedMoveCount": 0,
+      "consecutiveSimilarGlobalPointCount": 0,
+      "synonymDuplicateWithExistingCandidateCount": 5,
+      "lateOpeningStyleLargePointCount": 0
+    },
+    "121-200": {
+      "generatedCount": 0,
+      "enteredTop10Count": 0,
+      "shortReadRejectedCount": 0,
+      "duplicateCount": 0,
+      "settledRegionCount": 0,
+      "finallySelectedCount": 0,
+      "improvedMoveCount": 0,
+      "worsenedMoveCount": 0,
+      "consecutiveSimilarGlobalPointCount": 0,
+      "synonymDuplicateWithExistingCandidateCount": 0,
+      "lateOpeningStyleLargePointCount": 0
+    },
+    "201-300": {
+      "generatedCount": 0,
+      "enteredTop10Count": 0,
+      "shortReadRejectedCount": 0,
+      "duplicateCount": 0,
+      "settledRegionCount": 0,
+      "finallySelectedCount": 0,
+      "improvedMoveCount": 0,
+      "worsenedMoveCount": 0,
+      "consecutiveSimilarGlobalPointCount": 0,
+      "synonymDuplicateWithExistingCandidateCount": 0,
+      "lateOpeningStyleLargePointCount": 0
+    }
+  },
+  "baselinePhaseStats": {
+    "21-60": {
+      "generatedCount": 544,
+      "enteredTop10Count": 544,
+      "shortReadRejectedCount": 22,
+      "duplicateCount": 58,
+      "settledRegionCount": 11,
+      "finallySelectedCount": 7,
+      "improvedMoveCount": 4,
+      "worsenedMoveCount": 0,
+      "consecutiveSimilarGlobalPointCount": 0,
+      "synonymDuplicateWithExistingCandidateCount": 3,
+      "lateOpeningStyleLargePointCount": 0
+    },
+    "61-120": {
+      "generatedCount": 756,
+      "enteredTop10Count": 756,
+      "shortReadRejectedCount": 35,
+      "duplicateCount": 91,
+      "settledRegionCount": 18,
+      "finallySelectedCount": 10,
+      "improvedMoveCount": 6,
+      "worsenedMoveCount": 0,
+      "consecutiveSimilarGlobalPointCount": 0,
+      "synonymDuplicateWithExistingCandidateCount": 5,
+      "lateOpeningStyleLargePointCount": 0
+    },
+    "121-200": {
+      "generatedCount": 684,
+      "enteredTop10Count": 671,
+      "shortReadRejectedCount": 61,
+      "duplicateCount": 146,
+      "settledRegionCount": 74,
+      "finallySelectedCount": 1,
+      "improvedMoveCount": 0,
+      "worsenedMoveCount": 0,
+      "consecutiveSimilarGlobalPointCount": 6,
+      "synonymDuplicateWithExistingCandidateCount": 18,
+      "lateOpeningStyleLargePointCount": 31
+    },
+    "201-300": {
+      "generatedCount": 438,
+      "enteredTop10Count": 409,
+      "shortReadRejectedCount": 84,
+      "duplicateCount": 127,
+      "settledRegionCount": 118,
+      "finallySelectedCount": 0,
+      "improvedMoveCount": 0,
+      "worsenedMoveCount": 0,
+      "consecutiveSimilarGlobalPointCount": 13,
+      "synonymDuplicateWithExistingCandidateCount": 24,
+      "lateOpeningStyleLargePointCount": 42
+    }
+  },
+  "duplicateReduction": 382,
+  "settledRegionReduction": 192,
+  "lateOpeningStyleReduction": 73,
+  "improvedMoveCount": 10,
+  "worsenedMoveCount": 0,
+  "nextBottleneck": "opponent reply coverage appears to be the next strength bottleneck after whole_board_strategy phase/duplicate cleanup"
+}

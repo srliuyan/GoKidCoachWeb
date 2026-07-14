@@ -12,6 +12,7 @@ const maxStrength = require("./evaluation/run-v170-max-strength-audit.js");
 const top10Reading = require("./evaluation/run-v171-top10-reading-audit.js");
 const breadthAudit = require("./evaluation/run-v172-candidate-breadth-audit.js");
 const candidateExpansion = require("./evaluation/run-v172-candidate-expansion.js");
+const wholeBoardAbAudit = require("./evaluation/run-v173-whole-board-ab-audit.js");
 
 const root = __dirname;
 
@@ -159,6 +160,9 @@ function testDeterministicHashesRepeat() {
   const m = candidateExpansion.run();
   const n = candidateExpansion.run();
   assert.strictEqual(deterministicHash(m.summary), deterministicHash(n.summary));
+  const o = wholeBoardAbAudit.run();
+  const p = wholeBoardAbAudit.run();
+  assert.strictEqual(deterministicHash(o.summary), deterministicHash(p.summary));
 }
 
 function testReportManifestCoversCurrentReports() {
@@ -177,6 +181,9 @@ function testReportManifestCoversCurrentReports() {
     "evaluation/v172-gate-result.json",
     "evaluation/v172-opportunity-consolidation.json",
     "evaluation/v172-candidate-expansion-summary.json",
+    "evaluation/v173-whole-board-ab-audit.json",
+    "evaluation/v173-whole-board-phase-summary.json",
+    "evaluation/v173-whole-board-gate-result.json",
     "evaluation/long-game-performance-report.json",
     "evaluation/build-consistency-audit.json",
     "evaluation/export-integrity-report.json",

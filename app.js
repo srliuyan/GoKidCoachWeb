@@ -1378,6 +1378,11 @@ function maxStrengthUrgentCandidateExists(candidateMap) {
   return Array.from(candidateMap.values()).some(item => item.urgent && item.priority >= 780);
 }
 
+function wholeBoardStrategyPhaseAllowed() {
+  const moveNumber = moveHistory.length + 1;
+  return moveNumber >= 21 && moveNumber <= 120;
+}
+
 function regionForStrategicPoint(point) {
   if (point.x <= 4 && point.y <= 4) return "upper_left_corner";
   if (point.x >= 14 && point.y <= 4) return "upper_right_corner";
@@ -1390,8 +1395,18 @@ function regionForStrategicPoint(point) {
   return "center";
 }
 
+function hasEquivalentStrategicCandidate(candidateMap, point, region) {
+  return Array.from(candidateMap.values()).some(item => {
+    const existingRegion = item.primaryRegion || regionForStrategicPoint(item.point);
+    const sameRegion = existingRegion === region;
+    const nearby = pointDistance(item.point, point) <= 2;
+    const globalLike = item.global || /whole_board|invasion|reduction|large_whole_board|policy_probe|position_probe/.test(item.source || "");
+    return globalLike && (sameRegion || nearby);
+  });
+}
+
 function addMaxStrengthWholeBoardStrategyCandidates(candidateMap, color, ownGroups) {
-  if (!isMaxStrengthMode() || maxStrengthUrgentCandidateExists(candidateMap)) return;
+  if (!isMaxStrengthMode() || maxStrengthUrgentCandidateExists(candidateMap) || !wholeBoardStrategyPhaseAllowed()) return;
   const strategicPoints = [
     { point: { x: 10, y: 14 }, purpose: "develop_influence", reason: "thickness_direction_global_value", priority: 535 },
     { point: { x: 10, y: 3 }, purpose: "global_large_point", reason: "largest_open_region_global_value", priority: 526 },
@@ -1404,6 +1419,7 @@ function addMaxStrengthWholeBoardStrategyCandidates(candidateMap, color, ownGrou
     if (added >= 2) break;
     const region = regionForStrategicPoint(item.point);
     if (usedRegions.has(region)) continue;
+    if (hasEquivalentStrategicCandidate(candidateMap, item.point, region)) continue;
     const near = nearestStoneDistance(item.point);
     const stableOwnGroups = ownGroups.filter(group => group.classification !== "critical" && group.classification !== "weak").length;
     addCandidatePoint(candidateMap, item.point, "whole_board_strategy", item.priority + Math.max(0, 6 - Math.min(6, near)), color, {
