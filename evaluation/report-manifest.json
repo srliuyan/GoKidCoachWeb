@@ -520,6 +520,50 @@
       "tracked": true,
       "current": true,
       "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v174-reply5-correction-report.json",
+      "generator": "evaluation/run-v174-reply5-correction.js",
+      "command": "node evaluation/run-v174-reply5-correction.js --write-reports",
+      "purpose": "V1.7.4 conditional reply5 correction report",
+      "requiredInputs": ["evaluation/v174-gate-result.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v174-reply5-profile-comparison.json",
+      "generator": "evaluation/run-v174-reply5-correction.js",
+      "command": "node evaluation/run-v174-reply5-correction.js --write-reports",
+      "purpose": "V1.7.4 reply4 baseline versus conditional_5 versus always_reply5 profile comparison",
+      "requiredInputs": ["evaluation/v174-gate-result.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v174-reply5-before-after.json",
+      "generator": "evaluation/run-v174-reply5-correction.js",
+      "command": "node evaluation/run-v174-reply5-correction.js --write-reports",
+      "purpose": "V1.7.4 conditional reply5 before/after cases",
+      "requiredInputs": ["evaluation/v174-gate-result.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
+    },
+    {
+      "path": "evaluation/v174-reply5-gate-result.json",
+      "generator": "evaluation/run-v174-reply5-correction.js",
+      "command": "node evaluation/run-v174-reply5-correction.js --write-reports",
+      "purpose": "V1.7.4 conditional reply5 correction gate result",
+      "requiredInputs": ["evaluation/v174-gate-result.json"],
+      "deterministic": true,
+      "tracked": true,
+      "current": true,
+      "lastKnownSchemaVersion": 1
     }
   ]
 }

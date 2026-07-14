@@ -1,0 +1,22 @@
+{
+  "productVersion": "1.7.4",
+  "engineVersion": "conditional-reply5-v1",
+  "selectedProfile": "conditional_5",
+  "reason": "conditional_5 removes high-confidence reply-5 tactical misses while staying under latency gates; always_reply5 fails the p95 latency gate",
+  "triggerCategories": [
+    "immediate_recapture",
+    "stronger_atari",
+    "double_atari",
+    "cut",
+    "connection",
+    "escape",
+    "seal_or_block",
+    "counterattack",
+    "weak_group_tesuji",
+    "invasion_response",
+    "reduction_response",
+    "sente_endgame_reply"
+  ],
+  "runtimeIntegrated": true,
+  "deploymentOccurred": false
+}

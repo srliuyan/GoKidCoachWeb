@@ -53,6 +53,7 @@ function testTop4RuntimeBehaviorUnchanged() {
   assert.strictEqual(result.gate.runtimeBehaviorChanged, false);
   const source = fs.readFileSync(path.join(__dirname, "rule-engine.js"), "utf8");
   assert(source.includes("Math.min(4, Number(context.maxOpponentReplies) || 4)"));
+  assert(source.includes("conditionalReply5Reason("));
 }
 
 function testDeterministicAndCheckModeClean() {

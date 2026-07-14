@@ -1,0 +1,82 @@
+{
+  "profiles": [
+    {
+      "name": "reply4_baseline",
+      "conditionalReply5Enabled": false,
+      "alwaysReply5Enabled": false,
+      "positionsEvaluated": 4180,
+      "candidatesEvaluated": 41800,
+      "criticalFifthReplyMissCount": 24,
+      "tacticalRefutationMissCount": 22,
+      "worsenedMoveCount": 0,
+      "tacticalErrors": 0,
+      "endgameErrors": 0,
+      "benchmark": {
+        "goodOrBetterRate": 0.216,
+        "endgameGoodOrBetterRate": 0.108,
+        "averageScoreLossFromBest": 9.513055,
+        "rejectedMoveRate": 0,
+        "regressed": false
+      },
+      "latency": {
+        "averageMs": 29.84,
+        "p95Ms": 33.12,
+        "averageGrowthPct": 0,
+        "p95GrowthPct": 0
+      },
+      "gatesPassed": true
+    },
+    {
+      "name": "conditional_5",
+      "conditionalReply5Enabled": true,
+      "alwaysReply5Enabled": false,
+      "positionsEvaluated": 4180,
+      "candidatesEvaluated": 41800,
+      "criticalFifthReplyMissCount": 0,
+      "tacticalRefutationMissCount": 0,
+      "worsenedMoveCount": 0,
+      "tacticalErrors": 0,
+      "endgameErrors": 0,
+      "benchmark": {
+        "goodOrBetterRate": 0.216,
+        "endgameGoodOrBetterRate": 0.108,
+        "averageScoreLossFromBest": 9.513055,
+        "rejectedMoveRate": 0,
+        "regressed": false
+      },
+      "latency": {
+        "averageMs": 31.73,
+        "p95Ms": 35.52,
+        "averageGrowthPct": 6.334,
+        "p95GrowthPct": 7.246
+      },
+      "gatesPassed": true
+    },
+    {
+      "name": "always_reply5",
+      "conditionalReply5Enabled": false,
+      "alwaysReply5Enabled": true,
+      "positionsEvaluated": 4180,
+      "candidatesEvaluated": 41800,
+      "criticalFifthReplyMissCount": 0,
+      "tacticalRefutationMissCount": 0,
+      "worsenedMoveCount": 0,
+      "tacticalErrors": 0,
+      "endgameErrors": 0,
+      "benchmark": {
+        "goodOrBetterRate": 0.216,
+        "endgameGoodOrBetterRate": 0.108,
+        "averageScoreLossFromBest": 9.513055,
+        "rejectedMoveRate": 0,
+        "regressed": false
+      },
+      "latency": {
+        "averageMs": 32.91,
+        "p95Ms": 36.96,
+        "averageGrowthPct": 10.288,
+        "p95GrowthPct": 11.594
+      },
+      "gatesPassed": false
+    }
+  ]
+}

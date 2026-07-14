@@ -1984,6 +1984,8 @@ function chooseLocalAIMove(moves, color = aiStoneColor(), perfRecord = null) {
         maxDepth: 3,
         maxCandidates: maxMode ? 10 : 8,
         maxOpponentReplies: 4,
+        allowConditionalReply5: maxMode,
+        difficultyMode: maxMode ? maxStrengthMode : mode,
         maxAiContinuations: 3,
         localRadius: 4,
         regionCap: 48,

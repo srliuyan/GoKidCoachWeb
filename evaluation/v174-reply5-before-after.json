@@ -1,0 +1,18 @@
+{
+  "before": {
+    "profile": "reply4_baseline",
+    "criticalFifthReplyMissCount": 24,
+    "tacticalRefutationMissCount": 22,
+    "averageLatencyMs": 29.84,
+    "p95LatencyMs": 33.12
+  },
+  "after": {
+    "profile": "conditional_5",
+    "criticalFifthReplyMissCount": 0,
+    "tacticalRefutationMissCount": 0,
+    "averageLatencyMs": 31.73,
+    "p95LatencyMs": 35.52
+  },
+  "fixedCaseCount": 24,
+  "worsenedMoveCount": 0
+}
