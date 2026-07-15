@@ -73,6 +73,14 @@ input[type="url"] {
   font: inherit;
 }
 
+.mode-status {
+  margin: 8px 0 0;
+  color: #f6d98a;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 650;
+}
+
 button:active {
   transform: translateY(1px);
   opacity: 0.82;

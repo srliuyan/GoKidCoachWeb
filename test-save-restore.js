@@ -7,10 +7,12 @@ function run() {
     size: 19,
     board: Array.from({ length: 19 }, () => Array(19).fill(0)),
     moveHistory: [],
-    difficultyMode: "advanced"
+    difficultyMode: "MAX_STRENGTH_FIXED"
   });
   assert.strictEqual(snapshot.moveHistory.length, 0);
   assert.strictEqual(product.normalizeDifficultyMode(snapshot.difficultyMode), "MAX_STRENGTH_FIXED");
+  assert.strictEqual(product.normalizeSnapshot({ ...snapshot, difficultyMode: "not-real" }).difficultyMode, "adaptive");
+  assert.strictEqual(product.normalizeSnapshot({ ...snapshot, difficultyMode: 980 }).difficultyMode, "advanced");
   const summary = product.diagnosticSummary({
     difficultyMode: "MAX_STRENGTH_FIXED",
     adaptiveWeakeningEnabled: false,

@@ -26,11 +26,11 @@
   };
 
   const difficultyModes = {
-    beginner: { key: "beginner", label: "入门陪练", level: 720, targetRank: 2.4, description: "只在有意义的合法候选中放松选择。" },
-    basic: { key: "basic", label: "基础陪练", level: 840, targetRank: 1.8, description: "通常选择好棋，允许少量可接受变化。" },
-    advanced: { key: "advanced", internalMode: MAX_STRENGTH_FIXED, label: "进阶陪练", level: 980, targetRank: 1, description: "映射到固定最大棋力。" },
-    MAX_STRENGTH_FIXED: { key: MAX_STRENGTH_FIXED, label: "进阶陪练", level: 980, targetRank: 1, description: "固定选择最强合法候选，不做自适应放松。" },
-    adaptive: { key: "adaptive", label: "自适应陪练", level: 880, targetRank: 1.8, description: "根据完成的真实对局缓慢调整。" }
+    beginner: { key: "beginner", label: "🌱 入门", level: 720, targetRank: 2.4, description: "适合第一次接触围棋，AI会主动留出学习空间。" },
+    basic: { key: "basic", label: "📘 基础", level: 840, targetRank: 1.8, description: "适合已经掌握基本规则，AI会进行基础攻防。" },
+    advanced: { key: "advanced", label: "⚔️ 进阶", level: 980, targetRank: 1.2, description: "适合能够独立完成对局，AI使用更完整的候选和攻防判断。" },
+    adaptive: { key: "adaptive", label: "🤖 自适应陪练", level: 880, targetRank: 1.8, description: "根据孩子表现平滑调整难度，保持略强于孩子。" },
+    MAX_STRENGTH_FIXED: { key: MAX_STRENGTH_FIXED, label: "👑 职业模式（最高棋力）", level: 980, targetRank: 1, description: "固定使用当前引擎最高能力，不根据孩子水平放水。" }
   };
 
   function clamp(value, min, max) {
@@ -38,12 +38,14 @@
   }
 
   function normalizeDifficultyMode(value) {
-    if (value === "advanced" || value === MAX_STRENGTH_FIXED || value === "max_strength_fixed") return MAX_STRENGTH_FIXED;
+    if (value === MAX_STRENGTH_FIXED || value === "max_strength_fixed") return MAX_STRENGTH_FIXED;
+    if (value === "easy") return "basic";
+    if (value === "hard") return "advanced";
     if (difficultyModes[value]) return value;
     const numeric = Number(value);
     if (numeric <= 760) return "beginner";
     if (numeric <= 900) return "basic";
-    if (numeric <= 980) return MAX_STRENGTH_FIXED;
+    if (numeric <= 980) return "advanced";
     return "adaptive";
   }
 
@@ -159,8 +161,10 @@
       ...snapshot,
       moveHistory: moveHistory.map(item => ({ ...item })),
       actualMoveCount: moveHistory.length,
+      difficultyMode: normalizeDifficultyMode(snapshot.difficultyMode),
       buildId: snapshot.buildId || buildInfo.buildId,
       appVersion: snapshot.appVersion || appVersion,
+      productVersion: snapshot.productVersion || buildInfo.productVersion,
       engineVersion: snapshot.engineVersion || engineVersion,
       schemaVersion: snapshot.schemaVersion || buildInfo.schemaVersion
     };
@@ -221,6 +225,7 @@
       `difficultyStart=${difficultyStart}`,
       `difficultyEnd=${difficultyEnd}`,
       `appVersion=${appVersion}`,
+      `productVersion=${buildInfo.productVersion}`,
       `engineVersion=${engineVersion}`,
       `buildId=${buildId}`,
       `moveCount=${moveHistory.length}`
@@ -322,6 +327,9 @@
       randomSofteningEnabled: Boolean(input.randomSofteningEnabled),
       selectedCandidateFinalRank: Number(input.selectedCandidateFinalRank) || 0,
       selectedCandidateTier: input.selectedCandidateTier || "",
+      localReadingCandidateCap: Number(input.localReadingCandidateCap) || 0,
+      opponentReplyMode: input.opponentReplyMode || "",
+      effectiveOpponentReplyCap: Number(input.effectiveOpponentReplyCap) || 0,
       appCrashRecoveryFlag: Boolean(input.appCrashRecoveryFlag)
     };
   }

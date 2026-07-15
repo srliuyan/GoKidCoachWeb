@@ -84,17 +84,29 @@ function withTempDir(fn) {
   }
 }
 
+function withQuietConsole(fn) {
+  const originalLog = console.log;
+  try {
+    console.log = () => {};
+    return fn();
+  } finally {
+    console.log = originalLog;
+  }
+}
+
 function testCheckModeDoesNotChangeTrackedFiles() {
   const before = trackedHashes();
-  stress.run({ seed: 20260713, positions: 800 });
-  endgame.run({ seed: 20260713, positions: 300 });
-  senteGote.run({ seed: 20260713, positions: 300, runtimeIntegrated: true });
+  withQuietConsole(() => {
+    stress.run({ seed: 20260713, positions: 800 });
+    endgame.run({ seed: 20260713, positions: 300 });
+    senteGote.run({ seed: 20260713, positions: 300, runtimeIntegrated: true });
+  });
   assertHashesUnchanged(before, "runner check mode");
 }
 
 function testReportModeWritesOnlyExpectedFiles() {
   withTempDir(dir => {
-    stress.run({ seed: 20260713, positions: 800, writeReports: true, outputDir: dir });
+    withQuietConsole(() => stress.run({ seed: 20260713, positions: 800, writeReports: true, outputDir: dir }));
     assert.deepStrictEqual(filesUnder(dir), [
       "v16-bad-move-cases.json",
       "v16-before-after-cases.json",
@@ -114,7 +126,7 @@ function testReportModeWritesOnlyExpectedFiles() {
     ]);
   });
   withTempDir(dir => {
-    endgame.run({ seed: 20260713, positions: 300, writeReports: true, outputDir: dir });
+    withQuietConsole(() => endgame.run({ seed: 20260713, positions: 300, writeReports: true, outputDir: dir }));
     assert.deepStrictEqual(filesUnder(dir), [
       "v161-before-after-cases.json",
       "v161-correction-report.json",
@@ -129,7 +141,7 @@ function testReportModeWritesOnlyExpectedFiles() {
     ]);
   });
   withTempDir(dir => {
-    senteGote.run({ seed: 20260713, positions: 300, runtimeIntegrated: true, writeReports: true, outputDir: dir });
+    withQuietConsole(() => senteGote.run({ seed: 20260713, positions: 300, runtimeIntegrated: true, writeReports: true, outputDir: dir }));
     assert.deepStrictEqual(filesUnder(dir), [
       "v162-before-after-cases.json",
       "v162-correction-report.json",
@@ -141,36 +153,38 @@ function testReportModeWritesOnlyExpectedFiles() {
 }
 
 function testDeterministicHashesRepeat() {
-  const a = stress.run({ seed: 20260713, positions: 800 });
-  const b = stress.run({ seed: 20260713, positions: 800 });
-  assert.strictEqual(deterministicHash(a.summary), deterministicHash(b.summary));
-  const c = endgame.run({ seed: 20260713, positions: 300 });
-  const d = endgame.run({ seed: 20260713, positions: 300 });
-  assert.strictEqual(deterministicHash(c.summary), deterministicHash(d.summary));
-  const e = senteGote.run({ seed: 20260713, positions: 300, runtimeIntegrated: true });
-  const f = senteGote.run({ seed: 20260713, positions: 300, runtimeIntegrated: true });
-  assert.strictEqual(deterministicHash(e.profiles), deterministicHash(f.profiles));
-  const g = maxStrength.run({ seed: 20260713, selfPlayGames: 100 });
-  const h = maxStrength.run({ seed: 20260713, selfPlayGames: 100 });
-  assert.strictEqual(deterministicHash(g.summary), deterministicHash(h.summary));
-  const i = top10Reading.run({ seed: 20260713, selfPlayGames: 100 });
-  const j = top10Reading.run({ seed: 20260713, selfPlayGames: 100 });
-  assert.strictEqual(deterministicHash(i.summary), deterministicHash(j.summary));
-  const k = breadthAudit.run({ seed: 20260714 });
-  const l = breadthAudit.run({ seed: 20260714 });
-  assert.strictEqual(deterministicHash(k.summary), deterministicHash(l.summary));
-  const m = candidateExpansion.run();
-  const n = candidateExpansion.run();
-  assert.strictEqual(deterministicHash(m.summary), deterministicHash(n.summary));
-  const o = wholeBoardAbAudit.run();
-  const p = wholeBoardAbAudit.run();
-  assert.strictEqual(deterministicHash(o.summary), deterministicHash(p.summary));
-  const q = opponentReplyAudit.run();
-  const r = opponentReplyAudit.run();
-  assert.strictEqual(deterministicHash(q.summary), deterministicHash(r.summary));
-  const s = reply5Correction.run();
-  const t = reply5Correction.run();
-  assert.strictEqual(deterministicHash(s.summary), deterministicHash(t.summary));
+  withQuietConsole(() => {
+    const a = stress.run({ seed: 20260713, positions: 800 });
+    const b = stress.run({ seed: 20260713, positions: 800 });
+    assert.strictEqual(deterministicHash(a.summary), deterministicHash(b.summary));
+    const c = endgame.run({ seed: 20260713, positions: 300 });
+    const d = endgame.run({ seed: 20260713, positions: 300 });
+    assert.strictEqual(deterministicHash(c.summary), deterministicHash(d.summary));
+    const e = senteGote.run({ seed: 20260713, positions: 300, runtimeIntegrated: true });
+    const f = senteGote.run({ seed: 20260713, positions: 300, runtimeIntegrated: true });
+    assert.strictEqual(deterministicHash(e.profiles), deterministicHash(f.profiles));
+    const g = maxStrength.run({ seed: 20260713, selfPlayGames: 100 });
+    const h = maxStrength.run({ seed: 20260713, selfPlayGames: 100 });
+    assert.strictEqual(deterministicHash(g.summary), deterministicHash(h.summary));
+    const i = top10Reading.run({ seed: 20260713, selfPlayGames: 100 });
+    const j = top10Reading.run({ seed: 20260713, selfPlayGames: 100 });
+    assert.strictEqual(deterministicHash(i.summary), deterministicHash(j.summary));
+    const k = breadthAudit.run({ seed: 20260714 });
+    const l = breadthAudit.run({ seed: 20260714 });
+    assert.strictEqual(deterministicHash(k.summary), deterministicHash(l.summary));
+    const m = candidateExpansion.run();
+    const n = candidateExpansion.run();
+    assert.strictEqual(deterministicHash(m.summary), deterministicHash(n.summary));
+    const o = wholeBoardAbAudit.run();
+    const p = wholeBoardAbAudit.run();
+    assert.strictEqual(deterministicHash(o.summary), deterministicHash(p.summary));
+    const q = opponentReplyAudit.run();
+    const r = opponentReplyAudit.run();
+    assert.strictEqual(deterministicHash(q.summary), deterministicHash(r.summary));
+    const s = reply5Correction.run();
+    const t = reply5Correction.run();
+    assert.strictEqual(deterministicHash(s.summary), deterministicHash(t.summary));
+  });
 }
 
 function testReportManifestCoversCurrentReports() {
@@ -221,12 +235,19 @@ function testCiUsesCheckModeAndDeploymentExcludesEvaluation() {
 function testFullLoopDoesNotChangeTrackedFiles() {
   if (process.env.GOKIDCOACH_ARTIFACT_INTEGRITY_CHILD === "1") return;
   const before = trackedHashes();
-  const command = "for f in test-*.js; do GOKIDCOACH_ARTIFACT_INTEGRITY_CHILD=1 node \"$f\" || exit 1; done";
-  childProcess.execFileSync("bash", ["-lc", command], {
-    cwd: root,
-    env: { ...process.env, GOKIDCOACH_ARTIFACT_INTEGRITY_CHILD: "1" },
-    stdio: "ignore"
-  });
+  const testFiles = fs.readdirSync(root)
+    .filter(file => /^test-.*\.js$/.test(file))
+    .sort();
+  for (const file of testFiles) {
+    const child = childProcess.spawnSync(process.execPath, [file], {
+      cwd: root,
+      env: { ...process.env, GOKIDCOACH_ARTIFACT_INTEGRITY_CHILD: "1" },
+      stdio: "ignore"
+    });
+    assert.ifError(child.error);
+    assert.strictEqual(child.signal, null, `${file} terminated by ${child.signal}`);
+    assert.strictEqual(child.status, 0, `${file} exited ${child.status}`);
+  }
   assertHashesUnchanged(before, "normal full test loop");
 }
 
@@ -235,13 +256,39 @@ function run() {
     console.log("test-test-artifact-integrity: child skip");
     return;
   }
+  if (process.env.GOKIDCOACH_ARTIFACT_INTEGRITY_WORKER !== "1") {
+    const worker = childProcess.spawn(process.execPath, [__filename], {
+      cwd: root,
+      env: { ...process.env, GOKIDCOACH_ARTIFACT_INTEGRITY_WORKER: "1" },
+      stdio: "ignore"
+    });
+    const heartbeat = setInterval(() => process.stdout.write("."), 30000);
+    worker.on("error", error => {
+      clearInterval(heartbeat);
+      console.error(error);
+      process.exit(1);
+    });
+    worker.on("exit", (code, signal) => {
+      clearInterval(heartbeat);
+      if (signal) {
+        console.error(`artifact worker terminated by ${signal}`);
+        process.exit(1);
+      }
+      if (code !== 0) {
+        console.error(`artifact worker exited ${code}`);
+        process.exit(code || 1);
+      }
+      console.log("\ntest-test-artifact-integrity: ok");
+      process.exit(0);
+    });
+    return;
+  }
   testCheckModeDoesNotChangeTrackedFiles();
   testReportModeWritesOnlyExpectedFiles();
   testDeterministicHashesRepeat();
   testReportManifestCoversCurrentReports();
   testCiUsesCheckModeAndDeploymentExcludesEvaluation();
   testFullLoopDoesNotChangeTrackedFiles();
-  console.log("test-test-artifact-integrity: ok");
 }
 
 run();

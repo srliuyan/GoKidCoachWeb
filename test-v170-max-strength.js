@@ -46,10 +46,12 @@ function context(overrides = {}) {
 }
 
 function testMappingAndFlags() {
-  assert.strictEqual(product.normalizeDifficultyMode("advanced"), "MAX_STRENGTH_FIXED");
-  assert.strictEqual(product.normalizeDifficultyMode(980), "MAX_STRENGTH_FIXED");
+  assert.strictEqual(product.normalizeDifficultyMode("advanced"), "advanced");
+  assert.strictEqual(product.normalizeDifficultyMode(980), "advanced");
+  assert.strictEqual(product.normalizeDifficultyMode("MAX_STRENGTH_FIXED"), "MAX_STRENGTH_FIXED");
   assert.strictEqual(product.difficultyModeConfig("advanced").level, 980);
-  assert.strictEqual(product.isMaxStrengthMode("advanced"), true);
+  assert.strictEqual(product.isMaxStrengthMode("advanced"), false);
+  assert.strictEqual(product.isMaxStrengthMode("MAX_STRENGTH_FIXED"), true);
   const summary = product.diagnosticSummary({
     difficultyMode: "MAX_STRENGTH_FIXED",
     adaptiveWeakeningEnabled: false,

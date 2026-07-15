@@ -1,5 +1,11 @@
 # GoKidCoach V1.0 Known Engine Limitations
 
+## V1.7.4.1 Notes
+
+- `职业模式（最高棋力）` is a product mode name. It means the app uses the current local engine's fixed maximum-strength path; it is not a claim of professional human strength.
+- V1.7.4.1 exposes an existing internal mode and updates release metadata. It does not add new chess-strength logic or change the benchmark baseline.
+- Adaptive companion mode remains the recommended default for normal child practice.
+
 ## V1.6.3 Stable Notes
 
 - V1.6.3 is the stable promotion of the validated V1.6.3-rc1 state.

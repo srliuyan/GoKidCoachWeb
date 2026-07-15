@@ -1,5 +1,18 @@
 # GoKidCoach Engine Freeze
 
+## V1.7.4.1 Release Alignment and Difficulty UI Patch
+
+- Product version: `1.7.4.1`
+- Engine version: `conditional-reply5-v1`
+- Freeze date: 2026-07-15
+- Build id: `gokidcoach-1.7.4.1-conditional-reply5-v1-20260715-1741`
+- Runtime baseline update: no benchmark baseline update
+- Deployment: release alignment patch
+
+V1.7.4.1 aligns formal release metadata with the validated production fixes at `ba834f53acd462ba12e40448f7c5969fd999d08f`, preserves the GitHub Pages exclusion fix and maximum-mode context fix, and exposes the already implemented `MAX_STRENGTH_FIXED` mode as `👑 职业模式（最高棋力）`.
+
+This patch does not add candidate generation, scoring, search, depth, reply-generation, AI continuation, final-selector, whole-board strategy, benchmark baseline, MCTS, neural, backend or KataGo changes.
+
 ## V1.6.3 Stable Coherent Stress-Hardened Release
 
 - Product version: `1.6.3`

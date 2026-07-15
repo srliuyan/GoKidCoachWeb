@@ -29,18 +29,21 @@ function makeCandidate(point, overrides = {}) {
 }
 
 function testDifficultyModes() {
-  assert.deepStrictEqual(Object.keys(product.difficultyModes), ["beginner", "basic", "advanced", "MAX_STRENGTH_FIXED", "adaptive"]);
-  assert.strictEqual(product.difficultyModeConfig("beginner").label, "入门陪练");
+  assert.deepStrictEqual(Object.keys(product.difficultyModes), ["beginner", "basic", "advanced", "adaptive", "MAX_STRENGTH_FIXED"]);
+  assert.strictEqual(product.difficultyModeConfig("beginner").label, "🌱 入门");
   assert.strictEqual(product.difficultyModeConfig("beginner").level, 720);
   assert.strictEqual(product.difficultyModeConfig("basic").level, 840);
   assert.strictEqual(product.difficultyModeConfig("advanced").level, 980);
-  assert.strictEqual(product.difficultyModeConfig("advanced").key, "MAX_STRENGTH_FIXED");
+  assert.strictEqual(product.difficultyModeConfig("advanced").key, "advanced");
+  assert.strictEqual(product.difficultyModeConfig("MAX_STRENGTH_FIXED").key, "MAX_STRENGTH_FIXED");
   assert.strictEqual(product.normalizeDifficultyMode(640), "beginner");
   assert.strictEqual(product.normalizeDifficultyMode(840), "basic");
-  assert.strictEqual(product.normalizeDifficultyMode(980), "MAX_STRENGTH_FIXED");
-  assert.strictEqual(product.normalizeDifficultyMode("advanced"), "MAX_STRENGTH_FIXED");
-  assert.strictEqual(product.isMaxStrengthMode("advanced"), true);
+  assert.strictEqual(product.normalizeDifficultyMode(980), "advanced");
+  assert.strictEqual(product.normalizeDifficultyMode("advanced"), "advanced");
+  assert.strictEqual(product.isMaxStrengthMode("advanced"), false);
+  assert.strictEqual(product.isMaxStrengthMode("MAX_STRENGTH_FIXED"), true);
   assert.strictEqual(product.normalizeDifficultyMode("adaptive"), "adaptive");
+  assert.strictEqual(product.normalizeDifficultyMode("unknown"), "adaptive");
 }
 
 function testAdaptiveBounded() {
@@ -103,6 +106,7 @@ function testSgfExportRoundTrip() {
     difficultyEnd: 764,
     date: new Date("2026-07-13T00:00:00Z")
   });
+  assert(sgf.includes("productVersion=1.7.4.1"));
   for (const token of ["GM[1]", "FF[4]", "CA[UTF-8]", "SZ[19]", "DT[2026-07-13]", "AP[GoKidCoachWeb:"]) {
     assert(sgf.includes(token), token);
   }
@@ -139,6 +143,25 @@ function testSnapshotValidationAndDiagnostics() {
   assert.strictEqual(summary.restoreCount, 1);
   assert.strictEqual(summary.adaptiveWeakeningEnabled, false);
   assert.strictEqual(summary.randomSofteningEnabled, false);
+}
+
+function testMaxDebugFields() {
+  const summary = product.diagnosticSummary({
+    difficultyMode: "MAX_STRENGTH_FIXED",
+    adaptiveWeakeningEnabled: false,
+    randomSofteningEnabled: false,
+    selectedCandidateFinalRank: 1,
+    selectedCandidateTier: "bestMove",
+    localReadingCandidateCap: 10,
+    opponentReplyMode: "conditional_5",
+    effectiveOpponentReplyCap: 5
+  });
+  assert.strictEqual(summary.difficultyMode, "MAX_STRENGTH_FIXED");
+  assert.strictEqual(summary.adaptiveWeakeningEnabled, false);
+  assert.strictEqual(summary.randomSofteningEnabled, false);
+  assert.strictEqual(summary.localReadingCandidateCap, 10);
+  assert.strictEqual(summary.opponentReplyMode, "conditional_5");
+  assert.strictEqual(summary.effectiveOpponentReplyCap, 5);
 }
 
 function testCompleteGameSimulationStable() {
@@ -188,6 +211,7 @@ function run() {
   testRuleFlowBasics();
   testSgfExportRoundTrip();
   testSnapshotValidationAndDiagnostics();
+  testMaxDebugFields();
   testCompleteGameSimulationStable();
   testPwaAssetsAndEvaluationExclusion();
   testFrozenEngineAndShallowVerifierActive();

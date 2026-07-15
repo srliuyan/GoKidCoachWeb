@@ -21,7 +21,7 @@
   }
 
   function isMaxStrengthMode(mode) {
-    return mode === "MAX_STRENGTH_FIXED" || mode === "advanced";
+    return mode === "MAX_STRENGTH_FIXED";
   }
 
   function candidatePoint(candidate) {

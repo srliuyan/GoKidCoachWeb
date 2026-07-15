@@ -1,0 +1,47 @@
+{
+  "audit": "v1741-release-delta-audit",
+  "generatedAt": "2026-07-15T00:00:00Z",
+  "baseTag": "v1.7.4",
+  "baseCommit": "a10578aac118cc4e3ae3f5c110da01b7732f3620",
+  "deployedProductionCommit": "ba834f53acd462ba12e40448f7c5969fd999d08f",
+  "range": "a10578aac118cc4e3ae3f5c110da01b7732f3620..ba834f53acd462ba12e40448f7c5969fd999d08f",
+  "changedFiles": [
+    {
+      "path": "_config.yml",
+      "status": "modified",
+      "classification": "Pages exclusion fix",
+      "summary": "Adds test and development artifacts to GitHub Pages exclusions.",
+      "engineStrengthImpact": "none"
+    },
+    {
+      "path": "app.js",
+      "status": "modified",
+      "classification": "maximum-mode context fix",
+      "summary": "Passes normalized non-MAX difficulty mode into local reading context while preserving MAX_STRENGTH_FIXED for maximum mode.",
+      "engineStrengthImpact": "mode-context only; no candidate generation, search depth, scoring weight, reply cap or selector change"
+    }
+  ],
+  "classifiedCounts": {
+    "Pages exclusion fix": 1,
+    "maximum-mode context fix": 1,
+    "deployment metadata": 0,
+    "test-only": 0,
+    "unrelated": 0,
+    "uncertain": 0
+  },
+  "strengthChangeAudit": {
+    "unapprovedEngineStrengthChange": false,
+    "scoringSearchCandidateChange": false,
+    "benchmarkBaselineChange": false,
+    "candidateGenerationChange": false,
+    "top10ReadingChange": false,
+    "depth3Change": false,
+    "conditionalReply5ThresholdChange": false,
+    "aiContinuationCountChange": false,
+    "scoringWeightsChange": false,
+    "finalSelectorGuardChange": false,
+    "wholeBoardStrategyChange": false
+  },
+  "canonicalReportsRewritten": false,
+  "result": "deployed delta fully explained"
+}

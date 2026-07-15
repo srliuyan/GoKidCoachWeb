@@ -11,6 +11,8 @@ exclude:
   - "README.md"
   - "REAL-PLAY-QA.md"
   - "RELEASE-CHECKLIST.md"
+  - "RELEASE-CHECKLIST-V1.6.3.md"
+  - "RELEASE-CHECKLIST-V1.7.4.1.md"
   - "evaluation/"
   - "release/"
   - "screenshots/"

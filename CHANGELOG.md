@@ -1,5 +1,13 @@
 # Changelog
 
+## V1.7.4.1 Release Alignment and Difficulty UI Patch - 2026-07-15
+
+- Aligned release metadata to productVersion `1.7.4.1`, engineVersion `conditional-reply5-v1`, buildId `gokidcoach-1.7.4.1-conditional-reply5-v1-20260715-1741`.
+- Preserved the validated Pages exclusion fix and maximum-mode context fix already deployed at `ba834f53acd462ba12e40448f7c5969fd999d08f`.
+- Replaced the visible difficulty menu with five modes: `🌱 入门`, `📘 基础`, `⚔️ 进阶`, `🤖 自适应陪练`, `👑 职业模式（最高棋力）`.
+- Exposed the already implemented `MAX_STRENGTH_FIXED` mode through `👑 职业模式（最高棋力）`; no new strength algorithm was added.
+- Kept candidate generation, top-10 MAX reading, depth 3, conditional reply-5 gates, AI continuation count, scoring weights, final selector guard, whole-board strategy and benchmark baseline unchanged.
+
 ## V1.6.3 Stable Release - 2026-07-14
 
 - Promoted the validated V1.6.3-rc1 state to final productVersion `1.6.3`, engineVersion `coherent-stress-hardened-v1`, buildId `gokidcoach-1.6.3-coherent-stress-hardened-v1-20260714-final`.
