@@ -1,0 +1,825 @@
+{
+  "schema": "gokidcoach-v303-katago-position-fixtures",
+  "fixtureCount": 30,
+  "fixtures": [
+    {
+      "id": "v303-01-empty_board",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Chinese",
+      "komi": 7.5,
+      "moves": [],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "empty_board",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "f393d268ef4cb18c0c8a88365f0df67bbaa3fa08cb1ad895d6aaae3582c9e110"
+    },
+    {
+      "id": "v303-02-standard_opening_1",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Japanese",
+      "komi": 6.5,
+      "moves": [
+        "B D4",
+        "W Q16",
+        "B Q4",
+        "W D16"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "standard_opening_1",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "02d0503b36af56c81c5fbd1b87ff735fdc211b54e2c39266660b36604a943409"
+    },
+    {
+      "id": "v303-03-corner_contact",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Chinese",
+      "komi": 0.5,
+      "moves": [
+        "B D4",
+        "W E4",
+        "B D5",
+        "W C4"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "corner_contact",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "fde41d0ddf5364d604753b8e9585919f41d5a6d8cf44fcce526e6b08e60d0f77"
+    },
+    {
+      "id": "v303-04-simple_capture",
+      "boardSize": 19,
+      "sideToMove": "W",
+      "rules": "Japanese",
+      "komi": 7.5,
+      "moves": [
+        "B D4",
+        "W E4",
+        "B E3",
+        "W Q16",
+        "B E5",
+        "W Q4",
+        "B F4"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "simple_capture",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "4a901d3cd32a61ecf518c54bce2d92a9ea2944594b05efff42afca7057284907"
+    },
+    {
+      "id": "v303-05-self_atari_context",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Chinese",
+      "komi": 6.5,
+      "moves": [
+        "B C3",
+        "W C4",
+        "B D4",
+        "W D3",
+        "B Q16",
+        "W C2"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "self_atari_context",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "095ae91669152578912b828eec45425136d1a173e2a172767d3c87db1c83f95c"
+    },
+    {
+      "id": "v303-06-ko_shape",
+      "boardSize": 19,
+      "sideToMove": "W",
+      "rules": "Japanese",
+      "komi": 0.5,
+      "moves": [
+        "B D4",
+        "W E4",
+        "B E3",
+        "W D5",
+        "B C4",
+        "W F3",
+        "B E5",
+        "W D3",
+        "B C5"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "ko_shape",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "a3e08f33fe6f458ebeb480757f4ddc3b8fffbcc9e638fc96c24b6871f3a4872b"
+    },
+    {
+      "id": "v303-07-ladder_like",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Chinese",
+      "komi": 7.5,
+      "moves": [
+        "B D4",
+        "W E4",
+        "B F4",
+        "W E5",
+        "B F6",
+        "W G6",
+        "B H6",
+        "W G7"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "ladder_like",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "ae0271c04586b8e0c8d1e860e71cae06aa83033b0564cbf7334a6144eb89710b"
+    },
+    {
+      "id": "v303-08-weak_group",
+      "boardSize": 19,
+      "sideToMove": "W",
+      "rules": "Japanese",
+      "komi": 6.5,
+      "moves": [
+        "B K10",
+        "W K11",
+        "B L11",
+        "W J10",
+        "B J9",
+        "W K9",
+        "B L9"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "weak_group",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "5a59220f34490c6392a207d55d5cad5ab81f97cf39d9ad1e7cf8095f8cc8f300"
+    },
+    {
+      "id": "v303-09-escape",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Chinese",
+      "komi": 0.5,
+      "moves": [
+        "B K10",
+        "W K11",
+        "B L11",
+        "W J10",
+        "B J9",
+        "W K9",
+        "B L9",
+        "W K8"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "escape",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "312f4ecaa93ad9cd0e9f35ee350104bb8bad7b1860ee41047be23658e4e1f215"
+    },
+    {
+      "id": "v303-10-connection",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Japanese",
+      "komi": 7.5,
+      "moves": [
+        "B D4",
+        "B F4",
+        "W E4",
+        "W E5",
+        "B Q16",
+        "W D16"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "connection",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "96bba9836195a065e12a250d1eb32af6ecf77cf06cf6bc38ffb0981840f83309"
+    },
+    {
+      "id": "v303-11-cut",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Chinese",
+      "komi": 6.5,
+      "moves": [
+        "B D4",
+        "W E4",
+        "B F4",
+        "W E5",
+        "B Q16",
+        "W Q4"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "cut",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "d54e0280805512f207d7de144d86799624b076e3bd94210f21ac74259b09e57a"
+    },
+    {
+      "id": "v303-12-counterattack",
+      "boardSize": 19,
+      "sideToMove": "W",
+      "rules": "Japanese",
+      "komi": 0.5,
+      "moves": [
+        "B K10",
+        "W K11",
+        "B L11",
+        "W J10",
+        "B D4",
+        "W Q16",
+        "B J9"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "counterattack",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "0430da10f910faba5e3b50c4ae26845e7716cb2d5b7d4e4cce053451993f70c7"
+    },
+    {
+      "id": "v303-13-large_framework",
+      "boardSize": 19,
+      "sideToMove": "W",
+      "rules": "Chinese",
+      "komi": 7.5,
+      "moves": [
+        "B D4",
+        "B Q4",
+        "B K10",
+        "W D16",
+        "W Q16"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "large_framework",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "a888a78dfdebd7697ee2b4cd02dc3e11d3bf74da5d5550acd5134026c314733f"
+    },
+    {
+      "id": "v303-14-late_middlegame",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Japanese",
+      "komi": 6.5,
+      "moves": [
+        "B D4",
+        "W Q16",
+        "B Q4",
+        "W D16",
+        "B K10",
+        "W C10",
+        "B R10",
+        "W K3",
+        "B K17",
+        "W F4",
+        "B F16",
+        "W Q10"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "late_middlegame",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "4a8fab8428e203e38231ca57b1aae75eac980ea4e3cf18e1e05749fbcd6f2502"
+    },
+    {
+      "id": "v303-15-endgame_edge",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Chinese",
+      "komi": 0.5,
+      "moves": [
+        "B A2",
+        "W B2",
+        "B A3",
+        "W B3",
+        "B C2",
+        "W C3",
+        "B Q16",
+        "W D4"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "endgame_edge",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "d417cb1df7e3e0b7d136c444167cf76262928bc0ef76ae4dde5999074cb362e4"
+    },
+    {
+      "id": "v303-16-pass_sensitive",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Japanese",
+      "komi": 7.5,
+      "moves": [
+        "B D4",
+        "W Q16",
+        "B pass",
+        "W D16",
+        "B Q4"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "pass_sensitive",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "c06b225395742348815b2aa4ec2197715aa363de7ca85080bbc72e785f05cf3f"
+    },
+    {
+      "id": "v303-17-empty_board",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Chinese",
+      "komi": 6.5,
+      "moves": [],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "empty_board",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "6970da52d47bbf8eba4c387140b2562c79f159e1f1b62a98c83939cf24192a13"
+    },
+    {
+      "id": "v303-18-standard_opening_1",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Japanese",
+      "komi": 0.5,
+      "moves": [
+        "B D4",
+        "W Q16",
+        "B Q4",
+        "W D16"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "standard_opening_1",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "49bac9db0b8033f142ffbbe5bc8d46ce7711b761c829949c8e4c3612a1d95b15"
+    },
+    {
+      "id": "v303-19-corner_contact",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Chinese",
+      "komi": 7.5,
+      "moves": [
+        "B D4",
+        "W E4",
+        "B D5",
+        "W C4"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "corner_contact",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "40e06f113ab02885113115101c92a7ef0f2156866c36699952e931b98d9c6ced"
+    },
+    {
+      "id": "v303-20-simple_capture",
+      "boardSize": 19,
+      "sideToMove": "W",
+      "rules": "Japanese",
+      "komi": 6.5,
+      "moves": [
+        "B D4",
+        "W E4",
+        "B E3",
+        "W Q16",
+        "B E5",
+        "W Q4",
+        "B F4"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "simple_capture",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "da8263db3814ffda5936981360c293bd1022e0a0b757b720865a39c79bf07b56"
+    },
+    {
+      "id": "v303-21-self_atari_context",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Chinese",
+      "komi": 0.5,
+      "moves": [
+        "B C3",
+        "W C4",
+        "B D4",
+        "W D3",
+        "B Q16",
+        "W C2"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "self_atari_context",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "21bb73b150a4adefa55b907f55a5c7fbb270a3969c64d28499927d47f8fb8f00"
+    },
+    {
+      "id": "v303-22-ko_shape",
+      "boardSize": 19,
+      "sideToMove": "W",
+      "rules": "Japanese",
+      "komi": 7.5,
+      "moves": [
+        "B D4",
+        "W E4",
+        "B E3",
+        "W D5",
+        "B C4",
+        "W F3",
+        "B E5",
+        "W D3",
+        "B C5"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "ko_shape",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "6bc87f6053850859234befc20797b347c8f8f06092b7983d4808f547eaf6a9c2"
+    },
+    {
+      "id": "v303-23-ladder_like",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Chinese",
+      "komi": 6.5,
+      "moves": [
+        "B D4",
+        "W E4",
+        "B F4",
+        "W E5",
+        "B F6",
+        "W G6",
+        "B H6",
+        "W G7"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "ladder_like",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "0c7e3541a5a2ad23ab7937bb5b6befb5ff7055ee716ef2296393755f79a50bc6"
+    },
+    {
+      "id": "v303-24-weak_group",
+      "boardSize": 19,
+      "sideToMove": "W",
+      "rules": "Japanese",
+      "komi": 0.5,
+      "moves": [
+        "B K10",
+        "W K11",
+        "B L11",
+        "W J10",
+        "B J9",
+        "W K9",
+        "B L9"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "weak_group",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "c8a63c72bbba1085b96395638f5a7e60863aaee25cb19db44b21dfed63c15bd0"
+    },
+    {
+      "id": "v303-25-escape",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Chinese",
+      "komi": 7.5,
+      "moves": [
+        "B K10",
+        "W K11",
+        "B L11",
+        "W J10",
+        "B J9",
+        "W K9",
+        "B L9",
+        "W K8"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "escape",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "62221d3cea451df15e4fb7484601265bf6f8e6ebc61eb88e0d802a9220341d45"
+    },
+    {
+      "id": "v303-26-connection",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Japanese",
+      "komi": 6.5,
+      "moves": [
+        "B D4",
+        "B F4",
+        "W E4",
+        "W E5",
+        "B Q16",
+        "W D16"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "connection",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "fcad512c4a7661e774d971ce6d42511bc552b3fa3d910e750871a267b2e370e8"
+    },
+    {
+      "id": "v303-27-cut",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Chinese",
+      "komi": 0.5,
+      "moves": [
+        "B D4",
+        "W E4",
+        "B F4",
+        "W E5",
+        "B Q16",
+        "W Q4"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "cut",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "0d3a9cfa89df21e5f98531557e5183af8d79ab91c0a7064a41d81247eaeda4da"
+    },
+    {
+      "id": "v303-28-counterattack",
+      "boardSize": 19,
+      "sideToMove": "W",
+      "rules": "Japanese",
+      "komi": 7.5,
+      "moves": [
+        "B K10",
+        "W K11",
+        "B L11",
+        "W J10",
+        "B D4",
+        "W Q16",
+        "B J9"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "counterattack",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "bd8ea4d49fc5f00494b98e31cfe5bafcf2f425a3570d1d69b600c9293ba31a5b"
+    },
+    {
+      "id": "v303-29-large_framework",
+      "boardSize": 19,
+      "sideToMove": "W",
+      "rules": "Chinese",
+      "komi": 6.5,
+      "moves": [
+        "B D4",
+        "B Q4",
+        "B K10",
+        "W D16",
+        "W Q16"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "large_framework",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "f51b874799ca53e8659d78ec233f2c825229a3d9c5cb3cb618611405df926455"
+    },
+    {
+      "id": "v303-30-late_middlegame",
+      "boardSize": 19,
+      "sideToMove": "B",
+      "rules": "Japanese",
+      "komi": 0.5,
+      "moves": [
+        "B D4",
+        "W Q16",
+        "B Q4",
+        "W D16",
+        "B K10",
+        "W C10",
+        "B R10",
+        "W K3",
+        "B K17",
+        "W F4",
+        "B F16",
+        "W Q10"
+      ],
+      "expectedLegalMoves": [
+        "pass",
+        "D4",
+        "Q16",
+        "K10"
+      ],
+      "tags": [
+        "late_middlegame",
+        "deterministic",
+        "non_private"
+      ],
+      "fixtureHash": "50a64a999308dca5d4c15c0c0efbba7e35ef31bb69a93a9182bec7127c9e5bbb"
+    }
+  ]
+}

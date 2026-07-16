@@ -136,6 +136,7 @@ def main(argv=None):
   parser.add_argument("--expected-sha256")
   parser.add_argument("--manifest-out", type=Path)
   parser.add_argument("--opset", type=int, default=17)
+  parser.add_argument("--katago-source", type=Path)
   args = parser.parse_args(argv)
 
   started_at = time.time()
@@ -151,6 +152,25 @@ def main(argv=None):
       raise RuntimeError(f"unsupported KataGo text model version: {structure['modelVersion']}")
     if structure["boardSize"] != args.board_size:
       raise RuntimeError(f"model board size {structure['boardSize']} does not match requested {args.board_size}")
+
+    loader_status = {}
+    if args.katago_source:
+      v116_loader = args.katago_source / "KataGo-1.16.5" / "python" / "katago" / "train" / "load_model.py"
+      v13_model = args.katago_source / "KataGo-1.3" / "python" / "model.py"
+      loader_status = {
+        "v116PytorchCheckpointLoader": str(v116_loader),
+        "v13TensorFlowModel": str(v13_model),
+        "v116PytorchCheckpointLoaderExists": v116_loader.exists(),
+        "v13TensorFlowModelExists": v13_model.exists(),
+        "officialPytorchTextLoaderAvailable": False,
+      }
+      reason = (
+        "no official PyTorch text-network loader exists for this selected legacy KataGo .txt.gz model; "
+        "modern official PyTorch code loads checkpoints/state_dicts, while the selected model's official path is "
+        "C++/TensorFlow-era text loading. Refusing to emit a placeholder graph."
+      )
+      reason += f" loaderStatus={json.dumps(loader_status, sort_keys=True)}"
+      raise RuntimeError(reason)
 
     missing = []
     for module_name in ("onnx", "onnxruntime"):

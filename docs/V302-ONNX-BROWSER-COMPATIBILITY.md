@@ -1,6 +1,6 @@
 # GoKidCoach V3.0.2 ONNX Browser Compatibility
 
-Status: blocked because no ONNX graph was produced.
+Status: blocked because no ONNX graph was produced. V3.0.3 confirmed the blocker is the lack of an official PyTorch loader for the selected legacy KataGo `.txt.gz` model, not browser packaging.
 
 ## Expected Graph Characteristics
 
