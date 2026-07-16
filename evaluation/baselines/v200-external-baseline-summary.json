@@ -1,0 +1,173 @@
+{
+  "baselineVersion": "v200-external-baseline-summary",
+  "evaluationVersion": "2.0.0-dev",
+  "frozenFor": "V2.0.1 candidate recall reconstruction",
+  "sourceHashes": {
+    "positions": "4808a457bdf597776fa8c2e66550543b697d664edbd521ac2d3f9d260e08e9fb",
+    "summary": "cfcbb85f2fc9653d2d81a17aa3b6800307494c2ba9cb63d789ab4683ca3eb6c8",
+    "phaseSummary": "56788c3d599d707b4ad577b25501e88105cb10fe45a5d00929619b534a4e1f2d",
+    "errorAttribution": "7b282f10f2ff140caeac3cef39938952832c001290673ac4cdbfac3f09a124d2",
+    "candidateRecall": "92764c1079b4c79ea56416f18a263b78f10c0ed73dab6d00617cf68e53f2cc80",
+    "stability": "5dce9ab565fdcbb7d140c61678574fbf3eee0470ee9a8c22b08fccb8f0adcb29",
+    "sgfFixture": "bcc8d94316a74875340ea6cb9e1c070af1452cc3252aca3836edfd62da09a916",
+    "debugFixture": "8ee9217e13c472d1e7af625b3070cf1a07780fa583e3f5253d5ab8b83771ad03"
+  },
+  "katago": {
+    "version": "KataGo v1.16.5",
+    "binarySha256": "955ce41f1a564be1c2de9f5b0719e6f1c52164b46727c608e05e0828bfbff58e",
+    "modelName": "kata1-b18c384nbt-s9996604416-d4316597426",
+    "modelSha256": "9d7a6afed8ff5b74894727e156f04f0cd36060a24824892008fbb6e0cba51f1d",
+    "sourceConfigSha256": "aeab5a694460a1c74018f6fb55b8b8eaa7573ed175ef67ab3a924b21d4d2dd3c",
+    "backend": {
+      "compiledBackend": "OpenCL",
+      "activeBackend": "OpenCL GPU",
+      "gpuSupport": "NVIDIA OpenCL available when KataGo is run outside the restricted sandbox",
+      "detectedOpenClPlatform": "NVIDIA CUDA",
+      "detectedOpenClDevice": "NVIDIA GeForce GTX 1070",
+      "driverVersion": "550.163.01",
+      "cudaVersionReportedByDriver": "12.4",
+      "gpuMemory": "8192 MiB",
+      "fp16Storage": false,
+      "fp16Compute": false
+    },
+    "profiles": {
+      "quick": {
+        "maxVisits": 16,
+        "purpose": "all extracted positions"
+      },
+      "standard": {
+        "maxVisits": 96,
+        "purpose": "suspected errors and stability reruns"
+      },
+      "deep_sample": {
+        "maxVisits": 320,
+        "purpose": "critical validation subset"
+      }
+    }
+  },
+  "counts": {
+    "uniquePositions": 2200,
+    "actionablePositions": 2176,
+    "maxActionablePositions": 2175,
+    "unstableExcluded": 24,
+    "invalidPlaceholderDataCount": 0
+  },
+  "metrics": {
+    "bestMoveCandidateRecall": 0.28125,
+    "top10MoveMatch": 0.17977,
+    "averageScoreLoss": 13.639373,
+    "medianScoreLoss": 11.977339200000003,
+    "p90ScoreLoss": 29.178081,
+    "severeErrorRate": 0.534467,
+    "phaseMetrics": {
+      "opening_1_20": {
+        "positionsEvaluated": 221,
+        "averageKataGoRank": 10.923077,
+        "top1MatchRate": 0,
+        "top3MatchRate": 0.004525,
+        "top5MatchRate": 0.004525,
+        "top10MatchRate": 0.0181,
+        "averageScoreLoss": 2.652654,
+        "medianScoreLoss": 2.90628887,
+        "p90ScoreLoss": 4.319456,
+        "severeErrorRate": 0,
+        "candidateRecall": 0.253394
+      },
+      "early_middlegame_21_60": {
+        "positionsEvaluated": 601,
+        "averageKataGoRank": 8.59401,
+        "top1MatchRate": 0.1198,
+        "top3MatchRate": 0.207987,
+        "top5MatchRate": 0.259567,
+        "top10MatchRate": 0.296173,
+        "averageScoreLoss": 5.922254,
+        "medianScoreLoss": 3.5559654,
+        "p90ScoreLoss": 14.969988,
+        "severeErrorRate": 0.252912,
+        "candidateRecall": 0.400998
+      },
+      "middlegame_61_120": {
+        "positionsEvaluated": 401,
+        "averageKataGoRank": 9.860349,
+        "top1MatchRate": 0.0399,
+        "top3MatchRate": 0.097257,
+        "top5MatchRate": 0.124688,
+        "top10MatchRate": 0.142145,
+        "averageScoreLoss": 13.709394,
+        "medianScoreLoss": 14.209275329999999,
+        "p90ScoreLoss": 24.498708,
+        "severeErrorRate": 0.668329,
+        "candidateRecall": 0.206983
+      },
+      "late_middlegame_121_200": {
+        "positionsEvaluated": 445,
+        "averageKataGoRank": 10.076404,
+        "top1MatchRate": 0.017978,
+        "top3MatchRate": 0.078652,
+        "top5MatchRate": 0.096629,
+        "top10MatchRate": 0.12809,
+        "averageScoreLoss": 17.454021,
+        "medianScoreLoss": 16.943410299999996,
+        "p90ScoreLoss": 28.659225,
+        "severeErrorRate": 0.746067,
+        "candidateRecall": 0.164045
+      },
+      "endgame_201_plus": {
+        "positionsEvaluated": 532,
+        "averageKataGoRank": 9.62782,
+        "top1MatchRate": 0.088346,
+        "top3MatchRate": 0.101504,
+        "top5MatchRate": 0.131579,
+        "top10MatchRate": 0.18609,
+        "averageScoreLoss": 23.658557,
+        "medianScoreLoss": 20.74431772,
+        "p90ScoreLoss": 48.924129,
+        "severeErrorRate": 0.798872,
+        "candidateRecall": 0.304511
+      }
+    }
+  },
+  "errorAttributionCounts": [
+    {
+      "category": "best_move_not_generated",
+      "count": 1363,
+      "rate": 0.619545
+    },
+    {
+      "category": "weak_group_evaluation_error",
+      "count": 407,
+      "rate": 0.185
+    },
+    {
+      "category": "katago_uncertain",
+      "count": 18,
+      "rate": 0.008182
+    }
+  ],
+  "anonymizedUnstableIds": [
+    "420d1f7ad3e4fc12",
+    "e0f233a8ed88f360",
+    "e5e5719d31f6b2c4",
+    "43dd7bb8c3e4912d",
+    "f008ca8bba225784",
+    "9d75826a1bafdf97",
+    "557950d4135d0c23",
+    "e497372958070bc0",
+    "c0d87f2cb0739508",
+    "384653824e1922f7",
+    "18cfc3ec6ecd4e32",
+    "bffb0e17da1a6b12",
+    "99f2bc2bdb6c2d68",
+    "b0dea2fee5e0f8c6",
+    "abc32421a10cd1e6",
+    "ed94247e93ab5c0b",
+    "52006d8536e5ad96",
+    "1e6b87186cd06b8c",
+    "a94d3dfd24fc8ee7",
+    "64012bc44eb25a8a",
+    "6ae46499a38b83f5",
+    "24defda158cdaa22",
+    "a305a8ce42be90ec",
+    "a6c4bc8034fff0d3"
+  ]
+}

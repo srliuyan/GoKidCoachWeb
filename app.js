@@ -1456,6 +1456,128 @@ function addMaxStrengthWholeBoardStrategyCandidates(candidateMap, color, ownGrou
   }
 }
 
+function libertyQualityForCandidate(point, color) {
+  const edge = Math.min(point.x, point.y, size - 1 - point.x, size - 1 - point.y);
+  const adjacent = neighbors(point);
+  const emptyAdj = adjacent.filter(next => board[next.y][next.x] === empty).length;
+  const friendAdj = adjacent.filter(next => board[next.y][next.x] === color).length;
+  const oppAdj = adjacent.filter(next => board[next.y][next.x] === opponent(color)).length;
+  return emptyAdj * 8 + friendAdj * 7 + oppAdj * 3 + Math.min(edge, 4) * 2;
+}
+
+function addV201CandidateRecallCandidates(candidateMap, color, ownGroups, enemyGroups) {
+  if (!isMaxStrengthMode()) return;
+  const opponentColor = opponent(color);
+  for (const group of ownGroups) {
+    if (!["critical", "weak", "unsettled"].includes(group.classification)) continue;
+    const anchorKey = group.anchor ? `${group.anchor.x},${group.anchor.y}` : "";
+    const basePriority = group.classification === "critical" ? 1130 : group.classification === "weak" ? 850 : 610;
+    const liberties = group.libertyPoints
+      .slice()
+      .sort((a, b) => libertyQualityForCandidate(b, color) - libertyQualityForCandidate(a, color) || a.y - b.y || a.x - b.x);
+    for (const liberty of liberties.slice(0, 3)) {
+      addCandidatePoint(candidateMap, liberty, "v201_urgent_group_defense", basePriority + libertyQualityForCandidate(liberty, color), color, {
+        sourceTags: ["v201_candidate_recall", "weak_group_candidate"],
+        purposeLabels: ["direct_defense", "escape"],
+        generationReason: `defend ${group.classification} group with ${group.liberties} liberties`,
+        confidence: group.classification === "critical" ? "high" : "medium",
+        affectedGroups: anchorKey ? [anchorKey] : [],
+        tacticalSafety: {
+          localUrgency: group.classification,
+          liberties: group.liberties,
+          captureRisk: group.tacticalCaptureRisk
+        }
+      });
+      for (const next of neighbors(liberty)) {
+        if (board[next.y][next.x] !== empty) continue;
+        if (group.anchor && pointDistance(next, group.anchor) > 4) continue;
+        addCandidatePoint(candidateMap, next, "v201_large_escape_extension", basePriority - 70 + libertyQualityForCandidate(next, color), color, {
+          sourceTags: ["v201_candidate_recall", "weak_group_candidate"],
+          purposeLabels: ["extension", "escape"],
+          generationReason: "extend from unsettled group toward higher-liberty shape",
+          confidence: "medium",
+          affectedGroups: anchorKey ? [anchorKey] : [],
+          tacticalSafety: {
+            localUrgency: group.classification,
+            liberties: group.liberties,
+            captureRisk: group.tacticalCaptureRisk
+          }
+        });
+      }
+    }
+  }
+
+  for (const group of enemyGroups) {
+    const liberties = Array.from(group.liberties).map(value => {
+      const [x, y] = value.split(",").map(Number);
+      return { x, y };
+    }).sort((a, b) => libertyQualityForCandidate(b, color) - libertyQualityForCandidate(a, color) || a.y - b.y || a.x - b.x);
+    const evidence = window.GoKidCoachRuleEngine?.groupSafetyEvidence
+      ? window.GoKidCoachRuleEngine.groupSafetyEvidence(board, group, opponentColor)
+      : null;
+    const classification = evidence?.classification || (liberties.length <= 1 ? "critical" : liberties.length <= 3 ? "weak" : "stable");
+    if (!["critical", "weak", "unsettled"].includes(classification)) continue;
+    const anchor = groupAnchor(group);
+    const anchorKey = anchor ? `${anchor.x},${anchor.y}` : "";
+    for (const liberty of liberties.slice(0, 3)) {
+      addCandidatePoint(candidateMap, liberty, "v201_counterattack_weak_opponent_group", 830 + Math.min(120, group.stones.length * 12), color, {
+        sourceTags: ["v201_candidate_recall", "counterattack_candidate"],
+        purposeLabels: ["counterattack", "sente_defense"],
+        generationReason: `attack opponent ${classification} group instead of passive defense`,
+        confidence: "medium",
+        affectedGroups: anchorKey ? [anchorKey] : [],
+        tacticalSafety: {
+          localUrgency: classification,
+          opponentLiberties: liberties.length
+        }
+      });
+    }
+  }
+
+  for (let y = 0; y < size; y += 1) {
+    for (let x = 0; x < size; x += 1) {
+      if (board[y][x] !== empty) continue;
+      const point = { x, y };
+      const ownNear = uniqueGroupsNear(point, color);
+      const oppNear = uniqueGroupsNear(point, opponentColor);
+      if (ownNear.length >= 2) {
+        addCandidatePoint(candidateMap, point, "v201_connection_bridge", 760 + ownNear.length * 22, color, {
+          sourceTags: ["v201_candidate_recall", "connection_candidate"],
+          purposeLabels: ["connection"],
+          generationReason: "connect multiple nearby friendly groups",
+          confidence: "medium",
+          affectedGroups: ownNear.map(groupKey),
+          tacticalSafety: { connectedGroupCount: ownNear.length }
+        });
+      }
+      if (oppNear.length >= 2) {
+        addCandidatePoint(candidateMap, point, "v201_cut_and_separate", 735 + oppNear.length * 24, color, {
+          sourceTags: ["v201_candidate_recall", "cut_candidate"],
+          purposeLabels: ["cut", "counterattack"],
+          generationReason: "separate multiple nearby opponent groups",
+          confidence: "medium",
+          affectedGroups: oppNear.map(groupKey),
+          tacticalSafety: { cutGroupCount: oppNear.length }
+        });
+      }
+      const edge = Math.min(point.x, point.y, size - 1 - point.x, size - 1 - point.y);
+      if (edge >= 2 && edge <= 5 && ownNear.length === 0 && oppNear.length === 0) {
+        const regionStones = neighbors(point).filter(next => board[next.y][next.x] !== empty).length;
+        if (regionStones === 0 && (point.x % 3 === 0 || point.y % 3 === 0)) {
+          addCandidatePoint(candidateMap, point, "v201_invasion_reduction_probe", moveHistory.length >= 120 ? 540 : 505, color, {
+            sourceTags: ["v201_candidate_recall", "invasion_reduction_candidate"],
+            purposeLabels: ["invasion", "reduction"],
+            generationReason: "probe large open framework without increasing reading cap",
+            confidence: "low",
+            primaryRegion: regionForStrategicPoint(point),
+            tacticalSafety: { urgentFight: false }
+          });
+        }
+      }
+    }
+  }
+}
+
 function prioritizedCandidateList(candidates, maxCount = 12) {
   const sorted = Array.from(candidates.values())
     .sort((a, b) => b.priority - a.priority || a.point.y - b.point.y || a.point.x - b.point.x);
@@ -1556,6 +1678,7 @@ function generateMiddlegameCandidateMoves(color) {
     }
   }
   addMaxStrengthWholeBoardStrategyCandidates(candidates, color, ownGroups);
+  addV201CandidateRecallCandidates(candidates, color, ownGroups, enemyGroups);
   return prioritizedCandidateList(candidates, 12);
 }
 

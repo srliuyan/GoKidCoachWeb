@@ -257,30 +257,22 @@ function run() {
     return;
   }
   if (process.env.GOKIDCOACH_ARTIFACT_INTEGRITY_WORKER !== "1") {
-    const worker = childProcess.spawn(process.execPath, [__filename], {
+    const worker = childProcess.spawnSync(process.execPath, [__filename], {
       cwd: root,
       env: { ...process.env, GOKIDCOACH_ARTIFACT_INTEGRITY_WORKER: "1" },
-      stdio: "ignore"
+      stdio: "inherit"
     });
-    const heartbeat = setInterval(() => process.stdout.write("."), 30000);
-    worker.on("error", error => {
-      clearInterval(heartbeat);
-      console.error(error);
+    assert.ifError(worker.error);
+    if (worker.signal) {
+      console.error(`artifact worker terminated by ${worker.signal}`);
       process.exit(1);
-    });
-    worker.on("exit", (code, signal) => {
-      clearInterval(heartbeat);
-      if (signal) {
-        console.error(`artifact worker terminated by ${signal}`);
-        process.exit(1);
-      }
-      if (code !== 0) {
-        console.error(`artifact worker exited ${code}`);
-        process.exit(code || 1);
-      }
-      console.log("\ntest-test-artifact-integrity: ok");
-      process.exit(0);
-    });
+    }
+    if (worker.status !== 0) {
+      console.error(`artifact worker exited ${worker.status}`);
+      process.exit(worker.status || 1);
+    }
+    console.log("test-test-artifact-integrity: ok");
+    process.exit(0);
     return;
   }
   testCheckModeDoesNotChangeTrackedFiles();

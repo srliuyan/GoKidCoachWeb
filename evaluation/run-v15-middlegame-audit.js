@@ -32,6 +32,10 @@ function pointKey(point) {
   return `${point.x},${point.y}`;
 }
 
+function pointDistance(a, b) {
+  return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+}
+
 function neighbors(point) {
   return [
     { x: point.x - 1, y: point.y },
@@ -61,27 +65,154 @@ function groups(board, color) {
   }));
 }
 
-function add(map, board, color, point, source, priority) {
+function add(map, board, color, point, source, priority, metadata = {}) {
   if (!point || board[point.y]?.[point.x] !== EMPTY) return;
   const result = ruleEngine.simulateMove(board, point, color, []);
   if (!result.legal) return;
   const key = pointKey(point);
   const previous = map.get(key);
   const sourceTags = new Set([...(previous?.sourceTags || []), source]);
+  for (const tag of metadata.sourceTags || []) sourceTags.add(tag);
   const urgent = /urgent|capture|rescue|critical|necessary/.test(source) || Boolean(previous?.urgent);
   const weakGroup = /weak_group|escape|connection/.test(source) || Boolean(previous?.weakGroup);
   const global = /whole_board|invasion|reduction/.test(source) || Boolean(previous?.global);
   if (!previous || priority > previous.priority) {
-    map.set(key, { point: { ...point }, source, priority, sourceTags: Array.from(sourceTags), urgent, weakGroup, global });
+    map.set(key, {
+      point: { ...point },
+      source,
+      priority,
+      sourceTags: Array.from(sourceTags),
+      purposeLabels: metadata.purposeLabels || [],
+      generationReason: metadata.generationReason || source,
+      confidence: metadata.confidence || "",
+      candidateFamily: metadata.candidateFamily || "",
+      urgent,
+      weakGroup,
+      global
+    });
   } else {
     previous.sourceTags = Array.from(sourceTags);
+    previous.purposeLabels = Array.from(new Set([...(previous.purposeLabels || []), ...(metadata.purposeLabels || [])]));
+    previous.generationReason = [previous.generationReason, metadata.generationReason].filter(Boolean).join("; ");
+    previous.confidence = previous.confidence || metadata.confidence || "";
+    previous.candidateFamily = previous.candidateFamily || metadata.candidateFamily || "";
     previous.urgent = urgent;
     previous.weakGroup = weakGroup;
     previous.global = global;
   }
 }
 
-function generateCandidates(board, color) {
+function libertyQuality(board, color, point) {
+  const edge = Math.min(point.x, point.y, SIZE - 1 - point.x, SIZE - 1 - point.y);
+  const adjacent = neighbors(point);
+  const emptyAdj = adjacent.filter(next => board[next.y][next.x] === EMPTY).length;
+  const friendAdj = adjacent.filter(next => board[next.y][next.x] === color).length;
+  const oppAdj = adjacent.filter(next => board[next.y][next.x] === (color === BLACK ? WHITE : BLACK)).length;
+  return emptyAdj * 8 + friendAdj * 7 + oppAdj * 3 + Math.min(edge, 4) * 2;
+}
+
+function candidateFamilyForSource(source) {
+  if (/counterattack|attack_critical_opponent|capture/.test(source)) return "counterattack";
+  if (/cut/.test(source)) return "cut";
+  if (/connection|bridge/.test(source)) return "connection";
+  if (/escape/.test(source)) return "escape";
+  if (/defense|rescue|weak_group/.test(source)) return "urgent_group_defense";
+  if (/invasion/.test(source)) return "invasion";
+  if (/reduction/.test(source)) return "reduction";
+  if (/endgame|yose/.test(source)) return "large_endgame";
+  if (/whole_board/.test(source)) return "whole_board_direction";
+  return "other";
+}
+
+function addV201CandidateRecallCandidates(map, board, color) {
+  const opponentColor = color === BLACK ? WHITE : BLACK;
+  const own = groups(board, color);
+  const enemy = groups(board, opponentColor);
+
+  for (const item of own) {
+    const evidence = item.evidence || {};
+    const liberties = ruleEngine.libertyPoints(item.group)
+      .sort((a, b) => libertyQuality(board, color, b) - libertyQuality(board, color, a) || a.y - b.y || a.x - b.x);
+    const urgent = ["critical", "weak", "unsettled"].includes(evidence.classification);
+    if (!urgent) continue;
+    const base = evidence.classification === "critical" ? 1130 : evidence.classification === "weak" ? 850 : 610;
+    for (const liberty of liberties.slice(0, 3)) {
+      add(map, board, color, liberty, "v201_urgent_group_defense", base + libertyQuality(board, color, liberty), {
+        sourceTags: ["v201_candidate_recall", "weak_group_candidate"],
+        purposeLabels: ["direct_defense", "escape"],
+        generationReason: `defend ${evidence.classification} group with ${evidence.liberties || liberties.length} liberties`,
+        confidence: evidence.classification === "critical" ? "high" : "medium",
+        candidateFamily: "urgent_group_defense"
+      });
+      for (const next of neighbors(liberty)) {
+        if (board[next.y][next.x] === EMPTY && pointDistance(next, item.anchor) <= 4) {
+          add(map, board, color, next, "v201_large_escape_extension", base - 70 + libertyQuality(board, color, next), {
+            sourceTags: ["v201_candidate_recall", "weak_group_candidate"],
+            purposeLabels: ["extension", "escape"],
+            generationReason: "extend from unsettled group toward higher liberty quality",
+            confidence: "medium",
+            candidateFamily: "extension"
+          });
+        }
+      }
+    }
+  }
+
+  for (const item of enemy) {
+    const evidence = item.evidence || {};
+    const liberties = ruleEngine.libertyPoints(item.group)
+      .sort((a, b) => libertyQuality(board, color, b) - libertyQuality(board, color, a) || a.y - b.y || a.x - b.x);
+    if (["critical", "weak", "unsettled"].includes(evidence.classification)) {
+      for (const liberty of liberties.slice(0, 3)) {
+        add(map, board, color, liberty, "v201_counterattack_weak_opponent_group", 830 + Math.min(120, (evidence.stoneCount || item.group.stones.length) * 12), {
+          sourceTags: ["v201_candidate_recall", "counterattack_candidate"],
+          purposeLabels: ["counterattack", "sente_defense"],
+          generationReason: `attack opponent ${evidence.classification} group instead of passive defense`,
+          confidence: "medium",
+          candidateFamily: "counterattack"
+        });
+      }
+    }
+  }
+
+  for (const point of legalMoves(board, color)) {
+    const ownNear = ruleEngine.adjacentGroups(board, point, color);
+    const oppNear = ruleEngine.adjacentGroups(board, point, opponentColor);
+    if (ownNear.length >= 2) {
+      add(map, board, color, point, "v201_connection_bridge", 760 + ownNear.length * 22, {
+        sourceTags: ["v201_candidate_recall", "connection_candidate"],
+        purposeLabels: ["connection"],
+        generationReason: "connect multiple nearby friendly groups",
+        confidence: "medium",
+        candidateFamily: "connection"
+      });
+    }
+    if (oppNear.length >= 2) {
+      add(map, board, color, point, "v201_cut_and_separate", 735 + oppNear.length * 24, {
+        sourceTags: ["v201_candidate_recall", "cut_candidate"],
+        purposeLabels: ["cut", "counterattack"],
+        generationReason: "separate multiple nearby opponent groups",
+        confidence: "medium",
+        candidateFamily: "cut"
+      });
+    }
+    const edge = Math.min(point.x, point.y, SIZE - 1 - point.x, SIZE - 1 - point.y);
+    if (edge >= 2 && edge <= 5 && oppNear.length === 0 && ownNear.length === 0) {
+      const regionStones = neighbors(point).reduce((sum, next) => sum + (board[next.y][next.x] !== EMPTY ? 1 : 0), 0);
+      if (regionStones === 0 && (point.x % 3 === 0 || point.y % 3 === 0)) {
+        add(map, board, color, point, "v201_invasion_reduction_probe", 505, {
+          sourceTags: ["v201_candidate_recall", "invasion_reduction_candidate"],
+          purposeLabels: ["invasion", "reduction"],
+          generationReason: "probe large open framework without increasing reading cap",
+          confidence: "low",
+          candidateFamily: "invasion"
+        });
+      }
+    }
+  }
+}
+
+function generateCandidates(board, color, options = {}) {
   const map = new Map();
   const own = groups(board, color);
   const enemy = groups(board, color === BLACK ? WHITE : BLACK);
@@ -127,6 +258,7 @@ function generateCandidates(board, color) {
   ]) {
     add(map, board, color, point, "large_whole_board_move", Math.min(point.x, point.y, SIZE - 1 - point.x, SIZE - 1 - point.y) <= 3 ? 560 : 500);
   }
+  if (options.v201CandidateRecall === true) addV201CandidateRecallCandidates(map, board, color);
   const sorted = Array.from(map.values()).sort((a, b) => b.priority - a.priority || a.point.y - b.point.y || a.point.x - b.point.x);
   const selected = [];
   const used = new Set();
@@ -184,6 +316,7 @@ function candidateCoverageReport() {
     const candidates = generateCandidates(position.board, position.color);
     const sourceCounts = candidates.reduce((counts, candidate) => {
       counts[candidate.source] = (counts[candidate.source] || 0) + 1;
+      for (const tag of candidate.sourceTags || []) counts[tag] = (counts[tag] || 0) + 1;
       return counts;
     }, {});
     const selected = candidates[0] || null;
@@ -374,10 +507,10 @@ function wholeBoardStrategyAudit() {
     const globalCandidates = candidates.filter(candidate => supportedGlobalCandidate(position.board, candidate, position.color));
     const urgent = selected && /capture|rescue|critical|necessary/.test(selected.source);
     const selectedGlobal = selected && globalCandidates.some(candidate => pointKey(candidate.point) === pointKey(selected.point));
-    const selectedSmallLocal = selected && /connection|escape|cut/.test(selected.source) && !urgent;
+    const selectedSmallLocal = selected && /connection|escape|cut/.test(selected.source) && !/^v201_/.test(selected.source) && !urgent;
     const smallLocalOverGlobal = Boolean(selectedSmallLocal && globalCandidates.length > 0);
     const settledAreaRepetition = Boolean(selected && /connection_toward_support/.test(selected.source) && weakOwn.length === 0);
-    const redundantDefense = Boolean(selected && /defense|connection/.test(selected.source) && weakOwn.length === 0);
+    const redundantDefense = Boolean(selected && /defense|connection/.test(selected.source) && !/^v201_/.test(selected.source) && weakOwn.length === 0);
     return {
       positionId: position.id,
       moveNumber: position.moveNumber,
