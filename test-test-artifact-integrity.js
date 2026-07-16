@@ -242,8 +242,13 @@ function testFullLoopDoesNotChangeTrackedFiles() {
     const child = childProcess.spawnSync(process.execPath, [file], {
       cwd: root,
       env: { ...process.env, GOKIDCOACH_ARTIFACT_INTEGRITY_CHILD: "1" },
-      stdio: "ignore"
+      stdio: "pipe",
+      timeout: 300000,
+      killSignal: "SIGTERM"
     });
+    if (child.error && child.error.code === "ETIMEDOUT") {
+      throw new Error(`${file} timed out during artifact-integrity full-loop check`);
+    }
     assert.ifError(child.error);
     assert.strictEqual(child.signal, null, `${file} terminated by ${child.signal}`);
     assert.strictEqual(child.status, 0, `${file} exited ${child.status}`);
@@ -256,31 +261,13 @@ function run() {
     console.log("test-test-artifact-integrity: child skip");
     return;
   }
-  if (process.env.GOKIDCOACH_ARTIFACT_INTEGRITY_WORKER !== "1") {
-    const worker = childProcess.spawnSync(process.execPath, [__filename], {
-      cwd: root,
-      env: { ...process.env, GOKIDCOACH_ARTIFACT_INTEGRITY_WORKER: "1" },
-      stdio: "inherit"
-    });
-    assert.ifError(worker.error);
-    if (worker.signal) {
-      console.error(`artifact worker terminated by ${worker.signal}`);
-      process.exit(1);
-    }
-    if (worker.status !== 0) {
-      console.error(`artifact worker exited ${worker.status}`);
-      process.exit(worker.status || 1);
-    }
-    console.log("test-test-artifact-integrity: ok");
-    process.exit(0);
-    return;
-  }
   testCheckModeDoesNotChangeTrackedFiles();
   testReportModeWritesOnlyExpectedFiles();
   testDeterministicHashesRepeat();
   testReportManifestCoversCurrentReports();
   testCiUsesCheckModeAndDeploymentExcludesEvaluation();
   testFullLoopDoesNotChangeTrackedFiles();
+  console.log("test-test-artifact-integrity: ok");
 }
 
 run();
