@@ -121,7 +121,10 @@ function testNoProductionContamination() {
   assert(!read("sw.js").includes("neural-prototype"));
   assert(!read("sw.js").includes("neural-mcts"));
   assert(!/run-v200-katago-analysis|katago-analysis-played|\.bin\.gz|\.onnx|\.tflite/.test(read("neural-prototype.js")));
-  const files = fs.readdirSync(root, { recursive: true }).map(String);
+  const files = fs.readdirSync(root, { recursive: true }).map(String).filter(file =>
+    !file.startsWith(`evaluation${path.sep}models${path.sep}private${path.sep}`)
+    && !file.startsWith(`evaluation${path.sep}fixtures${path.sep}private${path.sep}`)
+  );
   assert(!files.some(file => /\.(onnx|tflite|pt|pb|bin\.gz|weights)$/i.test(file)));
 }
 

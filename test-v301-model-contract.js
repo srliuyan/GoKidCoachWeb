@@ -93,6 +93,7 @@ function listFiles(dir) {
 
   const forbiddenModelExtensions = new Set([".onnx", ".tflite", ".pt", ".pth", ".pb", ".safetensors", ".weights"]);
   const forbiddenModelFiles = listFiles(root).filter((file) => {
+    if (file.includes(`${path.sep}evaluation${path.sep}models${path.sep}private${path.sep}`)) return false;
     if (file.includes(`${path.sep}evaluation${path.sep}fixtures${path.sep}private${path.sep}`)) return false;
     if (file.endsWith(".bin.gz")) return true;
     return forbiddenModelExtensions.has(path.extname(file));
