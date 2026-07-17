@@ -40,7 +40,14 @@
   "lossWeights": {
     "policy": 1.0,
     "value": 0.25,
-    "score": 0.05
+    "score": 0.1
+  },
+  "v311": {
+    "policySource": "visits",
+    "targetPositions": 20000,
+    "scoreScale": 30,
+    "teacherTarget": "search_visit_policy",
+    "rootCauseV310TopZero": "cached raw policy arrays were too smooth after normalization for a 1000-position smoke run; search-visit policy gives a sharper learnable target"
   },
   "stageA": {
     "targetPositions": 1000,

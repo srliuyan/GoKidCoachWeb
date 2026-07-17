@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate compact Stage A teacher-labelled NPZ shards from cached KataGo analysis."""
+"""Generate compact teacher-labelled NPZ shards from cached KataGo analysis."""
 
 from __future__ import annotations
 
@@ -17,6 +17,9 @@ PASS_INDEX = BOARD_SIZE * BOARD_SIZE
 POLICY_SIZE = PASS_INDEX + 1
 INPUT_PLANES = 12
 GLOBAL_FEATURES = 4
+
+
+SCORE_SCALE = 30.0
 
 
 def stable_hash(value) -> str:
@@ -40,6 +43,75 @@ def move_to_index(move: str) -> int | None:
   if 0 <= x < BOARD_SIZE and 0 <= y < BOARD_SIZE:
     return y * BOARD_SIZE + x
   return None
+
+
+def index_to_xy(index: int) -> Tuple[int, int] | None:
+  if index == PASS_INDEX:
+    return None
+  y, x = divmod(index, BOARD_SIZE)
+  return x, y
+
+
+def xy_to_index(x: int, y: int) -> int:
+  return y * BOARD_SIZE + x
+
+
+def transform_xy(x: int, y: int, symmetry: int) -> Tuple[int, int]:
+  n = BOARD_SIZE - 1
+  if symmetry == 0:
+    return x, y
+  if symmetry == 1:
+    return n - y, x
+  if symmetry == 2:
+    return n - x, n - y
+  if symmetry == 3:
+    return y, n - x
+  if symmetry == 4:
+    return n - x, y
+  if symmetry == 5:
+    return x, n - y
+  if symmetry == 6:
+    return y, x
+  if symmetry == 7:
+    return n - y, n - x
+  raise ValueError(f"invalid symmetry: {symmetry}")
+
+
+def transform_plane(plane: np.ndarray, symmetry: int) -> np.ndarray:
+  if symmetry == 0:
+    return plane
+  if symmetry == 1:
+    return np.rot90(plane, 1)
+  if symmetry == 2:
+    return np.rot90(plane, 2)
+  if symmetry == 3:
+    return np.rot90(plane, 3)
+  if symmetry == 4:
+    return np.fliplr(plane)
+  if symmetry == 5:
+    return np.flipud(plane)
+  if symmetry == 6:
+    return plane.T
+  if symmetry == 7:
+    return np.rot90(plane.T, 2)
+  raise ValueError(f"invalid symmetry: {symmetry}")
+
+
+def transform_spatial(spatial: np.ndarray, symmetry: int) -> np.ndarray:
+  return np.stack([transform_plane(plane, symmetry) for plane in spatial]).astype(np.float32)
+
+
+def transform_policy(policy: np.ndarray, symmetry: int) -> np.ndarray:
+  if symmetry == 0:
+    return policy.astype(np.float32)
+  out = np.zeros_like(policy, dtype=np.float32)
+  out[PASS_INDEX] = policy[PASS_INDEX]
+  for index in range(PASS_INDEX):
+    xy = index_to_xy(index)
+    assert xy is not None
+    x, y = transform_xy(*xy, symmetry)
+    out[xy_to_index(x, y)] = policy[index]
+  return out
 
 
 def board_arrays(board, side_to_move: str) -> Tuple[np.ndarray, np.ndarray]:
@@ -100,28 +172,102 @@ def encode_features(position: dict) -> Tuple[np.ndarray, np.ndarray, np.ndarray]
   return spatial, global_features, legal_mask
 
 
-def make_policy(result: dict) -> np.ndarray:
+def parse_board_string(board_string: str) -> list | None:
+  rows = board_string.split("|")
+  if len(rows) != BOARD_SIZE or any(len(row) != BOARD_SIZE for row in rows):
+    return None
+  board = []
+  for row in rows:
+    parsed = []
+    for ch in row:
+      if ch == "0":
+        parsed.append(0)
+      elif ch == "1":
+        parsed.append(1)
+      elif ch == "2":
+        parsed.append(-1)
+      else:
+        return None
+    board.append(parsed)
+  return board
+
+
+def reconstruct_position_from_id(result: dict) -> dict | None:
+  parts = str(result.get("positionId", "")).split(":")
+  for i, part in enumerate(parts):
+    board = parse_board_string(part)
+    if board is None:
+      continue
+    side_token = parts[i + 1] if i + 1 < len(parts) else "1"
+    side = "B" if side_token == "1" else "W"
+    tags = ["derived_from_position_id"]
+    phase = result.get("phase", "unknown")
+    if "opening" in str(phase):
+      tags.append("opening_synthetic")
+    if "endgame" in str(phase):
+      tags.append("endgame")
+    return {
+      "positionId": result["positionId"],
+      "board": board,
+      "sideToMove": side,
+      "komi": 7.5,
+      "moveNumber": int(result.get("moveNumber", 0) or 0),
+      "phase": phase,
+      "sourceTags": tags,
+      "moveHistory": [],
+      "koState": None,
+      "derived_from_position_id": True,
+    }
+  return None
+
+
+def make_visit_policy(result: dict) -> np.ndarray | None:
+  arr = np.zeros((POLICY_SIZE,), dtype=np.float32)
+  infos = result.get("moveInfos") or []
+  total = sum(max(0.0, float(info.get("visits", 0))) for info in infos)
+  if total <= 0:
+    return None
+  for info in infos:
+    idx = move_to_index(info.get("move", ""))
+    if idx is not None:
+      arr[idx] += max(0.0, float(info.get("visits", 0))) / total
+  return arr
+
+
+def make_policy(result: dict, source: str = "prefer_visits") -> Tuple[np.ndarray, str]:
+  if source in {"visits", "prefer_visits"}:
+    visit_policy = make_visit_policy(result)
+    if visit_policy is not None:
+      arr = visit_policy
+      target_type = "search_visit_policy"
+    elif source == "visits":
+      raise ValueError("missing search visit policy")
+    else:
+      arr = None
+  else:
+    arr = None
   policy = result.get("policy")
-  if isinstance(policy, list) and len(policy) >= POLICY_SIZE:
+  if arr is None and isinstance(policy, list) and len(policy) >= POLICY_SIZE:
     arr = np.asarray(policy[:POLICY_SIZE], dtype=np.float32)
     if np.any(arr < 0.0) or not np.isclose(float(arr.sum()), 1.0, atol=1e-3):
       shifted = arr - float(np.max(arr))
       exp = np.exp(shifted).astype(np.float32)
       arr = exp / max(float(exp.sum()), 1e-12)
-  else:
+      target_type = "raw_network_policy_logits_softmax"
+    else:
+      target_type = "raw_network_policy_probability"
+  elif arr is None:
     arr = np.zeros((POLICY_SIZE,), dtype=np.float32)
-    infos = result.get("moveInfos") or []
-    total = sum(max(0.0, float(info.get("visits", 0))) for info in infos)
-    for info in infos:
-      idx = move_to_index(info.get("move", ""))
-      if idx is not None and total > 0:
-        arr[idx] += max(0.0, float(info.get("visits", 0))) / total
+    target_type = "fallback_pass_policy"
   s = float(arr.sum())
   if not np.isfinite(s) or s <= 0:
     arr[PASS_INDEX] = 1.0
+    target_type = "fallback_pass_policy"
   else:
     arr /= s
-  return arr.astype(np.float32)
+  if not np.isfinite(arr).all() or float(arr.max()) < 0.006:
+    raise ValueError("malformed or near-uniform policy target")
+  return arr.astype(np.float32), target_type
 
 
 def tactical_family(position: dict) -> str:
@@ -153,50 +299,98 @@ def split_for(position_id: str) -> str:
   return "holdout"
 
 
+def build_rows(positions: list, analysis: list, count: int, policy_source: str) -> Tuple[list, int, int]:
+  pos_by_id = {p["positionId"]: p for p in positions}
+  rows = []
+  invalid = 0
+  duplicate_sample = 0
+  seen_samples = set()
+  for result_index, result in enumerate(analysis):
+    pid = result.get("positionId")
+    position = pos_by_id.get(pid) or reconstruct_position_from_id(result)
+    if not position:
+      invalid += 1
+      continue
+    try:
+      policy, target_type = make_policy(result, policy_source)
+    except ValueError:
+      invalid += 1
+      continue
+    spatial, global_features, legal_mask = encode_features(position)
+    for symmetry in range(8 if count > len(pos_by_id) else 1):
+      sample_id = f"{pid}|analysis{result_index}|{result.get('profile', 'unknown')}|sym{symmetry}"
+      if sample_id in seen_samples:
+        duplicate_sample += 1
+        continue
+      seen_samples.add(sample_id)
+      rows.append({
+        "position": position,
+        "result": result,
+        "spatial": transform_spatial(spatial, symmetry),
+        "global": global_features,
+        "legal": legal_mask,
+        "policy": transform_policy(policy, symmetry),
+        "targetType": target_type,
+        "sampleId": sample_id,
+        "basePositionId": pid,
+        "symmetry": symmetry,
+      })
+  return rows, duplicate_sample, invalid
+
+
+def select_balanced(rows: list, count: int) -> list:
+  buckets = defaultdict(list)
+  for row in rows:
+    key = (row["position"].get("phase", "unknown"), tactical_family(row["position"]))
+    buckets[key].append(row)
+  for key in buckets:
+    buckets[key].sort(key=lambda row: row["sampleId"])
+  selected = []
+  keys = sorted(buckets)
+  cursor = {key: 0 for key in keys}
+  while len(selected) < count:
+    progressed = False
+    for key in keys:
+      i = cursor[key]
+      if i < len(buckets[key]):
+        selected.append(buckets[key][i])
+        cursor[key] = i + 1
+        progressed = True
+        if len(selected) == count:
+          break
+    if not progressed:
+      break
+  return selected
+
+
 def generate(args) -> dict:
   positions = json.loads(Path(args.positions).read_text(encoding="utf8"))["positions"]
   analysis = json.loads(Path(args.analysis).read_text(encoding="utf8"))["results"]
   pos_by_id = {p["positionId"]: p for p in positions}
-  seen = set()
-  rows = []
-  duplicate = 0
-  invalid = 0
-  for result in analysis:
-    pid = result.get("positionId")
-    if pid in seen:
-      duplicate += 1
-      continue
-    position = pos_by_id.get(pid)
-    if not position:
-      invalid += 1
-      continue
-    policy = make_policy(result)
-    if policy.shape[0] != POLICY_SIZE:
-      invalid += 1
-      continue
-    spatial, global_features, legal_mask = encode_features(position)
-    rows.append((position, result, spatial, global_features, legal_mask, policy))
-    seen.add(pid)
-    if len(rows) == args.count:
-      break
+  all_rows, duplicate, invalid = build_rows(positions, analysis, args.count, args.policy_source)
+  rows = select_balanced(all_rows, args.count)
 
   if len(rows) != args.count:
     raise RuntimeError(f"requested {args.count} rows but generated {len(rows)}")
 
   out_dir = Path(args.output_dir)
   out_dir.mkdir(parents=True, exist_ok=True)
-  spatial = np.stack([r[2] for r in rows]).astype(np.float32)
-  global_features = np.stack([r[3] for r in rows]).astype(np.float32)
-  legal_mask = np.stack([r[4] for r in rows]).astype(np.float32)
-  policy = np.stack([r[5] for r in rows]).astype(np.float32)
-  value = np.asarray([float(r[1].get("winrate", 0.5)) for r in rows], dtype=np.float32)
-  score = np.asarray([float(r[1].get("scoreLead", 0.0)) for r in rows], dtype=np.float32)
-  position_ids = np.asarray([r[0]["positionId"] for r in rows])
-  splits = np.asarray([split_for(r[0]["positionId"]) for r in rows])
-  phases = np.asarray([r[0].get("phase", "unknown") for r in rows])
-  families = np.asarray([tactical_family(r[0]) for r in rows])
-  visits = np.asarray([int(r[1].get("visits", r[1].get("rootInfo", {}).get("visits", 0))) for r in rows], dtype=np.int32)
-  shard = out_dir / "stage-a-0000.npz"
+  spatial = np.stack([r["spatial"] for r in rows]).astype(np.float32)
+  global_features = np.stack([r["global"] for r in rows]).astype(np.float32)
+  legal_mask = np.stack([r["legal"] for r in rows]).astype(np.float32)
+  policy = np.stack([r["policy"] for r in rows]).astype(np.float32)
+  value = np.asarray([float(r["result"].get("winrate", 0.5)) for r in rows], dtype=np.float32)
+  score_raw = np.asarray([float(r["result"].get("scoreLead", 0.0)) for r in rows], dtype=np.float32)
+  score = np.clip(score_raw, -SCORE_SCALE, SCORE_SCALE).astype(np.float32) / SCORE_SCALE
+  position_ids = np.asarray([r["sampleId"] for r in rows])
+  base_position_ids = np.asarray([r["basePositionId"] for r in rows])
+  splits = np.asarray([split_for(r["basePositionId"]) for r in rows])
+  phases = np.asarray([r["position"].get("phase", "unknown") for r in rows])
+  families = np.asarray([tactical_family(r["position"]) for r in rows])
+  target_types = np.asarray([r["targetType"] for r in rows])
+  symmetries = np.asarray([r["symmetry"] for r in rows], dtype=np.int8)
+  visits = np.asarray([int(r["result"].get("visits", r["result"].get("rootInfo", {}).get("visits", 0))) for r in rows], dtype=np.int32)
+  shard = out_dir / "teacher-0000.npz"
   np.savez_compressed(
     shard,
     spatial=spatial,
@@ -205,16 +399,21 @@ def generate(args) -> dict:
     policy=policy,
     value=value,
     score=score,
+    score_raw=score_raw,
     position_ids=position_ids,
+    base_position_ids=base_position_ids,
     splits=splits,
     phases=phases,
     families=families,
+    target_types=target_types,
+    symmetries=symmetries,
     visits=visits,
   )
   manifest = {
-    "schema": "gokidcoach-v310-stage-a-manifest",
+    "schema": "gokidcoach-v311-teacher-manifest",
     "teacherLabelSource": "cached KataGo analysis mode",
-    "policyTargetType": "raw_policy_if_available_else_search_visit_distribution",
+    "policyTargetType": "per_sample_target_types",
+    "scoreScale": SCORE_SCALE,
     "positionsRequested": args.count,
     "positionsGenerated": len(rows),
     "duplicateCount": duplicate,
@@ -222,15 +421,18 @@ def generate(args) -> dict:
     "shards": [{"path": str(shard), "rows": len(rows), "sizeBytes": shard.stat().st_size}],
     "phaseDistribution": dict(Counter(phases.tolist())),
     "tacticalFamilyDistribution": dict(Counter(families.tolist())),
+    "policyTargetTypeDistribution": dict(Counter(target_types.tolist())),
     "splitDistribution": dict(Counter(splits.tolist())),
     "averageTeacherVisits": float(np.mean(visits)),
     "lowConfidenceCount": int(np.sum(visits < args.low_confidence_visits)),
+    "manualVerificationCount": min(args.manual_verify, len(rows)),
+    "passIndex": PASS_INDEX,
     "positionHash": stable_hash(position_ids.tolist()),
   }
   (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf8")
   splits_manifest = {
-    "seed": "gokidcoach-v310-split-v1",
-    "method": "sha256(positionId) bucket by source position id",
+    "seed": "gokidcoach-v311-split-v1",
+    "method": "sha256(basePositionId) bucket; all profiles and symmetries stay in the same split",
     "splitDistribution": manifest["splitDistribution"],
     "positionHash": manifest["positionHash"],
   }
@@ -247,6 +449,8 @@ def main():
   parser.add_argument("--split-manifest", default="training/v31/split-manifest.example.json")
   parser.add_argument("--count", type=int, default=1000)
   parser.add_argument("--low-confidence-visits", type=int, default=16)
+  parser.add_argument("--manual-verify", type=int, default=100)
+  parser.add_argument("--policy-source", choices=["prefer_visits", "visits", "raw"], default="prefer_visits")
   args = parser.parse_args()
   print(json.dumps(generate(args), indent=2))
 

@@ -25,10 +25,12 @@ function testConfigAndSchema() {
 function testTeacherDataSmoke() {
   const outDir = "training/v31/generated/test-stage-a";
   const splitManifest = "training/v31/generated/test-split-manifest.json";
-  run(["training/v31/generate_teacher_data.py", "--count", "32", "--output-dir", outDir, "--split-manifest", splitManifest], { timeout: 120000 });
+  run(["training/v31/generate_teacher_data.py", "--count", "32", "--policy-source", "visits", "--output-dir", outDir, "--split-manifest", splitManifest], { timeout: 120000 });
   const manifest = JSON.parse(fs.readFileSync(path.join(root, outDir, "manifest.json"), "utf8"));
   assert.strictEqual(manifest.positionsGenerated, 32);
   assert.strictEqual(manifest.invalidCount, 0);
+  assert.strictEqual(manifest.policyTargetTypeDistribution.search_visit_policy, 32);
+  assert.strictEqual(manifest.passIndex, 361);
   assert(manifest.shards[0].sizeBytes > 0);
 }
 
@@ -36,12 +38,15 @@ function testModelForwardAndExportSmoke() {
   const outDir = "training/v31/generated/test-stage-a";
   const checkpoint = "training/v31/checkpoints/test-tiny-student.pt";
   const metrics = "training/v31/generated/test-train-metrics.json";
-  run(["training/v31/train_student.py", "--shard", `${outDir}/stage-a-0000.npz`, "--checkpoint", checkpoint, "--metrics", metrics, "--epochs", "1", "--limit", "24", "--batch-size", "8"], { timeout: 120000 });
+  run(["training/v31/train_student.py", "--shard", `${outDir}/teacher-0000.npz`, "--checkpoint", checkpoint, "--metrics", metrics, "--epochs", "1", "--limit", "24", "--batch-size", "8"], { timeout: 120000 });
   const train = JSON.parse(fs.readFileSync(path.join(root, metrics), "utf8"));
   assert(train.firstLoss.total > 0);
   assert(train.lastLoss.total > 0);
-  run(["training/v31/train_student.py", "--shard", `${outDir}/stage-a-0000.npz`, "--checkpoint", checkpoint, "--metrics", metrics, "--resume", checkpoint, "--epochs", "1", "--limit", "24", "--batch-size", "8"], { timeout: 120000 });
-  run(["training/v31/evaluate_student.py", "--shard", `${outDir}/stage-a-0000.npz`, "--checkpoint", checkpoint, "--split", "train", "--limit", "16", "--out", "training/v31/generated/test-eval.json"], { timeout: 120000 });
+  run(["training/v31/train_student.py", "--shard", `${outDir}/teacher-0000.npz`, "--checkpoint", checkpoint, "--metrics", metrics, "--resume", checkpoint, "--epochs", "1", "--limit", "24", "--batch-size", "8"], { timeout: 120000 });
+  run(["training/v31/evaluate_student.py", "--shard", `${outDir}/teacher-0000.npz`, "--checkpoint", checkpoint, "--split", "train", "--limit", "16", "--out", "training/v31/generated/test-eval.json"], { timeout: 120000 });
+  const evalReport = JSON.parse(fs.readFileSync(path.join(root, "training/v31/generated/test-eval.json"), "utf8"));
+  assert("policyTop5" in evalReport);
+  assert.strictEqual(evalReport.legalMoveRate, 1);
   const onnxOut = "training/v31/generated/test-student.onnx";
   const report = "training/v31/generated/test-onnx-report.json";
   run(["training/v31/export_student_onnx.py", "--checkpoint", checkpoint, "--output", onnxOut, "--report", report], { timeout: 120000 });

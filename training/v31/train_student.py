@@ -15,7 +15,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from model_student import build_model
 
 
-def load_split(shard, split="train", limit=None):
+def load_split(shard, split="train", limit=None, include_meta=False):
   data = np.load(shard, allow_pickle=True)
   mask = data["splits"] == split
   idx = np.nonzero(mask)[0]
@@ -28,7 +28,10 @@ def load_split(shard, split="train", limit=None):
     torch.from_numpy(data["value"][idx]).float(),
     torch.from_numpy(data["score"][idx]).float(),
   ]
-  return TensorDataset(*tensors)
+  ds = TensorDataset(*tensors)
+  if include_meta:
+    return ds, {key: data[key][idx] for key in data.files if key not in {"spatial", "global_features", "legal_mask", "policy", "value", "score"}}
+  return ds
 
 
 def compute_loss(outputs, targets, weights):
@@ -42,22 +45,54 @@ def compute_loss(outputs, targets, weights):
   return total, {"policy": float(policy_loss.detach()), "value": float(value_loss.detach()), "score": float(score_loss.detach()), "total": float(total.detach())}
 
 
+def evaluate_loss(model, dataset, weights, device, batch_size):
+  loader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
+  totals = []
+  parts_sum = {"policy": 0.0, "value": 0.0, "score": 0.0, "total": 0.0}
+  count = 0
+  model.eval()
+  with torch.no_grad():
+    for spatial, global_features, policy, value, score in loader:
+      spatial = spatial.to(device)
+      global_features = global_features.to(device)
+      policy = policy.to(device)
+      value = value.to(device)
+      score = score.to(device)
+      _, parts = compute_loss(model(spatial, global_features), (policy, value, score), weights)
+      n = spatial.shape[0]
+      for key in parts_sum:
+        parts_sum[key] += parts[key] * n
+      count += n
+  model.train()
+  return {key: parts_sum[key] / max(1, count) for key in parts_sum}
+
+
 def train(args):
   torch.manual_seed(args.seed)
+  np.random.seed(args.seed)
   device = torch.device("cuda" if args.prefer_gpu and torch.cuda.is_available() else "cpu")
   model = build_model(args.architecture).to(device)
   weights = {"policy": args.policy_weight, "value": args.value_weight, "score": args.score_weight}
   ds = load_split(args.shard, "train", args.limit)
-  loader = DataLoader(ds, batch_size=args.batch_size, shuffle=True)
+  val_ds = load_split(args.shard, "validation", args.validation_limit)
+  generator = torch.Generator().manual_seed(args.seed)
+  loader = DataLoader(ds, batch_size=args.batch_size, shuffle=True, generator=generator)
   opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
+  scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=max(1, args.epochs), eta_min=args.min_lr)
+  scaler = torch.amp.GradScaler("cuda", enabled=args.mixed_precision and device.type == "cuda")
   start_epoch = 0
+  best_validation = None
+  best_epoch = None
   if args.resume and Path(args.resume).exists():
     ckpt = torch.load(args.resume, map_location=device)
     model.load_state_dict(ckpt["model"])
     opt.load_state_dict(ckpt["optimizer"])
     start_epoch = int(ckpt["epoch"]) + 1
+    best_validation = ckpt.get("bestValidation")
+    best_epoch = ckpt.get("bestEpoch")
   first = None
   last = None
+  history = []
   for epoch in range(start_epoch, start_epoch + args.epochs):
     for spatial, global_features, policy, value, score in loader:
       spatial = spatial.to(device)
@@ -66,15 +101,47 @@ def train(args):
       value = value.to(device)
       score = score.to(device)
       opt.zero_grad(set_to_none=True)
-      loss, parts = compute_loss(model(spatial, global_features), (policy, value, score), weights)
-      loss.backward()
-      opt.step()
+      with torch.amp.autocast("cuda", enabled=args.mixed_precision and device.type == "cuda"):
+        loss, parts = compute_loss(model(spatial, global_features), (policy, value, score), weights)
+      scaler.scale(loss).backward()
+      if args.grad_clip > 0:
+        scaler.unscale_(opt)
+        torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
+      scaler.step(opt)
+      scaler.update()
       if first is None:
         first = parts
       last = parts
-  Path(args.checkpoint).parent.mkdir(parents=True, exist_ok=True)
-  torch.save({"model": model.state_dict(), "optimizer": opt.state_dict(), "epoch": start_epoch + args.epochs - 1, "architecture": args.architecture}, args.checkpoint)
-  metrics = {"device": str(device), "architecture": args.architecture, "firstLoss": first, "lastLoss": last, "checkpoint": args.checkpoint}
+    validation = evaluate_loss(model, val_ds, weights, device, args.batch_size)
+    history.append({"epoch": epoch, "trainLast": last, "validation": validation, "lr": opt.param_groups[0]["lr"]})
+    if best_validation is None or validation["total"] < best_validation:
+      best_validation = validation["total"]
+      best_epoch = epoch
+      Path(args.checkpoint).parent.mkdir(parents=True, exist_ok=True)
+      torch.save({
+        "model": model.state_dict(),
+        "optimizer": opt.state_dict(),
+        "epoch": epoch,
+        "architecture": args.architecture,
+        "bestValidation": best_validation,
+        "bestEpoch": best_epoch,
+      }, args.checkpoint)
+    scheduler.step()
+    if args.early_stopping_patience and best_epoch is not None and epoch - best_epoch >= args.early_stopping_patience:
+      break
+  if not Path(args.checkpoint).exists():
+    Path(args.checkpoint).parent.mkdir(parents=True, exist_ok=True)
+    torch.save({"model": model.state_dict(), "optimizer": opt.state_dict(), "epoch": start_epoch + args.epochs - 1, "architecture": args.architecture}, args.checkpoint)
+  metrics = {
+    "device": str(device),
+    "architecture": args.architecture,
+    "firstLoss": first,
+    "lastLoss": last,
+    "bestValidation": best_validation,
+    "bestEpoch": best_epoch,
+    "history": history,
+    "checkpoint": args.checkpoint,
+  }
   Path(args.metrics).parent.mkdir(parents=True, exist_ok=True)
   Path(args.metrics).write_text(json.dumps(metrics, indent=2), encoding="utf8")
   print(json.dumps(metrics, indent=2))
@@ -83,7 +150,7 @@ def train(args):
 
 def main():
   parser = argparse.ArgumentParser()
-  parser.add_argument("--shard", default="training/v31/generated/stage-a/stage-a-0000.npz")
+  parser.add_argument("--shard", default="training/v31/generated/stage-a/teacher-0000.npz")
   parser.add_argument("--architecture", default="res6c64")
   parser.add_argument("--checkpoint", default="training/v31/checkpoints/tiny-student.pt")
   parser.add_argument("--metrics", default="training/v31/generated/tiny-train-metrics.json")
@@ -91,11 +158,16 @@ def main():
   parser.add_argument("--epochs", type=int, default=1)
   parser.add_argument("--batch-size", type=int, default=16)
   parser.add_argument("--limit", type=int, default=128)
+  parser.add_argument("--validation-limit", type=int)
   parser.add_argument("--lr", type=float, default=1e-3)
+  parser.add_argument("--min-lr", type=float, default=1e-5)
   parser.add_argument("--seed", type=int, default=310)
   parser.add_argument("--policy-weight", type=float, default=1.0)
   parser.add_argument("--value-weight", type=float, default=0.25)
-  parser.add_argument("--score-weight", type=float, default=0.05)
+  parser.add_argument("--score-weight", type=float, default=0.10)
+  parser.add_argument("--grad-clip", type=float, default=1.0)
+  parser.add_argument("--early-stopping-patience", type=int, default=0)
+  parser.add_argument("--mixed-precision", action="store_true")
   parser.add_argument("--prefer-gpu", action="store_true")
   args = parser.parse_args()
   train(args)

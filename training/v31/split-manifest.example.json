@@ -1,10 +1,10 @@
 {
-  "seed": "gokidcoach-v310-split-v1",
-  "method": "sha256(positionId) bucket by source position id",
+  "seed": "gokidcoach-v311-split-v1",
+  "method": "sha256(basePositionId) bucket; all profiles and symmetries stay in the same split",
   "splitDistribution": {
-    "train": 806,
-    "validation": 97,
-    "holdout": 97
+    "train": 16302,
+    "holdout": 1924,
+    "validation": 1774
   },
-  "positionHash": "33472f34479a094481e0d1d98d95045bd13a88ff31c2c03eefa51aa486638f62"
+  "positionHash": "1e84fc03a1eeb824aeda3b69b9a4fd470661d24e9a28ae7733de42c702f078b1"
 }
