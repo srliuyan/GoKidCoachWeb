@@ -16,9 +16,6 @@ const rawStageTimingCap = 100;
 const recoverySnapshotInterval = 20;
 const maxStrengthMode = "MAX_STRENGTH_FIXED";
 const difficultyPresets = [
-  { value: "beginner", level: 720, key: "difficultyBeginner" },
-  { value: "basic", level: 840, key: "difficultyIntermediate" },
-  { value: "advanced", level: 980, key: "difficultyStrong" },
   { value: "adaptive", level: 880, key: "difficultyChallenge" },
   { value: maxStrengthMode, level: 980, key: "difficultyMax" }
 ];
@@ -35,7 +32,7 @@ const i18n = {
     appTitle: "围棋陪练", subtitle: "{size} 路儿童自适应对弈网页版", thinking: "AI 思考中...",
     setup: "学习设置", child: "孩子", newChild: "新孩子名字", add: "添加", board: "棋盘", language: "语言", stage: "阶段",
     board9: "9 路入门", board13: "13 路进阶", board19: "19 路完整",
-    difficulty: "陪练模式", difficultyBeginner: "🌱 入门", difficultyIntermediate: "📘 基础", difficultyStrong: "⚔️ 进阶", difficultyChallenge: "🤖 自适应陪练", difficultyMax: "👑 职业模式（最高棋力）",
+    difficulty: "陪练模式", difficultyBeginner: "🌱 入门", difficultyIntermediate: "📘 基础", difficultyStrong: "⚔️ 进阶", difficultyChallenge: "自适应对弈", difficultyMax: "当前最高棋力",
     maxModeStatus: "👑 职业模式已开启：AI将以当前最高棋力对弈，不会自动降低难度。",
     statusStart: "黑棋先行，请孩子落子", statusDone: "本局已结束，可以新开一局", statusBlack: "轮到孩子落子", statusWhite: "轮到 AI 落子",
     moves: "手数", childCaptures: "孩子吃子", aiCaptures: "AI吃子", profile: "能力档案", rating: "总体棋力", opening: "布局", fighting: "战斗", stability: "稳定", played: "已下", winRate: "胜率", aiLevel: "AI强度",
@@ -61,7 +58,7 @@ const i18n = {
     appTitle: "圍棋陪練", subtitle: "{size} 路小朋友自適應對弈網頁版", thinking: "AI 諗緊...",
     setup: "學習設定", child: "小朋友", newChild: "新小朋友名", add: "新增", board: "棋盤", language: "語言", stage: "階段",
     board9: "9 路入門", board13: "13 路進階", board19: "19 路完整",
-    difficulty: "初始難度", difficultyBeginner: "🌱 入門", difficultyIntermediate: "📘 基礎", difficultyStrong: "⚔️ 進階", difficultyChallenge: "🤖 自適應陪練", difficultyMax: "👑 職業模式（最高棋力）",
+    difficulty: "初始難度", difficultyBeginner: "🌱 入門", difficultyIntermediate: "📘 基礎", difficultyStrong: "⚔️ 進階", difficultyChallenge: "自適應對弈", difficultyMax: "目前最高棋力",
     maxModeStatus: "👑 職業模式已開啟：AI會以目前最高棋力對弈，不會自動降低難度。",
     statusStart: "黑棋先行，請小朋友落子", statusDone: "呢局已結束，可以開新局", statusBlack: "輪到小朋友落黑棋", statusWhite: "輪到 AI 落白棋",
     moves: "手數", childCaptures: "小朋友食子", aiCaptures: "AI食子", profile: "能力檔案", rating: "整體棋力", opening: "布局", fighting: "戰鬥", stability: "穩定", played: "已下", winRate: "勝率", aiLevel: "AI強度",
@@ -86,7 +83,7 @@ const i18n = {
     appTitle: "Go Coach", subtitle: "{size}x{size} adaptive Go for kids", thinking: "AI thinking...",
     setup: "Learning", child: "Child", newChild: "New child name", add: "Add", board: "Board", language: "Language", stage: "Stage",
     board9: "9x9 Beginner", board13: "13x13 Next", board19: "19x19 Full",
-    difficulty: "Initial level", difficultyBeginner: "🌱 Beginner", difficultyIntermediate: "📘 Basic", difficultyStrong: "⚔️ Advanced", difficultyChallenge: "🤖 Adaptive coach", difficultyMax: "👑 Pro mode (max strength)",
+    difficulty: "Initial level", difficultyBeginner: "🌱 Beginner", difficultyIntermediate: "📘 Basic", difficultyStrong: "⚔️ Advanced", difficultyChallenge: "Adaptive play", difficultyMax: "Current maximum strength",
     maxModeStatus: "👑 Pro mode is on: AI uses the current maximum engine strength and will not lower difficulty automatically.",
     statusStart: "Black plays first. Place a stone.", statusDone: "Game finished. Start a new game.", statusBlack: "Child to play black", statusWhite: "AI to play white",
     moves: "Moves", childCaptures: "Child captures", aiCaptures: "AI captures", profile: "Skill Profile", rating: "Rating", opening: "Opening", fighting: "Fighting", stability: "Stability", played: "Games", winRate: "Win rate", aiLevel: "AI level",
@@ -111,7 +108,7 @@ const i18n = {
     appTitle: "囲碁コーチ", subtitle: "{size} 路 子ども向け自動調整対局", thinking: "AI 思考中...",
     setup: "学習設定", child: "子ども", newChild: "新しい名前", add: "追加", board: "盤", language: "言語", stage: "段階",
     board9: "9 路 入門", board13: "13 路 中級", board19: "19 路 完整",
-    difficulty: "初期難度", difficultyBeginner: "🌱 入門", difficultyIntermediate: "📘 基本", difficultyStrong: "⚔️ 上級", difficultyChallenge: "🤖 自動調整", difficultyMax: "👑 プロモード（最高棋力）",
+    difficulty: "初期難度", difficultyBeginner: "🌱 入門", difficultyIntermediate: "📘 基本", difficultyStrong: "⚔️ 上級", difficultyChallenge: "自動対局", difficultyMax: "現在の最高棋力",
     maxModeStatus: "👑 プロモード中：AIは現在の最高棋力で対局し、自動で弱くしません。",
     statusStart: "黒番です。石を置いてください", statusDone: "対局終了。新しい対局を始められます", statusBlack: "子どもの黒番", statusWhite: "AI の白番",
     moves: "手数", childCaptures: "子どもの取り", aiCaptures: "AIの取り", profile: "能力プロフィール", rating: "総合棋力", opening: "序盤", fighting: "戦い", stability: "安定", played: "対局数", winRate: "勝率", aiLevel: "AI強度",
@@ -136,7 +133,7 @@ const i18n = {
     appTitle: "바둑 코치", subtitle: "{size}줄 어린이 맞춤 대국", thinking: "AI 생각 중...",
     setup: "학습 설정", child: "아이", newChild: "새 아이 이름", add: "추가", board: "바둑판", language: "언어", stage: "단계",
     board9: "9줄 입문", board13: "13줄 중급", board19: "19줄 전체",
-    difficulty: "초기 난이도", difficultyBeginner: "🌱 입문", difficultyIntermediate: "📘 기본", difficultyStrong: "⚔️ 고급", difficultyChallenge: "🤖 맞춤 대련", difficultyMax: "👑 프로 모드(최고 기력)",
+    difficulty: "초기 난이도", difficultyBeginner: "🌱 입문", difficultyIntermediate: "📘 기본", difficultyStrong: "⚔️ 고급", difficultyChallenge: "적응 대국", difficultyMax: "현재 최고 기력",
     maxModeStatus: "👑 프로 모드가 켜졌습니다. AI는 현재 최고 기력으로 두며 자동으로 약해지지 않습니다.",
     statusStart: "흑이 먼저 둡니다. 돌을 놓으세요", statusDone: "대국이 끝났습니다. 새 판을 시작하세요", statusBlack: "아이의 흑 차례", statusWhite: "AI의 백 차례",
     moves: "수순", childCaptures: "아이 잡은 돌", aiCaptures: "AI 잡은 돌", profile: "실력 기록", rating: "종합 실력", opening: "포석", fighting: "전투", stability: "안정", played: "대국", winRate: "승률", aiLevel: "AI 강도",
@@ -1037,13 +1034,13 @@ function learningStage() {
 function adaptiveStatus() {
   const plan = currentMoveQualityPlan || currentCompanionPlan;
   if (!plan) {
-    return { title: "Adaptive Engine", status: "--", text: "In-game adaptive strength is waiting for the first evaluation." };
+    return { title: "自适应对弈", status: "--", text: "AI 会根据最近对局结果调整思考时间。" };
   }
   const confidence = Math.round((plan.confidenceBase || 0.7) * 100);
   return {
-    title: "Adaptive Engine",
+    title: "自适应对弈",
     status: `${confidence}%`,
-    text: `Current strength ${plan.currentStrength}, AI target ${plan.targetAiStrength}, precision ${plan.precisionBand}, focus ${plan.focus}.`
+    text: "AI 会保持稳定对弈，不故意下坏棋。"
   };
 }
 

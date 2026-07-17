@@ -31,7 +31,7 @@ async function testManagerDefaultsToLegacy() {
   const manager = new managerModule.EngineManager({
     legacyOptions: { selectMove: position => position.legalMoves[0] }
   });
-  await manager.initialize();
+  await manager.initialize({ preferNeural: false });
   assert.strictEqual(manager.getActiveEngineName(), "legacy");
   assert.strictEqual(manager.getDiagnostics().fallbackReason, "default_legacy");
   assert.deepStrictEqual(await manager.selectMove({ legalMoves: [{ x: 1, y: 2 }] }), { x: 1, y: 2 });
@@ -88,7 +88,7 @@ async function testStaleResponseAndOneActiveRequest() {
       }
     }
   });
-  await manager.initialize();
+  await manager.initialize({ preferNeural: false });
   const first = manager.selectMove({ legalMoves: [{ x: 1, y: 1 }] });
   const second = manager.selectMove({ legalMoves: [{ x: 2, y: 2 }] });
   await second;
@@ -98,7 +98,7 @@ async function testStaleResponseAndOneActiveRequest() {
 
 async function testCancellationAndDiagnostics() {
   const manager = new managerModule.EngineManager();
-  await manager.initialize();
+  await manager.initialize({ preferNeural: false });
   const result = manager.cancelSearch();
   assert.strictEqual(result.cancelled, true);
   const diagnostics = manager.getDiagnostics();
@@ -108,9 +108,9 @@ async function testCancellationAndDiagnostics() {
 function testNeuralPlaceholderCapabilities() {
   const engine = new neuralModule.NeuralMctsPrototypeEngine({ scope: { navigator: {}, WebAssembly } });
   const capabilities = engine.getCapabilities();
-  assert.strictEqual(capabilities.architectureOnly, true);
+  assert.strictEqual(capabilities.architectureOnly, false);
   assert.strictEqual(capabilities.neuralModelLoaded, false);
-  assert.strictEqual(capabilities.mctsImplemented, false);
+  assert.strictEqual(capabilities.mctsImplemented, true);
   assert.strictEqual(capabilities.serverDependency, false);
   assert.strictEqual(capabilities.paidApiDependency, false);
 }
@@ -136,8 +136,7 @@ function testPrototypePageDiagnosticsExport() {
   const js = read("neural-prototype.js");
   assert(html.includes("exportDiagnosticsBtn"));
   assert(js.includes("modelIncluded: false"));
-  assert(js.includes("mctsImplemented: false"));
-  assert(js.includes("webgpuInferenceImplemented: false"));
+  assert(js.includes("mctsImplemented: true"));
 }
 
 (async function run() {

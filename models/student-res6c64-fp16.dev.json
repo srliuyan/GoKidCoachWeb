@@ -1,0 +1,26 @@
+{
+  "schema": "gokidcoach-dev-model-manifest",
+  "id": "gokidcoach-student-res6c64-fp16-fast-track",
+  "version": "3-fast-track-20260717",
+  "displayName": "GoKidCoach res6c64 FP16 student",
+  "modelPath": "training/v31/generated/fast-track/student-res6c64-fp16-direct.onnx",
+  "modelFormat": "onnx-fp16",
+  "sha256": "fdc4e2f352d908cacc531ce1aa59c50f126e7b08e477c85c6f771a7cb832086e",
+  "featureSchemaVersion": "gokidcoach-v310-12plane-current-player",
+  "boardSize": 19,
+  "spatialInputShape": [1, 12, 19, 19],
+  "globalInputShape": [1, 4],
+  "passIndex": 361,
+  "inputTensorNames": {
+    "spatial": "spatial",
+    "global": "global_features"
+  },
+  "outputTensorNames": {
+    "policy": "policy_logits",
+    "value": "value_logit",
+    "score": "score"
+  },
+  "preferredExecutionProvider": "webgpu",
+  "fallbackExecutionProvider": "wasm",
+  "committedModelBinary": false
+}

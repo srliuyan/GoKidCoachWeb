@@ -55,7 +55,7 @@
       await this.legacyEngine.initialize(options.legacy || {});
       this.activeEngine = this.legacyEngine;
       this.fallbackReason = "default_legacy";
-      if (options.preferNeural === true) {
+      if (options.preferNeural !== false) {
         try {
           const neural = this.neuralEngineFactory();
           if (!validateAIEngine(neural)) throw new Error("Neural engine does not implement AIEngine");

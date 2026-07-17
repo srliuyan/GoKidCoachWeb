@@ -11,7 +11,7 @@
   <main class="prototype-shell">
     <header>
       <p class="eyebrow">Development Only</p>
-      <h1>Neural MCTS Architecture Scaffold</h1>
+      <h1>Neural MCTS Integration Prototype</h1>
     </header>
 
     <section class="status-grid" aria-label="Prototype status">
@@ -21,9 +21,18 @@
       <div><span>Worker supported</span><strong id="workerStatus">checking</strong></div>
       <div><span>Current active engine</span><strong id="activeEngine">legacy</strong></div>
       <div><span>Fallback status</span><strong id="fallbackStatus">default_legacy</strong></div>
+      <div><span>Model status</span><strong id="modelStatus">pending</strong></div>
+      <div><span>MCTS status</span><strong id="mctsStatus">pending</strong></div>
+    </section>
+
+    <section class="mode-row" aria-label="Mode">
+      <button id="adaptiveModeBtn" type="button" data-mode="adaptive">自适应对弈</button>
+      <button id="maxModeBtn" type="button" data-mode="max">当前最高棋力</button>
     </section>
 
     <section class="actions" aria-label="Diagnostics">
+      <button id="smokeBtn" type="button">运行一次搜索</button>
+      <button id="cancelBtn" type="button">取消搜索</button>
       <button id="exportDiagnosticsBtn" type="button">导出诊断</button>
     </section>
 
