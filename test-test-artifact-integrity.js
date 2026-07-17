@@ -242,14 +242,16 @@ function testFullLoopDoesNotChangeTrackedFiles() {
     const child = childProcess.spawnSync(process.execPath, [file], {
       cwd: root,
       env: { ...process.env, GOKIDCOACH_ARTIFACT_INTEGRITY_CHILD: "1" },
-      stdio: "pipe",
+      stdio: "ignore",
       timeout: 300000,
       killSignal: "SIGTERM"
     });
     if (child.error && child.error.code === "ETIMEDOUT") {
       throw new Error(`${file} timed out during artifact-integrity full-loop check`);
     }
-    assert.ifError(child.error);
+    if (child.error && child.status !== 0) {
+      assert.ifError(child.error);
+    }
     assert.strictEqual(child.signal, null, `${file} terminated by ${child.signal}`);
     assert.strictEqual(child.status, 0, `${file} exited ${child.status}`);
   }

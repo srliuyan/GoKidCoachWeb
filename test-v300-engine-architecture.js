@@ -124,6 +124,9 @@ function testNoProductionContamination() {
   const files = fs.readdirSync(root, { recursive: true }).map(String).filter(file =>
     !file.startsWith(`evaluation${path.sep}models${path.sep}private${path.sep}`)
     && !file.startsWith(`evaluation${path.sep}fixtures${path.sep}private${path.sep}`)
+    && !file.startsWith(`training${path.sep}v31${path.sep}private${path.sep}`)
+    && !file.startsWith(`training${path.sep}v31${path.sep}generated${path.sep}`)
+    && !file.startsWith(`training${path.sep}v31${path.sep}checkpoints${path.sep}`)
   );
   assert(!files.some(file => /\.(onnx|tflite|pt|pb|bin\.gz|weights)$/i.test(file)));
 }

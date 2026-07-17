@@ -1,0 +1,51 @@
+{
+  "schema": "gokidcoach-v310-student-config",
+  "selectedArchitecture": "res6c64",
+  "architectures": {
+    "res6c64": {
+      "description": "6 residual blocks, 64 channels",
+      "inputPlanes": 12,
+      "residualBlocks": 6,
+      "channels": 64,
+      "activation": "relu",
+      "selected": true
+    },
+    "res8c64": {
+      "description": "8 residual blocks, 64 channels",
+      "inputPlanes": 12,
+      "residualBlocks": 8,
+      "channels": 64,
+      "activation": "relu",
+      "selected": false
+    },
+    "res6c96": {
+      "description": "6 residual blocks, 96 channels",
+      "inputPlanes": 12,
+      "residualBlocks": 6,
+      "channels": 96,
+      "activation": "relu",
+      "selected": false
+    }
+  },
+  "featureSchema": {
+    "id": "gokidcoach-v310-12plane-current-player",
+    "boardSize": 19,
+    "spatialShape": [12, 19, 19],
+    "globalShape": [4],
+    "passIndex": 361,
+    "historyDepth": 4,
+    "rules": "chinese_initial",
+    "komiEncoding": "komi_minus_7_5_div_10"
+  },
+  "lossWeights": {
+    "policy": 1.0,
+    "value": 0.25,
+    "score": 0.05
+  },
+  "stageA": {
+    "targetPositions": 1000,
+    "sourcePositions": "evaluation/v200-positions.json",
+    "sourceTeacher": "evaluation/v200-katago-analysis-combined.json",
+    "outputDir": "training/v31/generated/stage-a"
+  }
+}

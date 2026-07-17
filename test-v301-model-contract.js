@@ -95,6 +95,9 @@ function listFiles(dir) {
   const forbiddenModelFiles = listFiles(root).filter((file) => {
     if (file.includes(`${path.sep}evaluation${path.sep}models${path.sep}private${path.sep}`)) return false;
     if (file.includes(`${path.sep}evaluation${path.sep}fixtures${path.sep}private${path.sep}`)) return false;
+    if (file.includes(`${path.sep}training${path.sep}v31${path.sep}private${path.sep}`)) return false;
+    if (file.includes(`${path.sep}training${path.sep}v31${path.sep}generated${path.sep}`)) return false;
+    if (file.includes(`${path.sep}training${path.sep}v31${path.sep}checkpoints${path.sep}`)) return false;
     if (file.endsWith(".bin.gz")) return true;
     return forbiddenModelExtensions.has(path.extname(file));
   });

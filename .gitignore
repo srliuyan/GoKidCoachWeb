@@ -32,3 +32,8 @@ evaluation/V200-EXTERNAL-BENCHMARK.md
 evaluation/v201-*.json
 evaluation/V201-*.md
 !evaluation/V201-CANDIDATE-RECALL-METHODOLOGY.md
+
+# V3.1 student-model generated artifacts.
+training/v31/private/
+training/v31/generated/
+training/v31/checkpoints/
