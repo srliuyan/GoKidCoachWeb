@@ -20,6 +20,14 @@ GLOBAL_FEATURES = 4
 
 
 SCORE_SCALE = 30.0
+PHASE_TARGETS = {
+  "opening_1_20": 0.15,
+  "early_middlegame_21_60": 0.20,
+  "middlegame_61_120": 0.25,
+  "late_middlegame_121_200": 0.25,
+  "endgame_201_plus": 0.15,
+}
+IMPORTANT_FAMILIES = {"escape", "weak_group", "counterattack", "capture_or_atari", "connection", "cut"}
 
 
 def stable_hash(value) -> str:
@@ -221,22 +229,59 @@ def reconstruct_position_from_id(result: dict) -> dict | None:
   return None
 
 
-def make_visit_policy(result: dict) -> np.ndarray | None:
+def normalize_policy(arr: np.ndarray) -> np.ndarray | None:
+  total = float(arr.sum())
+  if not np.isfinite(total) or total <= 0.0:
+    return None
+  out = (arr / total).astype(np.float32)
+  if not np.isfinite(out).all():
+    return None
+  return out
+
+
+def temperature_smooth(policy: np.ndarray, temperature: float) -> np.ndarray:
+  if temperature <= 0:
+    raise ValueError("temperature must be positive")
+  if abs(temperature - 1.0) < 1e-9:
+    return policy.astype(np.float32)
+  powered = np.power(np.clip(policy, 0.0, 1.0), 1.0 / temperature).astype(np.float32)
+  normalized = normalize_policy(powered)
+  if normalized is None:
+    raise ValueError("temperature produced invalid policy")
+  return normalized
+
+
+def make_visit_policy(result: dict, top_n: int = 0, tail_mass: float = 0.0) -> np.ndarray | None:
   arr = np.zeros((POLICY_SIZE,), dtype=np.float32)
   infos = result.get("moveInfos") or []
-  total = sum(max(0.0, float(info.get("visits", 0))) for info in infos)
+  sorted_infos = sorted(infos, key=lambda info: float(info.get("visits", 0)), reverse=True)
+  if top_n > 0:
+    sorted_infos = sorted_infos[:top_n]
+  total = sum(max(0.0, float(info.get("visits", 0))) for info in sorted_infos)
   if total <= 0:
     return None
-  for info in infos:
+  for info in sorted_infos:
     idx = move_to_index(info.get("move", ""))
     if idx is not None:
-      arr[idx] += max(0.0, float(info.get("visits", 0))) / total
-  return arr
+      arr[idx] += (1.0 - tail_mass) * max(0.0, float(info.get("visits", 0))) / total
+  if tail_mass > 0.0:
+    legal_count = POLICY_SIZE
+    arr += tail_mass / legal_count
+  return normalize_policy(arr)
 
 
-def make_policy(result: dict, source: str = "prefer_visits") -> Tuple[np.ndarray, str]:
+def make_prior_policy(result: dict) -> np.ndarray | None:
+  arr = np.zeros((POLICY_SIZE,), dtype=np.float32)
+  for info in result.get("moveInfos") or []:
+    idx = move_to_index(info.get("move", ""))
+    if idx is not None:
+      arr[idx] += max(0.0, float(info.get("prior", 0)))
+  return normalize_policy(arr)
+
+
+def make_policy(result: dict, source: str = "prefer_visits", temperature: float = 1.0, top_n: int = 0, tail_mass: float = 0.0, blend_raw: float = 0.0) -> Tuple[np.ndarray, str]:
   if source in {"visits", "prefer_visits"}:
-    visit_policy = make_visit_policy(result)
+    visit_policy = make_visit_policy(result, top_n=top_n, tail_mass=tail_mass)
     if visit_policy is not None:
       arr = visit_policy
       target_type = "search_visit_policy"
@@ -265,9 +310,68 @@ def make_policy(result: dict, source: str = "prefer_visits") -> Tuple[np.ndarray
     target_type = "fallback_pass_policy"
   else:
     arr /= s
+  if blend_raw > 0.0 and target_type == "search_visit_policy":
+    prior = make_prior_policy(result)
+    if prior is not None:
+      arr = normalize_policy((1.0 - blend_raw) * arr + blend_raw * prior)
+      target_type = "visit_prior_blend_policy"
+  arr = temperature_smooth(arr, temperature)
   if not np.isfinite(arr).all() or float(arr.max()) < 0.006:
     raise ValueError("malformed or near-uniform policy target")
   return arr.astype(np.float32), target_type
+
+
+def policy_quality(result: dict, policy: np.ndarray, target_type: str) -> dict:
+  infos = result.get("moveInfos") or []
+  visit_values = np.asarray([max(0.0, float(info.get("visits", 0))) for info in infos], dtype=np.float32)
+  total_visits = float(visit_values.sum())
+  sorted_visits = np.sort(visit_values)[::-1]
+  entropy = float(-(policy * np.log(np.clip(policy, 1e-12, 1.0))).sum())
+  max_entropy = float(np.log(POLICY_SIZE))
+  score_stdevs = [float(info.get("scoreStdev", 0.0)) for info in infos if info.get("scoreStdev") is not None]
+  winrates = [float(info.get("winrate", result.get("winrate", 0.5))) for info in infos if info.get("winrate") is not None]
+  top1 = float(sorted_visits[0] / total_visits) if total_visits > 0 and len(sorted_visits) else 0.0
+  top3 = float(sorted_visits[:3].sum() / total_visits) if total_visits > 0 and len(sorted_visits) else 0.0
+  top10 = float(sorted_visits[:10].sum() / total_visits) if total_visits > 0 and len(sorted_visits) else 0.0
+  pass_prob = float(policy[PASS_INDEX])
+  low_visit = total_visits < 32
+  flat = entropy / max_entropy > 0.72
+  sharp = top1 > 0.92
+  few_moves = len([v for v in visit_values if v > 0]) < 3
+  excessive_pass = pass_prob > 0.35
+  score_uncertainty = float(np.mean(score_stdevs)) if score_stdevs else 0.0
+  winrate_uncertainty = float(np.std(winrates)) if winrates else 0.0
+  confidence = 1.0
+  if low_visit:
+    confidence *= 0.70
+  if flat:
+    confidence *= 0.80
+  if sharp:
+    confidence *= 0.90
+  if few_moves:
+    confidence *= 0.75
+  if score_uncertainty > 25:
+    confidence *= 0.85
+  if excessive_pass:
+    confidence *= 0.75
+  return {
+    "teacherVisits": int(result.get("visits", result.get("rootInfo", {}).get("visits", total_visits))),
+    "rootMoveCount": int(len(infos)),
+    "top1VisitShare": top1,
+    "top3VisitShare": top3,
+    "top10VisitShare": top10,
+    "policyEntropy": entropy,
+    "nonzeroMoves": int(np.sum(policy > 0)),
+    "scoreUncertainty": score_uncertainty,
+    "winrateUncertainty": winrate_uncertainty,
+    "targetType": target_type,
+    "lowVisit": low_visit,
+    "flatTarget": flat,
+    "sharpTarget": sharp,
+    "fewExploredMoves": few_moves,
+    "excessivePass": excessive_pass,
+    "confidenceWeight": float(max(0.15, min(1.0, confidence))),
+  }
 
 
 def tactical_family(position: dict) -> str:
@@ -299,7 +403,7 @@ def split_for(position_id: str) -> str:
   return "holdout"
 
 
-def build_rows(positions: list, analysis: list, count: int, policy_source: str) -> Tuple[list, int, int]:
+def build_rows(positions: list, analysis: list, count: int, policy_source: str, temperature: float, top_n: int, tail_mass: float, blend_raw: float) -> Tuple[list, int, int]:
   pos_by_id = {p["positionId"]: p for p in positions}
   rows = []
   invalid = 0
@@ -312,10 +416,11 @@ def build_rows(positions: list, analysis: list, count: int, policy_source: str) 
       invalid += 1
       continue
     try:
-      policy, target_type = make_policy(result, policy_source)
+      policy, target_type = make_policy(result, policy_source, temperature=temperature, top_n=top_n, tail_mass=tail_mass, blend_raw=blend_raw)
     except ValueError:
       invalid += 1
       continue
+    quality = policy_quality(result, policy, target_type)
     spatial, global_features, legal_mask = encode_features(position)
     for symmetry in range(8 if count > len(pos_by_id) else 1):
       sample_id = f"{pid}|analysis{result_index}|{result.get('profile', 'unknown')}|sym{symmetry}"
@@ -331,6 +436,7 @@ def build_rows(positions: list, analysis: list, count: int, policy_source: str) 
         "legal": legal_mask,
         "policy": transform_policy(policy, symmetry),
         "targetType": target_type,
+        "quality": quality,
         "sampleId": sample_id,
         "basePositionId": pid,
         "symmetry": symmetry,
@@ -338,7 +444,17 @@ def build_rows(positions: list, analysis: list, count: int, policy_source: str) 
   return rows, duplicate_sample, invalid
 
 
-def select_balanced(rows: list, count: int) -> list:
+def quota_counts(total: int, proportions: dict) -> dict:
+  quotas = {key: int(total * value) for key, value in proportions.items()}
+  remainder = total - sum(quotas.values())
+  for key in sorted(proportions, key=lambda k: proportions[k], reverse=True)[:remainder]:
+    quotas[key] += 1
+  return quotas
+
+
+def select_balanced(rows: list, count: int, mode: str = "round_robin") -> list:
+  if mode == "phase_targets":
+    return select_phase_targeted(rows, count)
   buckets = defaultdict(list)
   for row in rows:
     key = (row["position"].get("phase", "unknown"), tactical_family(row["position"]))
@@ -363,12 +479,48 @@ def select_balanced(rows: list, count: int) -> list:
   return selected
 
 
+def select_phase_targeted(rows: list, count: int) -> list:
+  phase_buckets = defaultdict(list)
+  for row in rows:
+    phase_buckets[row["position"].get("phase", "unknown")].append(row)
+  for phase in phase_buckets:
+    phase_buckets[phase].sort(key=lambda row: (-row["quality"]["confidenceWeight"], row["sampleId"]))
+  selected = []
+  seen = set()
+  for phase, quota in quota_counts(count, PHASE_TARGETS).items():
+    for row in phase_buckets.get(phase, [])[:quota]:
+      selected.append(row)
+      seen.add(row["sampleId"])
+  remaining = [row for row in rows if row["sampleId"] not in seen]
+  family_counts = Counter(tactical_family(row["position"]) for row in selected)
+  family_min = int(count * 0.08)
+  for family in sorted(IMPORTANT_FAMILIES):
+    need = max(0, family_min - family_counts[family])
+    if need == 0:
+      continue
+    additions = [row for row in remaining if tactical_family(row["position"]) == family]
+    additions.sort(key=lambda row: (-row["quality"]["confidenceWeight"], row["sampleId"]))
+    for row in additions[:need]:
+      selected.append(row)
+      seen.add(row["sampleId"])
+      family_counts[family] += 1
+    remaining = [row for row in remaining if row["sampleId"] not in seen]
+  if len(selected) > count:
+    selected.sort(key=lambda row: (-row["quality"]["confidenceWeight"], row["sampleId"]))
+    selected = selected[:count]
+  elif len(selected) < count:
+    remaining.sort(key=lambda row: (-row["quality"]["confidenceWeight"], row["sampleId"]))
+    selected.extend(remaining[:count - len(selected)])
+  selected.sort(key=lambda row: row["sampleId"])
+  return selected[:count]
+
+
 def generate(args) -> dict:
   positions = json.loads(Path(args.positions).read_text(encoding="utf8"))["positions"]
   analysis = json.loads(Path(args.analysis).read_text(encoding="utf8"))["results"]
   pos_by_id = {p["positionId"]: p for p in positions}
-  all_rows, duplicate, invalid = build_rows(positions, analysis, args.count, args.policy_source)
-  rows = select_balanced(all_rows, args.count)
+  all_rows, duplicate, invalid = build_rows(positions, analysis, args.count, args.policy_source, args.temperature, args.top_n, args.tail_mass, args.blend_raw)
+  rows = select_balanced(all_rows, args.count, args.balance_mode)
 
   if len(rows) != args.count:
     raise RuntimeError(f"requested {args.count} rows but generated {len(rows)}")
@@ -381,7 +533,7 @@ def generate(args) -> dict:
   policy = np.stack([r["policy"] for r in rows]).astype(np.float32)
   value = np.asarray([float(r["result"].get("winrate", 0.5)) for r in rows], dtype=np.float32)
   score_raw = np.asarray([float(r["result"].get("scoreLead", 0.0)) for r in rows], dtype=np.float32)
-  score = np.clip(score_raw, -SCORE_SCALE, SCORE_SCALE).astype(np.float32) / SCORE_SCALE
+  score = np.clip(score_raw, -args.score_scale, args.score_scale).astype(np.float32) / args.score_scale
   position_ids = np.asarray([r["sampleId"] for r in rows])
   base_position_ids = np.asarray([r["basePositionId"] for r in rows])
   splits = np.asarray([split_for(r["basePositionId"]) for r in rows])
@@ -390,6 +542,15 @@ def generate(args) -> dict:
   target_types = np.asarray([r["targetType"] for r in rows])
   symmetries = np.asarray([r["symmetry"] for r in rows], dtype=np.int8)
   visits = np.asarray([int(r["result"].get("visits", r["result"].get("rootInfo", {}).get("visits", 0))) for r in rows], dtype=np.int32)
+  sample_weights = np.asarray([r["quality"]["confidenceWeight"] if args.confidence_weights else 1.0 for r in rows], dtype=np.float32)
+  teacher_top = np.asarray([int(np.argmax(r["policy"])) for r in rows], dtype=np.int16)
+  entropy = np.asarray([r["quality"]["policyEntropy"] for r in rows], dtype=np.float32)
+  root_move_counts = np.asarray([r["quality"]["rootMoveCount"] for r in rows], dtype=np.int16)
+  top1_visit_share = np.asarray([r["quality"]["top1VisitShare"] for r in rows], dtype=np.float32)
+  top3_visit_share = np.asarray([r["quality"]["top3VisitShare"] for r in rows], dtype=np.float32)
+  top10_visit_share = np.asarray([r["quality"]["top10VisitShare"] for r in rows], dtype=np.float32)
+  score_uncertainty = np.asarray([r["quality"]["scoreUncertainty"] for r in rows], dtype=np.float32)
+  winrate_uncertainty = np.asarray([r["quality"]["winrateUncertainty"] for r in rows], dtype=np.float32)
   shard = out_dir / "teacher-0000.npz"
   np.savez_compressed(
     shard,
@@ -408,12 +569,34 @@ def generate(args) -> dict:
     target_types=target_types,
     symmetries=symmetries,
     visits=visits,
+    sample_weights=sample_weights,
+    teacher_top=teacher_top,
+    policy_entropy=entropy,
+    root_move_counts=root_move_counts,
+    top1_visit_share=top1_visit_share,
+    top3_visit_share=top3_visit_share,
+    top10_visit_share=top10_visit_share,
+    score_uncertainty=score_uncertainty,
+    winrate_uncertainty=winrate_uncertainty,
   )
+  quality_flags = Counter()
+  for row in rows:
+    for key in ("lowVisit", "flatTarget", "sharpTarget", "fewExploredMoves", "excessivePass"):
+      if row["quality"][key]:
+        quality_flags[key] += 1
   manifest = {
-    "schema": "gokidcoach-v311-teacher-manifest",
+    "schema": "gokidcoach-v312-teacher-manifest",
     "teacherLabelSource": "cached KataGo analysis mode",
     "policyTargetType": "per_sample_target_types",
-    "scoreScale": SCORE_SCALE,
+    "policyTemperature": args.temperature,
+    "policyTopN": args.top_n,
+    "tailMass": args.tail_mass,
+    "blendRaw": args.blend_raw,
+    "balanceMode": args.balance_mode,
+    "confidenceWeightsEnabled": bool(args.confidence_weights),
+    "scoreScale": args.score_scale,
+    "scoreNormalization": f"clip_scoreLead_to_[-{args.score_scale},{args.score_scale}]_divide_by_{args.score_scale}",
+    "valuePerspective": "current-player perspective from KataGo side-to-move analysis",
     "positionsRequested": args.count,
     "positionsGenerated": len(rows),
     "duplicateCount": duplicate,
@@ -424,6 +607,13 @@ def generate(args) -> dict:
     "policyTargetTypeDistribution": dict(Counter(target_types.tolist())),
     "splitDistribution": dict(Counter(splits.tolist())),
     "averageTeacherVisits": float(np.mean(visits)),
+    "averageRootMoveCount": float(np.mean(root_move_counts)),
+    "averagePolicyEntropy": float(np.mean(entropy)),
+    "averageConfidenceWeight": float(np.mean(sample_weights)),
+    "qualityFlags": dict(quality_flags),
+    "flatTargetCount": int(quality_flags["flatTarget"]),
+    "sharpTargetCount": int(quality_flags["sharpTarget"]),
+    "fewExploredMoveCount": int(quality_flags["fewExploredMoves"]),
     "lowConfidenceCount": int(np.sum(visits < args.low_confidence_visits)),
     "manualVerificationCount": min(args.manual_verify, len(rows)),
     "passIndex": PASS_INDEX,
@@ -431,7 +621,7 @@ def generate(args) -> dict:
   }
   (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf8")
   splits_manifest = {
-    "seed": "gokidcoach-v311-split-v1",
+    "seed": "gokidcoach-v312-split-v1",
     "method": "sha256(basePositionId) bucket; all profiles and symmetries stay in the same split",
     "splitDistribution": manifest["splitDistribution"],
     "positionHash": manifest["positionHash"],
@@ -451,6 +641,13 @@ def main():
   parser.add_argument("--low-confidence-visits", type=int, default=16)
   parser.add_argument("--manual-verify", type=int, default=100)
   parser.add_argument("--policy-source", choices=["prefer_visits", "visits", "raw"], default="prefer_visits")
+  parser.add_argument("--temperature", type=float, default=1.0)
+  parser.add_argument("--top-n", type=int, default=0)
+  parser.add_argument("--tail-mass", type=float, default=0.0)
+  parser.add_argument("--blend-raw", type=float, default=0.0)
+  parser.add_argument("--balance-mode", choices=["round_robin", "phase_targets"], default="round_robin")
+  parser.add_argument("--score-scale", type=float, default=SCORE_SCALE)
+  parser.add_argument("--confidence-weights", action="store_true")
   args = parser.parse_args()
   print(json.dumps(generate(args), indent=2))
 

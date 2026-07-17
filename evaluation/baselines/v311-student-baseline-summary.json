@@ -1,0 +1,43 @@
+{
+  "schema": "gokidcoach-v311-student-baseline-summary",
+  "baselineCommit": "5f6b67feb5970a3beddc9a659f9ecf2be2570651",
+  "architecture": "res6c64",
+  "dataset": {
+    "positions": 20000,
+    "positionHash": "1e84fc03a1eeb824aeda3b69b9a4fd470661d24e9a28ae7733de42c702f078b1",
+    "policyTarget": "search_visit_policy",
+    "scoreScale": 30
+  },
+  "splitDistribution": {
+    "train": 16302,
+    "validation": 1774,
+    "holdout": 1924
+  },
+  "training": {
+    "seed": 310,
+    "epochsExecuted": 8,
+    "bestEpoch": 3,
+    "lossWeights": {
+      "policy": 1.0,
+      "value": 0.25,
+      "score": 0.1
+    }
+  },
+  "holdoutMetrics": {
+    "policyTop1": 0.0041580041870474815,
+    "policyTop3": 0.00883575901389122,
+    "policyTop5": 0.015072764828801155,
+    "policyTop10": 0.054054055362939835,
+    "policyKl": 4.436542510986328,
+    "valueMae": 0.42790427803993225,
+    "scoreMae": 32.842864990234375,
+    "scoreP90": 70.1778564453125,
+    "legalMoveRate": 1.0
+  },
+  "onnx": {
+    "sizeBytes": 2952968,
+    "checker": "passed",
+    "onnxRuntimeCpu": "passed",
+    "maxAbsDiff": 2.6226043701171875e-06
+  }
+}

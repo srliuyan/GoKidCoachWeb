@@ -25,10 +25,13 @@ def metric_block(logits, policy, value_prob, value, score_pred, score_raw, legal
   masked_logits = logits.masked_fill(legal_mask <= 0, -1e9)
   probs = torch.softmax(masked_logits, dim=1)
   kl = F.kl_div(torch.log(probs + 1e-8), policy, reduction="batchmean")
+  cross_entropy = -(policy * torch.log(probs + 1e-8)).sum(dim=1).mean()
   score_error = torch.abs(score_pred - score_raw)
   teacher_best = torch.argmax(policy, dim=1)
   pred_best = torch.argmax(masked_logits, dim=1)
   legal_selected = legal_mask.gather(1, pred_best[:, None]).squeeze(1) > 0
+  brier = torch.mean((value_prob - value) ** 2)
+  ece = expected_calibration_error(value_prob, value)
   return {
     "rows": int(logits.shape[0]),
     "policyTop1": topk_agreement(masked_logits, policy, 1),
@@ -36,12 +39,34 @@ def metric_block(logits, policy, value_prob, value, score_pred, score_raw, legal
     "policyTop5": topk_agreement(masked_logits, policy, 5),
     "policyTop10": topk_agreement(masked_logits, policy, 10),
     "policyKl": float(kl),
+    "policyCrossEntropy": float(cross_entropy),
     "valueMae": float(torch.mean(torch.abs(value_prob - value))),
+    "valueBrier": float(brier),
+    "valueEce": ece,
     "scoreMae": float(torch.mean(score_error)),
     "scoreP90": float(torch.quantile(score_error, 0.9)),
     "legalMoveRate": float(legal_selected.float().mean()),
     "passAccuracy": float(((pred_best == 361) == (teacher_best == 361)).float().mean()),
   }
+
+
+def expected_calibration_error(value_prob, value, buckets=10):
+  total = value_prob.numel()
+  if total == 0:
+    return 0.0
+  ece = torch.tensor(0.0, device=value_prob.device)
+  for i in range(buckets):
+    lo = i / buckets
+    hi = (i + 1) / buckets
+    if i == buckets - 1:
+      mask = (value_prob >= lo) & (value_prob <= hi)
+    else:
+      mask = (value_prob >= lo) & (value_prob < hi)
+    if torch.any(mask):
+      confidence = value_prob[mask].mean()
+      outcome = value[mask].mean()
+      ece = ece + (mask.float().mean() * torch.abs(confidence - outcome))
+  return float(ece)
 
 
 def evaluate(args):
@@ -52,7 +77,7 @@ def evaluate(args):
   model.load_state_dict(ckpt["model"])
   model.eval()
   ds, meta = load_split(args.shard, args.split, args.limit, include_meta=True)
-  spatial, global_features, policy, value, score = [t.to(device) for t in ds.tensors]
+  spatial, global_features, policy, value, score = [t.to(device) for t in ds.tensors[:5]]
   data = np.load(args.shard, allow_pickle=True)
   score_scale = float(args.score_scale)
   score_raw = torch.from_numpy(meta.get("score_raw", np.asarray(score.numpy() * score_scale))).float().to(device)

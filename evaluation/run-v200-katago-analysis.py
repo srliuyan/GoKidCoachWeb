@@ -33,6 +33,10 @@ PROFILES = {
     "quick": {"maxVisits": 16, "numAnalysisThreads": 8, "numSearchThreadsPerAnalysisThread": 1, "timeoutSeconds": 180},
     "standard": {"maxVisits": 96, "numAnalysisThreads": 4, "numSearchThreadsPerAnalysisThread": 1, "timeoutSeconds": 300},
     "deep_sample": {"maxVisits": 320, "numAnalysisThreads": 2, "numSearchThreadsPerAnalysisThread": 1, "timeoutSeconds": 600},
+    "v313_ordinary_128": {"maxVisits": 128, "numAnalysisThreads": 4, "numSearchThreadsPerAnalysisThread": 1, "timeoutSeconds": 360},
+    "v313_strategic_256": {"maxVisits": 256, "numAnalysisThreads": 3, "numSearchThreadsPerAnalysisThread": 1, "timeoutSeconds": 600},
+    "v313_weak_escape_512": {"maxVisits": 512, "numAnalysisThreads": 2, "numSearchThreadsPerAnalysisThread": 1, "timeoutSeconds": 900},
+    "v313_critical_1200": {"maxVisits": 1200, "numAnalysisThreads": 1, "numSearchThreadsPerAnalysisThread": 1, "timeoutSeconds": 1800},
 }
 
 LETTERS = "ABCDEFGHJKLMNOPQRST"

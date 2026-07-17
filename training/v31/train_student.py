@@ -21,12 +21,14 @@ def load_split(shard, split="train", limit=None, include_meta=False):
   idx = np.nonzero(mask)[0]
   if limit:
     idx = idx[:limit]
+  sample_weights = data["sample_weights"][idx] if "sample_weights" in data.files else np.ones((len(idx),), dtype=np.float32)
   tensors = [
     torch.from_numpy(data["spatial"][idx]).float(),
     torch.from_numpy(data["global_features"][idx]).float(),
     torch.from_numpy(data["policy"][idx]).float(),
     torch.from_numpy(data["value"][idx]).float(),
     torch.from_numpy(data["score"][idx]).float(),
+    torch.from_numpy(sample_weights).float(),
   ]
   ds = TensorDataset(*tensors)
   if include_meta:
@@ -34,13 +36,20 @@ def load_split(shard, split="train", limit=None, include_meta=False):
   return ds
 
 
-def compute_loss(outputs, targets, weights):
+def weighted_mean(values, sample_weights):
+  normalized = sample_weights / torch.clamp(sample_weights.mean(), min=1e-6)
+  return (values * normalized).mean()
+
+
+def compute_loss(outputs, targets, weights, sample_weights=None):
   policy_logits, value_logit, score = outputs
   policy_t, value_t, score_t = targets
+  if sample_weights is None:
+    sample_weights = torch.ones_like(value_t)
   log_probs = F.log_softmax(policy_logits, dim=1)
-  policy_loss = -(policy_t * log_probs).sum(dim=1).mean()
-  value_loss = F.binary_cross_entropy_with_logits(value_logit, value_t)
-  score_loss = F.huber_loss(score, score_t)
+  policy_loss = weighted_mean(-(policy_t * log_probs).sum(dim=1), sample_weights)
+  value_loss = weighted_mean(F.binary_cross_entropy_with_logits(value_logit, value_t, reduction="none"), sample_weights)
+  score_loss = weighted_mean(F.huber_loss(score, score_t, reduction="none"), sample_weights)
   total = weights["policy"] * policy_loss + weights["value"] * value_loss + weights["score"] * score_loss
   return total, {"policy": float(policy_loss.detach()), "value": float(value_loss.detach()), "score": float(score_loss.detach()), "total": float(total.detach())}
 
@@ -52,13 +61,14 @@ def evaluate_loss(model, dataset, weights, device, batch_size):
   count = 0
   model.eval()
   with torch.no_grad():
-    for spatial, global_features, policy, value, score in loader:
+    for spatial, global_features, policy, value, score, sample_weights in loader:
       spatial = spatial.to(device)
       global_features = global_features.to(device)
       policy = policy.to(device)
       value = value.to(device)
       score = score.to(device)
-      _, parts = compute_loss(model(spatial, global_features), (policy, value, score), weights)
+      sample_weights = sample_weights.to(device)
+      _, parts = compute_loss(model(spatial, global_features), (policy, value, score), weights, sample_weights)
       n = spatial.shape[0]
       for key in parts_sum:
         parts_sum[key] += parts[key] * n
@@ -94,15 +104,16 @@ def train(args):
   last = None
   history = []
   for epoch in range(start_epoch, start_epoch + args.epochs):
-    for spatial, global_features, policy, value, score in loader:
+    for spatial, global_features, policy, value, score, sample_weights in loader:
       spatial = spatial.to(device)
       global_features = global_features.to(device)
       policy = policy.to(device)
       value = value.to(device)
       score = score.to(device)
+      sample_weights = sample_weights.to(device)
       opt.zero_grad(set_to_none=True)
       with torch.amp.autocast("cuda", enabled=args.mixed_precision and device.type == "cuda"):
-        loss, parts = compute_loss(model(spatial, global_features), (policy, value, score), weights)
+        loss, parts = compute_loss(model(spatial, global_features), (policy, value, score), weights, sample_weights)
       scaler.scale(loss).backward()
       if args.grad_clip > 0:
         scaler.unscale_(opt)

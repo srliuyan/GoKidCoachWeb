@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify teacher sample indexing, masks, and metadata for V3.1.1 datasets."""
+"""Verify teacher sample indexing, masks, and metadata for V3.1 datasets."""
 
 from __future__ import annotations
 
@@ -34,12 +34,15 @@ def verify(args):
       failures.append({"index": i, "reason": "teacher_top_not_legal"})
     if data["spatial"][i].shape != (12, 19, 19):
       failures.append({"index": i, "reason": "spatial_shape"})
+    for required in ("sample_weights", "teacher_top", "policy_entropy", "root_move_counts"):
+      if required not in data.files:
+        failures.append({"index": i, "reason": f"missing_{required}"})
     family = str(data["families"][i])
     phase = str(data["phases"][i])
     families[family] = families.get(family, 0) + 1
     phases[phase] = phases.get(phase, 0) + 1
   report = {
-    "schema": "gokidcoach-v311-teacher-sample-verification",
+    "schema": "gokidcoach-v312-teacher-sample-verification",
     "samplesChecked": count,
     "failures": failures,
     "passed": len(failures) == 0,
@@ -54,6 +57,7 @@ def verify(args):
       "legal_mask_contains_teacher_top",
       "spatial_shape",
       "symmetry_metadata_present",
+      "teacher_quality_metadata_present",
     ],
     "symmetryMetadataPresent": "symmetries" in data.files,
   }

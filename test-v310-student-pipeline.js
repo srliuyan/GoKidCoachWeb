@@ -25,12 +25,27 @@ function testConfigAndSchema() {
 function testTeacherDataSmoke() {
   const outDir = "training/v31/generated/test-stage-a";
   const splitManifest = "training/v31/generated/test-split-manifest.json";
-  run(["training/v31/generate_teacher_data.py", "--count", "32", "--policy-source", "visits", "--output-dir", outDir, "--split-manifest", splitManifest], { timeout: 120000 });
+  run([
+    "training/v31/generate_teacher_data.py",
+    "--count", "64",
+    "--policy-source", "visits",
+    "--temperature", "1.3",
+    "--balance-mode", "phase_targets",
+    "--score-scale", "40",
+    "--output-dir", outDir,
+    "--split-manifest", splitManifest,
+  ], { timeout: 120000 });
   const manifest = JSON.parse(fs.readFileSync(path.join(root, outDir, "manifest.json"), "utf8"));
-  assert.strictEqual(manifest.positionsGenerated, 32);
+  assert.strictEqual(manifest.positionsGenerated, 64);
   assert.strictEqual(manifest.invalidCount, 0);
-  assert.strictEqual(manifest.policyTargetTypeDistribution.search_visit_policy, 32);
+  assert.strictEqual(manifest.policyTargetTypeDistribution.search_visit_policy, 64);
   assert.strictEqual(manifest.passIndex, 361);
+  assert.strictEqual(manifest.policyTemperature, 1.3);
+  assert.strictEqual(manifest.balanceMode, "phase_targets");
+  assert.strictEqual(manifest.scoreScale, 40);
+  assert(manifest.averageConfidenceWeight > 0);
+  assert("averagePolicyEntropy" in manifest);
+  assert("qualityFlags" in manifest);
   assert(manifest.shards[0].sizeBytes > 0);
 }
 
@@ -46,6 +61,9 @@ function testModelForwardAndExportSmoke() {
   run(["training/v31/evaluate_student.py", "--shard", `${outDir}/teacher-0000.npz`, "--checkpoint", checkpoint, "--split", "train", "--limit", "16", "--out", "training/v31/generated/test-eval.json"], { timeout: 120000 });
   const evalReport = JSON.parse(fs.readFileSync(path.join(root, "training/v31/generated/test-eval.json"), "utf8"));
   assert("policyTop5" in evalReport);
+  assert("policyCrossEntropy" in evalReport);
+  assert("valueBrier" in evalReport);
+  assert("valueEce" in evalReport);
   assert.strictEqual(evalReport.legalMoveRate, 1);
   const onnxOut = "training/v31/generated/test-student.onnx";
   const report = "training/v31/generated/test-onnx-report.json";
@@ -54,6 +72,17 @@ function testModelForwardAndExportSmoke() {
   assert.strictEqual(exportReport.checker, "passed");
   assert.strictEqual(exportReport.onnxRuntimeCpu, "passed");
   assert(exportReport.differences.every((d) => d.maxAbs <= 1e-4));
+}
+
+function testTeacherSampleVerificationSmoke() {
+  const outDir = "training/v31/generated/test-stage-a";
+  const report = "training/v31/generated/test-sample-verify.json";
+  run(["training/v31/verify_teacher_samples.py", "--shard", `${outDir}/teacher-0000.npz`, "--count", "16", "--out", report], { timeout: 120000 });
+  const verification = JSON.parse(fs.readFileSync(path.join(root, report), "utf8"));
+  assert.strictEqual(verification.passed, true);
+  assert.strictEqual(verification.passIndex, 361);
+  assert.deepStrictEqual(verification.failures, []);
+  assert(verification.checks.includes("legal_mask_contains_teacher_top"));
 }
 
 function testNoTrackedGeneratedDataOrProductionChanges() {
@@ -73,5 +102,6 @@ function testNoTrackedGeneratedDataOrProductionChanges() {
 testConfigAndSchema();
 testTeacherDataSmoke();
 testModelForwardAndExportSmoke();
+testTeacherSampleVerificationSmoke();
 testNoTrackedGeneratedDataOrProductionChanges();
 console.log("test-v310-student-pipeline: ok");

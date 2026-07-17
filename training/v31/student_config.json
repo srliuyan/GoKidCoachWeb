@@ -49,6 +49,30 @@
     "teacherTarget": "search_visit_policy",
     "rootCauseV310TopZero": "cached raw policy arrays were too smooth after normalization for a 1000-position smoke run; search-visit policy gives a sharper learnable target"
   },
+  "v312": {
+    "status": "diagnostic_failed_gate",
+    "acceptedModel": false,
+    "activeBaselineRemains": "v311",
+    "policySource": "visits",
+    "targetPositions": 20000,
+    "balanceMode": "phase_targets",
+    "phaseTargets": {
+      "opening_1_20": 0.15,
+      "early_middlegame_21_60": 0.2,
+      "middlegame_61_120": 0.25,
+      "late_middlegame_121_200": 0.25,
+      "endgame_201_plus": 0.15
+    },
+    "temperatureCandidates": [0.8, 1.0, 1.3],
+    "diagnosticWinnerTemperature": 1.3,
+    "defaultTemperature": 1.0,
+    "confidenceWeighting": "multiplicative penalty for low visits, flat targets, one-hot-like targets, few explored root moves, high score uncertainty and excessive pass mass",
+    "scoreScale": 40,
+    "scoreLoss": "Huber on clipped current-player scoreLead divided by scoreScale",
+    "valuePerspective": "current-player winrate from the KataGo analysis record",
+    "policyTarget": "opt-in confidence-weighted temperature-smoothed search_visit_policy",
+    "gateFailureReason": "best V3.1.2 holdout top10 was 0.0449, below the V3.1.1 baseline 0.0541"
+  },
   "stageA": {
     "targetPositions": 1000,
     "sourcePositions": "evaluation/v200-positions.json",

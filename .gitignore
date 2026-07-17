@@ -12,6 +12,7 @@ evaluation/*
 !evaluation/REPORT-GENERATION.md
 !evaluation/baselines/
 !evaluation/baselines/v200-external-baseline-summary.json
+!evaluation/baselines/v311-student-baseline-summary.json
 !evaluation/extract-v200-positions.js
 !evaluation/run-v200-katago-analysis.py
 !evaluation/compare-v200-engine-vs-katago.js
