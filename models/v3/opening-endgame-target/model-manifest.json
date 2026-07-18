@@ -1,0 +1,44 @@
+{
+  "schema": "gokidcoach-dev-model-manifest",
+  "id": "gokidcoach-student-res6c64-fp16-opening-endgame",
+  "version": "3-opening-endgame-res6c64-20260717",
+  "displayName": "GoKidCoach res6c64 FP16 opening/endgame candidate",
+  "modelPath": "models/v3/opening-endgame-target/student-res6c64-fp16.onnx",
+  "modelFormat": "onnx-fp16",
+  "sha256": "b3e0ffeeece84e4d27513105abced2a3331c99bd6d6a737d7e4cb045a45ed9d8",
+  "featureSchemaVersion": "gokidcoach-v310-12plane-current-player",
+  "boardSize": 19,
+  "spatialInputShape": [
+    1,
+    12,
+    19,
+    19
+  ],
+  "globalInputShape": [
+    1,
+    4
+  ],
+  "passIndex": 361,
+  "inputTensorNames": {
+    "spatial": "spatial",
+    "global": "global_features"
+  },
+  "inputTensorDtypes": {
+    "spatial": "float16",
+    "global": "float16"
+  },
+  "outputTensorNames": {
+    "policy": "policy_logits",
+    "value": "value_logit",
+    "score": "score"
+  },
+  "outputTensorDtypes": {
+    "policy": "float16",
+    "value": "float16",
+    "score": "float16"
+  },
+  "preferredExecutionProvider": "webgpu",
+  "fallbackExecutionProvider": "wasm",
+  "committedModelBinary": false,
+  "deploymentAsset": true
+}

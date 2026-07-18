@@ -25,6 +25,13 @@ async function testInterfaceAndLegacyDefault() {
   await legacy.initialize();
   assert.deepStrictEqual(await legacy.selectMove({ legalMoves: [{ x: 4, y: 4 }] }), { x: 3, y: 3 });
   assert.strictEqual(legacy.getCapabilities().productionDefault, true);
+
+  const unsafeDefault = new legacyModule.LegacyEngineAdapter();
+  await unsafeDefault.initialize();
+  await assert.rejects(
+    () => unsafeDefault.selectMove({ legalMoves: [{ x: 0, y: 0 }] }),
+    /required; refusing unsafe default move/
+  );
 }
 
 async function testManagerDefaultsToLegacy() {
@@ -67,14 +74,37 @@ async function testTimeoutAndActiveFailureFallback() {
   };
   const manager = new managerModule.EngineManager({
     timeoutMs: 15,
-    legacyOptions: { selectMove: () => ({ x: 0, y: 0 }) },
+    legacyOptions: { selectMove: position => position.legalMoves[0] },
     neuralEngineFactory: () => slowEngine
   });
   await manager.initialize({ preferNeural: true, timeoutMs: 15 });
   assert.strictEqual(manager.getActiveEngineName(), "slow-neural");
-  assert.deepStrictEqual(await manager.selectMove({ legalMoves: [{ x: 1, y: 1 }] }), { x: 0, y: 0 });
+  assert.deepStrictEqual(await manager.selectMove({ legalMoves: [{ x: 1, y: 1 }] }), { x: 1, y: 1 });
   assert.strictEqual(manager.getActiveEngineName(), "legacy");
   assert.strictEqual(manager.getDiagnostics().fallbackReason, "request_timeout");
+}
+
+async function testIllegalActiveMoveFallback() {
+  const badEngine = {
+    name: "bad-neural",
+    initialize: async () => ({}),
+    selectMove: async () => ({ x: 18, y: 18, engine: "bad-neural" }),
+    cancelSearch: () => ({ cancelled: true }),
+    getCapabilities: () => ({ engine: "bad-neural" }),
+    getDiagnostics: () => ({}),
+    dispose: () => {}
+  };
+  const manager = new managerModule.EngineManager({
+    timeoutMs: 100,
+    legacyOptions: { selectMove: () => ({ x: 1, y: 1, engine: "legacy" }) },
+    neuralEngineFactory: () => badEngine
+  });
+  await manager.initialize({ preferNeural: true, timeoutMs: 100 });
+  const move = await manager.selectMove({
+    legalMoves: [{ x: 1, y: 1 }]
+  });
+  assert.deepStrictEqual(move, { x: 1, y: 1, engine: "legacy" });
+  assert.strictEqual(manager.getDiagnostics().fallbackReason, "active_engine_failed");
 }
 
 async function testStaleResponseAndOneActiveRequest() {
@@ -82,9 +112,9 @@ async function testStaleResponseAndOneActiveRequest() {
   const manager = new managerModule.EngineManager({
     timeoutMs: 100,
     legacyOptions: {
-      selectMove: () => {
+      selectMove: position => {
         calls += 1;
-        return delay(calls === 1 ? 30 : 1, { x: calls, y: calls });
+        return delay(calls === 1 ? 30 : 1, position.legalMoves[0]);
       }
     }
   });
@@ -121,13 +151,30 @@ function testNoProductionContamination() {
   assert(!read("sw.js").includes("neural-prototype"));
   assert(!read("sw.js").includes("neural-mcts"));
   assert(!/run-v200-katago-analysis|katago-analysis-played|\.bin\.gz|\.onnx|\.tflite/.test(read("neural-prototype.js")));
-  const files = fs.readdirSync(root, { recursive: true }).map(String).filter(file =>
-    !file.startsWith(`evaluation${path.sep}models${path.sep}private${path.sep}`)
-    && !file.startsWith(`evaluation${path.sep}fixtures${path.sep}private${path.sep}`)
-    && !file.startsWith(`training${path.sep}v31${path.sep}private${path.sep}`)
-    && !file.startsWith(`training${path.sep}v31${path.sep}generated${path.sep}`)
-    && !file.startsWith(`training${path.sep}v31${path.sep}checkpoints${path.sep}`)
-  );
+  const ignoredDirs = new Set([
+    ".git",
+    "vendor",
+    `evaluation${path.sep}models${path.sep}private`,
+    `evaluation${path.sep}fixtures${path.sep}private`,
+    `training${path.sep}v31${path.sep}private`,
+    `training${path.sep}v31${path.sep}generated`,
+    `training${path.sep}v31${path.sep}checkpoints`,
+    `training${path.sep}v31${path.sep}__pycache__`
+  ]);
+  const files = [];
+  const stack = [""];
+  while (stack.length) {
+    const relativeDir = stack.pop();
+    const entries = fs.readdirSync(path.join(root, relativeDir), { withFileTypes: true });
+    for (const entry of entries) {
+      const relativePath = relativeDir ? path.join(relativeDir, entry.name) : entry.name;
+      if (entry.isDirectory()) {
+        if (!ignoredDirs.has(relativePath)) stack.push(relativePath);
+      } else {
+        files.push(relativePath);
+      }
+    }
+  }
   assert(!files.some(file => /\.(onnx|tflite|pt|pb|bin\.gz|weights)$/i.test(file)));
 }
 
@@ -137,6 +184,16 @@ function testPrototypePageDiagnosticsExport() {
   assert(html.includes("exportDiagnosticsBtn"));
   assert(js.includes("modelIncluded: false"));
   assert(js.includes("mctsImplemented: true"));
+  assert(js.includes("URLSearchParams"));
+  assert(js.includes("ortScriptUrl"));
+  assert(js.includes("ortMjsPath"));
+  assert(js.includes("ortWasmPath"));
+  assert(js.includes("modelManifestPath"));
+  assert(js.includes("GoKidCoachNeuralPrototypeHarness"));
+  assert(read("tools/run-v3-browser-smoke.js").includes("neural-prototype.html?provider=wasm"));
+  assert(read("engine/neural-mcts-prototype-engine.js").includes("DEFAULT_ORT_SCRIPT"));
+  assert(read("engine/neural-mcts-prototype-engine.js").includes("DEFAULT_ORT_MJS"));
+  assert(read("engine/neural-mcts-prototype-engine.js").includes("DEFAULT_ORT_WASM"));
 }
 
 (async function run() {
@@ -144,6 +201,7 @@ function testPrototypePageDiagnosticsExport() {
   await testManagerDefaultsToLegacy();
   await testInitializationFailureFallback();
   await testTimeoutAndActiveFailureFallback();
+  await testIllegalActiveMoveFallback();
   await testStaleResponseAndOneActiveRequest();
   await testCancellationAndDiagnostics();
   testNeuralPlaceholderCapabilities();

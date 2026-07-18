@@ -1,0 +1,44 @@
+{
+  "schema": "gokidcoach-dev-model-manifest",
+  "id": "gokidcoach-student-res6c64-fp16-opening-early-failed-1200",
+  "version": "3-opening-early-failed-1200-res6c64-20260717",
+  "displayName": "GoKidCoach res6c64 FP16 opening/early failed-position correction candidate",
+  "modelPath": "models/v3/opening-early-failed-1200/student-res6c64-fp16.onnx",
+  "modelFormat": "onnx-fp16",
+  "sha256": "2f2b37c3371fda264cc2788458df9aa3e3188d1eb0d1718d73f82157bb6e7a4c",
+  "featureSchemaVersion": "gokidcoach-v310-12plane-current-player",
+  "boardSize": 19,
+  "spatialInputShape": [
+    1,
+    12,
+    19,
+    19
+  ],
+  "globalInputShape": [
+    1,
+    4
+  ],
+  "passIndex": 361,
+  "inputTensorNames": {
+    "spatial": "spatial",
+    "global": "global_features"
+  },
+  "inputTensorDtypes": {
+    "spatial": "float16",
+    "global": "float16"
+  },
+  "outputTensorNames": {
+    "policy": "policy_logits",
+    "value": "value_logit",
+    "score": "score"
+  },
+  "outputTensorDtypes": {
+    "policy": "float16",
+    "value": "float16",
+    "score": "float16"
+  },
+  "preferredExecutionProvider": "webgpu",
+  "fallbackExecutionProvider": "wasm",
+  "committedModelBinary": false,
+  "deploymentAsset": true
+}

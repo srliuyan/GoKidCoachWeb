@@ -1,0 +1,44 @@
+{
+  "schema": "gokidcoach-dev-model-manifest",
+  "id": "gokidcoach-student-res8c96-fp32-early-cache-teacher",
+  "version": "3-early-cache-teacher-res8c96-20260717",
+  "displayName": "GoKidCoach res8c96 FP32 early cache teacher candidate",
+  "modelPath": "models/v3/early-cache-teacher-res8c96/student-res8c96-fp32.onnx",
+  "modelFormat": "onnx-fp32",
+  "sha256": "5386051ef2f4f07a6b91a45bcecbbd191a168f0f9e48e702b9518341a2875dc6",
+  "featureSchemaVersion": "gokidcoach-v310-12plane-current-player",
+  "boardSize": 19,
+  "spatialInputShape": [
+    1,
+    12,
+    19,
+    19
+  ],
+  "globalInputShape": [
+    1,
+    4
+  ],
+  "passIndex": 361,
+  "inputTensorNames": {
+    "spatial": "spatial",
+    "global": "global_features"
+  },
+  "inputTensorDtypes": {
+    "spatial": "float32",
+    "global": "float32"
+  },
+  "outputTensorNames": {
+    "policy": "policy_logits",
+    "value": "value_logit",
+    "score": "score"
+  },
+  "outputTensorDtypes": {
+    "policy": "float32",
+    "value": "float32",
+    "score": "float32"
+  },
+  "preferredExecutionProvider": "wasm",
+  "fallbackExecutionProvider": "wasm",
+  "committedModelBinary": false,
+  "deploymentAsset": true
+}

@@ -1,4 +1,6 @@
 const assert = require("assert");
+const fs = require("fs");
+const path = require("path");
 const difficulty = require("./difficulty-controller.js");
 const quality = require("./move-quality-controller.js");
 const product = require("./product-support.js");
@@ -117,12 +119,23 @@ function testLowerModesRetainAdaptiveBehavior() {
   assert.notStrictEqual(ranked.context.maxStrengthFixed, true);
 }
 
+function testMaxStrengthRuntimeCandidateBudget() {
+  const appSource = fs.readFileSync(path.join(__dirname, "app.js"), "utf8");
+  assert(appSource.includes("function candidatePoolSizeForMode"));
+  assert(appSource.includes("return isMaxStrengthMode(mode) ? 20 : 12"));
+  assert(appSource.includes("adjusted.candidatePoolSize = 20"));
+  assert(appSource.includes("adjusted.localReadingMaxCandidates = 12"));
+  assert(appSource.includes("adjusted.shallowVerificationMaxCandidates = 18"));
+  assert(appSource.includes("return prioritizedCandidateList(candidates, candidatePoolSizeForMode())"));
+}
+
 function run() {
   testMappingAndFlags();
   testNoRandomOrTemperatureSelection();
   testNoAcceptableOrGoodSubstitution();
   testRejectedAndFallbackAvoidance();
   testLowerModesRetainAdaptiveBehavior();
+  testMaxStrengthRuntimeCandidateBudget();
   console.log("test-v170-max-strength: ok");
 }
 

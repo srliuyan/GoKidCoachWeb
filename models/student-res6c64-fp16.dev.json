@@ -1,11 +1,11 @@
 {
   "schema": "gokidcoach-dev-model-manifest",
-  "id": "gokidcoach-student-res6c64-fp16-fast-track",
-  "version": "3-fast-track-20260717",
-  "displayName": "GoKidCoach res6c64 FP16 student",
-  "modelPath": "training/v31/generated/fast-track/student-res6c64-fp16-direct.onnx",
+  "id": "gokidcoach-student-res6c64-fp16-curriculum",
+  "version": "3-curriculum-res6c64-20260717",
+  "displayName": "GoKidCoach res6c64 FP16 curriculum candidate",
+  "modelPath": "training/v31/generated/curriculum-res6c64/student-res6c64-fp16.onnx",
   "modelFormat": "onnx-fp16",
-  "sha256": "fdc4e2f352d908cacc531ce1aa59c50f126e7b08e477c85c6f771a7cb832086e",
+  "sha256": "0f9dad75d4f16931e357d1361c1625345a222843dc803d177b9cfb1b3c44eebf",
   "featureSchemaVersion": "gokidcoach-v310-12plane-current-player",
   "boardSize": 19,
   "spatialInputShape": [1, 12, 19, 19],
@@ -15,10 +15,19 @@
     "spatial": "spatial",
     "global": "global_features"
   },
+  "inputTensorDtypes": {
+    "spatial": "float16",
+    "global": "float16"
+  },
   "outputTensorNames": {
     "policy": "policy_logits",
     "value": "value_logit",
     "score": "score"
+  },
+  "outputTensorDtypes": {
+    "policy": "float16",
+    "value": "float16",
+    "score": "float16"
   },
   "preferredExecutionProvider": "webgpu",
   "fallbackExecutionProvider": "wasm",

@@ -36,6 +36,40 @@
     });
   }
 
+  function isPass(move) {
+    return !move || move.pass === true || move.index === 361;
+  }
+
+  function moveIndex(move, boardSize = 19) {
+    if (isPass(move)) return boardSize * boardSize;
+    if (Number.isInteger(move?.index)) return move.index;
+    const x = Number(move?.x);
+    const y = Number(move?.y);
+    if (!Number.isInteger(x) || !Number.isInteger(y)) return null;
+    return y * boardSize + x;
+  }
+
+  function legalListContains(position, move) {
+    if (!Array.isArray(position?.legalMoves) || !position.legalMoves.length) return true;
+    const boardSize = Number(position.boardSize || 19);
+    const selected = moveIndex(move, boardSize);
+    return position.legalMoves.some(legal => moveIndex(legal, boardSize) === selected);
+  }
+
+  function isAllowedMove(position, move, options = {}) {
+    if (!move) return false;
+    const validator = typeof options.validateMove === "function"
+      ? options.validateMove
+      : typeof options.isLegalMove === "function"
+        ? options.isLegalMove
+        : null;
+    if (validator) {
+      const result = validator(move, position, options);
+      if (result === false || result?.legal === false) return false;
+    }
+    return legalListContains(position, move);
+  }
+
   class EngineManager {
     constructor(options = {}) {
       this.legacyEngine = options.legacyEngine || new LegacyEngineAdapter(options.legacyOptions || {});
@@ -85,8 +119,11 @@
         const move = await withTimeout(this.activeEngine.selectMove(position, options), timeoutMs, "selectMove");
         if (this.activeRequest !== request || request.cancelled) {
           this.staleResponseCount += 1;
-          return this.legacyEngine.selectMove(position, { ...options, fallbackReason: "stale_response_rejected" });
+          const fallback = await this.legacyEngine.selectMove(position, { ...options, fallbackReason: "stale_response_rejected" });
+          if (!isAllowedMove(position, fallback, options)) throw new Error("legacy fallback selected an illegal move after stale response");
+          return fallback;
         }
+        if (!isAllowedMove(position, move, options)) throw new Error("active engine selected an illegal move");
         this.activeRequest = null;
         return move;
       } catch (error) {
@@ -94,7 +131,9 @@
         this.fallbackReason = /timed out/.test(String(error.message || error)) ? "request_timeout" : "active_engine_failed";
         this.activeEngine = this.legacyEngine;
         this.activeRequest = null;
-        return this.legacyEngine.selectMove(position, { ...options, fallbackReason: this.fallbackReason });
+        const fallback = await this.legacyEngine.selectMove(position, { ...options, fallbackReason: this.fallbackReason });
+        if (!isAllowedMove(position, fallback, options)) throw new Error("legacy fallback selected an illegal move");
+        return fallback;
       }
     }
 

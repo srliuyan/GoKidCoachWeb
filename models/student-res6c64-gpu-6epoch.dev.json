@@ -1,0 +1,35 @@
+{
+  "schema": "gokidcoach-dev-model-manifest",
+  "id": "gokidcoach-student-res6c64-gpu-6epoch",
+  "version": "3-legal-mask-res6c64-gpu-6epoch-20260717",
+  "displayName": "GoKidCoach res6c64 GPU 6 epoch legal-mask candidate",
+  "modelPath": "training/v31/generated/legal-mask-res6c64/student-res6c64-gpu-6epoch.onnx",
+  "modelFormat": "onnx-fp32",
+  "sha256": "3e98e4eaf73a2bd4c0a15b71e0ad5bc4bc91db17ffa862f368efb611fdb2220e",
+  "featureSchemaVersion": "gokidcoach-v310-12plane-current-player",
+  "boardSize": 19,
+  "spatialInputShape": [1, 12, 19, 19],
+  "globalInputShape": [1, 4],
+  "passIndex": 361,
+  "inputTensorNames": {
+    "spatial": "spatial",
+    "global": "global_features"
+  },
+  "inputTensorDtypes": {
+    "spatial": "float32",
+    "global": "float32"
+  },
+  "outputTensorNames": {
+    "policy": "policy_logits",
+    "value": "value_logit",
+    "score": "score"
+  },
+  "outputTensorDtypes": {
+    "policy": "float32",
+    "value": "float32",
+    "score": "float32"
+  },
+  "preferredExecutionProvider": "webgpu",
+  "fallbackExecutionProvider": "wasm",
+  "committedModelBinary": false
+}

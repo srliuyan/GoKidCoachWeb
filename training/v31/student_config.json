@@ -16,12 +16,20 @@
       "residualBlocks": 8,
       "channels": 64,
       "activation": "relu",
-      "selected": false
+      "selected": true
     },
     "res6c96": {
       "description": "6 residual blocks, 96 channels",
       "inputPlanes": 12,
       "residualBlocks": 6,
+      "channels": 96,
+      "activation": "relu",
+      "selected": false
+    },
+    "res8c96": {
+      "description": "8 residual blocks, 96 channels",
+      "inputPlanes": 12,
+      "residualBlocks": 8,
       "channels": 96,
       "activation": "relu",
       "selected": false
@@ -39,8 +47,8 @@
   },
   "lossWeights": {
     "policy": 1.0,
-    "value": 0.25,
-    "score": 0.1
+    "value": 0.15,
+    "score": 0.03
   },
   "v311": {
     "policySource": "visits",
@@ -78,5 +86,27 @@
     "sourcePositions": "evaluation/v200-positions.json",
     "sourceTeacher": "evaluation/v200-katago-analysis-combined.json",
     "outputDir": "training/v31/generated/stage-a"
+  },
+  "v3FastTrackStrength": {
+    "architecture": "res8c96",
+    "policyTarget": "search_visit_policy_temperature_1_0",
+    "lossWeights": {
+      "policy": 1.0,
+      "value": 0.15,
+      "score": 0.03
+    },
+    "teacherFilter": "drop flat targets, excessive pass targets, and roots with fewer than 3 explored moves",
+    "mctsBudgets": {
+      "adaptive": {
+        "visits": 96,
+        "timeMs": 1800,
+        "maxTimeMs": 3000
+      },
+      "max": {
+        "visits": 256,
+        "timeMs": 3500,
+        "maxTimeMs": 5000
+      }
+    }
   }
 }

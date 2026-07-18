@@ -28,6 +28,7 @@ def load_split(shard, split="train", limit=None, include_meta=False):
     torch.from_numpy(data["policy"][idx]).float(),
     torch.from_numpy(data["value"][idx]).float(),
     torch.from_numpy(data["score"][idx]).float(),
+    torch.from_numpy(data["legal_mask"][idx]).float(),
     torch.from_numpy(sample_weights).float(),
   ]
   ds = TensorDataset(*tensors)
@@ -43,10 +44,12 @@ def weighted_mean(values, sample_weights):
 
 def compute_loss(outputs, targets, weights, sample_weights=None):
   policy_logits, value_logit, score = outputs
-  policy_t, value_t, score_t = targets
+  policy_t, value_t, score_t, legal_mask = targets
   if sample_weights is None:
     sample_weights = torch.ones_like(value_t)
-  log_probs = F.log_softmax(policy_logits, dim=1)
+  mask_floor = -1e4 if policy_logits.dtype in (torch.float16, torch.bfloat16) else -1e9
+  masked_logits = policy_logits.masked_fill(legal_mask <= 0, mask_floor)
+  log_probs = F.log_softmax(masked_logits, dim=1)
   policy_loss = weighted_mean(-(policy_t * log_probs).sum(dim=1), sample_weights)
   value_loss = weighted_mean(F.binary_cross_entropy_with_logits(value_logit, value_t, reduction="none"), sample_weights)
   score_loss = weighted_mean(F.huber_loss(score, score_t, reduction="none"), sample_weights)
@@ -61,14 +64,15 @@ def evaluate_loss(model, dataset, weights, device, batch_size):
   count = 0
   model.eval()
   with torch.no_grad():
-    for spatial, global_features, policy, value, score, sample_weights in loader:
+    for spatial, global_features, policy, value, score, legal_mask, sample_weights in loader:
       spatial = spatial.to(device)
       global_features = global_features.to(device)
       policy = policy.to(device)
       value = value.to(device)
       score = score.to(device)
+      legal_mask = legal_mask.to(device)
       sample_weights = sample_weights.to(device)
-      _, parts = compute_loss(model(spatial, global_features), (policy, value, score), weights, sample_weights)
+      _, parts = compute_loss(model(spatial, global_features), (policy, value, score, legal_mask), weights, sample_weights)
       n = spatial.shape[0]
       for key in parts_sum:
         parts_sum[key] += parts[key] * n
@@ -93,6 +97,12 @@ def train(args):
   start_epoch = 0
   best_validation = None
   best_epoch = None
+  best_metric = None
+  initialized_from = None
+  if args.init_from and Path(args.init_from).exists() and not args.resume:
+    init_ckpt = torch.load(args.init_from, map_location=device)
+    model.load_state_dict(init_ckpt["model"])
+    initialized_from = args.init_from
   if args.resume and Path(args.resume).exists():
     ckpt = torch.load(args.resume, map_location=device)
     model.load_state_dict(ckpt["model"])
@@ -100,20 +110,22 @@ def train(args):
     start_epoch = int(ckpt["epoch"]) + 1
     best_validation = ckpt.get("bestValidation")
     best_epoch = ckpt.get("bestEpoch")
+    best_metric = ckpt.get("bestMetric", best_validation)
   first = None
   last = None
   history = []
   for epoch in range(start_epoch, start_epoch + args.epochs):
-    for spatial, global_features, policy, value, score, sample_weights in loader:
+    for spatial, global_features, policy, value, score, legal_mask, sample_weights in loader:
       spatial = spatial.to(device)
       global_features = global_features.to(device)
       policy = policy.to(device)
       value = value.to(device)
       score = score.to(device)
+      legal_mask = legal_mask.to(device)
       sample_weights = sample_weights.to(device)
       opt.zero_grad(set_to_none=True)
       with torch.amp.autocast("cuda", enabled=args.mixed_precision and device.type == "cuda"):
-        loss, parts = compute_loss(model(spatial, global_features), (policy, value, score), weights, sample_weights)
+        loss, parts = compute_loss(model(spatial, global_features), (policy, value, score, legal_mask), weights, sample_weights)
       scaler.scale(loss).backward()
       if args.grad_clip > 0:
         scaler.unscale_(opt)
@@ -124,8 +136,10 @@ def train(args):
         first = parts
       last = parts
     validation = evaluate_loss(model, val_ds, weights, device, args.batch_size)
-    history.append({"epoch": epoch, "trainLast": last, "validation": validation, "lr": opt.param_groups[0]["lr"]})
-    if best_validation is None or validation["total"] < best_validation:
+    metric = validation[args.selection_metric]
+    history.append({"epoch": epoch, "trainLast": last, "validation": validation, "selectionMetric": args.selection_metric, "selectionValue": metric, "lr": opt.param_groups[0]["lr"]})
+    if best_metric is None or metric < best_metric:
+      best_metric = metric
       best_validation = validation["total"]
       best_epoch = epoch
       Path(args.checkpoint).parent.mkdir(parents=True, exist_ok=True)
@@ -135,10 +149,13 @@ def train(args):
         "epoch": epoch,
         "architecture": args.architecture,
         "bestValidation": best_validation,
+        "bestMetric": best_metric,
+        "selectionMetric": args.selection_metric,
         "bestEpoch": best_epoch,
       }, args.checkpoint)
     scheduler.step()
-    if args.early_stopping_patience and best_epoch is not None and epoch - best_epoch >= args.early_stopping_patience:
+    epochs_completed = epoch - start_epoch + 1
+    if args.early_stopping_patience and epochs_completed >= args.min_epochs_before_stopping and best_epoch is not None and epoch - best_epoch >= args.early_stopping_patience:
       break
   if not Path(args.checkpoint).exists():
     Path(args.checkpoint).parent.mkdir(parents=True, exist_ok=True)
@@ -149,7 +166,10 @@ def train(args):
     "firstLoss": first,
     "lastLoss": last,
     "bestValidation": best_validation,
+    "bestMetric": best_metric,
+    "selectionMetric": args.selection_metric,
     "bestEpoch": best_epoch,
+    "initializedFrom": initialized_from,
     "history": history,
     "checkpoint": args.checkpoint,
   }
@@ -166,6 +186,7 @@ def main():
   parser.add_argument("--checkpoint", default="training/v31/checkpoints/tiny-student.pt")
   parser.add_argument("--metrics", default="training/v31/generated/tiny-train-metrics.json")
   parser.add_argument("--resume")
+  parser.add_argument("--init-from")
   parser.add_argument("--epochs", type=int, default=1)
   parser.add_argument("--batch-size", type=int, default=16)
   parser.add_argument("--limit", type=int, default=128)
@@ -178,6 +199,8 @@ def main():
   parser.add_argument("--score-weight", type=float, default=0.10)
   parser.add_argument("--grad-clip", type=float, default=1.0)
   parser.add_argument("--early-stopping-patience", type=int, default=0)
+  parser.add_argument("--min-epochs-before-stopping", type=int, default=0)
+  parser.add_argument("--selection-metric", choices=["policy", "value", "score", "total"], default="total")
   parser.add_argument("--mixed-precision", action="store_true")
   parser.add_argument("--prefer-gpu", action="store_true")
   args = parser.parse_args()

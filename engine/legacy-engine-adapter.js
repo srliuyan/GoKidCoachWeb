@@ -4,9 +4,10 @@
   if (typeof module === "object" && module.exports) module.exports = factory();
   else root.GoKidCoachLegacyEngineAdapter = factory();
 })(typeof globalThis !== "undefined" ? globalThis : window, function factory() {
-  function defaultLegacySelectMove(position) {
-    const legalMoves = Array.isArray(position?.legalMoves) ? position.legalMoves : [];
-    return legalMoves[0] || { pass: true };
+  function defaultLegacySelectMove() {
+    const error = new Error("Legacy selectMove implementation is required; refusing unsafe default move");
+    error.code = "LEGACY_SELECT_MOVE_NOT_CONFIGURED";
+    throw error;
   }
 
   class LegacyEngineAdapter {

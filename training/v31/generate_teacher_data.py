@@ -21,11 +21,11 @@ GLOBAL_FEATURES = 4
 
 SCORE_SCALE = 30.0
 PHASE_TARGETS = {
-  "opening_1_20": 0.15,
-  "early_middlegame_21_60": 0.20,
-  "middlegame_61_120": 0.25,
-  "late_middlegame_121_200": 0.25,
-  "endgame_201_plus": 0.15,
+  "opening_1_20": 0.125,
+  "early_middlegame_21_60": 0.30,
+  "middlegame_61_120": 0.23,
+  "late_middlegame_121_200": 0.22,
+  "endgame_201_plus": 0.125,
 }
 IMPORTANT_FAMILIES = {"escape", "weak_group", "counterattack", "capture_or_atari", "connection", "cut"}
 
@@ -62,6 +62,13 @@ def index_to_xy(index: int) -> Tuple[int, int] | None:
 
 def xy_to_index(x: int, y: int) -> int:
   return y * BOARD_SIZE + x
+
+
+def index_to_move(index: int) -> dict:
+  if index == PASS_INDEX:
+    return {"pass": True, "index": PASS_INDEX}
+  y, x = divmod(index, BOARD_SIZE)
+  return {"x": x, "y": y, "index": index}
 
 
 def transform_xy(x: int, y: int, symmetry: int) -> Tuple[int, int]:
@@ -130,6 +137,110 @@ def board_arrays(board, side_to_move: str) -> Tuple[np.ndarray, np.ndarray]:
   return own, opp
 
 
+def board_value(value) -> int:
+  if value in (1, "B", "black"):
+    return 1
+  if value in (-1, 2, "W", "white"):
+    return -1
+  return 0
+
+
+def side_value(side_to_move: str) -> int:
+  return -1 if side_to_move in ("W", -1, 2) else 1
+
+
+def side_name(value: int) -> str:
+  return "W" if value == -1 else "B"
+
+
+def neighbors(x: int, y: int) -> list[tuple[int, int]]:
+  out = []
+  for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+    nx = x + dx
+    ny = y + dy
+    if 0 <= nx < BOARD_SIZE and 0 <= ny < BOARD_SIZE:
+      out.append((nx, ny))
+  return out
+
+
+def clone_board(board) -> list[list[int]]:
+  return [[board_value(board[y][x]) if y < len(board) and x < len(board[y]) else 0 for x in range(BOARD_SIZE)] for y in range(BOARD_SIZE)]
+
+
+def group_at(board, x: int, y: int) -> dict:
+  color = board_value(board[y][x])
+  if color == 0:
+    return {"color": 0, "stones": [], "liberties": []}
+  queue = [(x, y)]
+  seen = set()
+  liberties = set()
+  stones = []
+  while queue:
+    px, py = queue.pop()
+    if (px, py) in seen:
+      continue
+    seen.add((px, py))
+    stones.append((px, py))
+    for nx, ny in neighbors(px, py):
+      value = board_value(board[ny][nx])
+      if value == 0:
+        liberties.add((nx, ny))
+      elif value == color and (nx, ny) not in seen:
+        queue.append((nx, ny))
+  return {"color": color, "stones": stones, "liberties": list(liberties)}
+
+
+def ko_matches(ko, x: int, y: int) -> bool:
+  return isinstance(ko, dict) and ko.get("x") == x and ko.get("y") == y
+
+
+def play_move(position: dict, move: dict) -> dict | None:
+  color = side_value(position.get("sideToMove", "B"))
+  next_color = -color
+  board = clone_board(position.get("board", []))
+  if move.get("pass"):
+    return {**position, "board": board, "sideToMove": side_name(next_color)}
+  x = int(move["x"])
+  y = int(move["y"])
+  if board[y][x] != 0 or ko_matches(position.get("koState") or position.get("ko"), x, y):
+    return None
+  board[y][x] = color
+  captured = []
+  for nx, ny in neighbors(x, y):
+    if board_value(board[ny][nx]) != next_color:
+      continue
+    opponent = group_at(board, nx, ny)
+    if len(opponent["liberties"]) == 0:
+      for sx, sy in opponent["stones"]:
+        board[sy][sx] = 0
+        captured.append((sx, sy))
+  own = group_at(board, x, y)
+  if len(own["liberties"]) == 0:
+    return None
+  return {**position, "board": board, "sideToMove": side_name(next_color), "captures": len(captured)}
+
+
+def legal_moves(position: dict) -> list[dict]:
+  moves = []
+  board = clone_board(position.get("board", []))
+  for y in range(BOARD_SIZE):
+    for x in range(BOARD_SIZE):
+      if board[y][x] != 0:
+        continue
+      move = {"x": x, "y": y, "index": xy_to_index(x, y)}
+      if play_move(position, move) is not None:
+        moves.append(move)
+  moves.append({"pass": True, "index": PASS_INDEX})
+  return moves
+
+
+def legal_policy_mask(position: dict) -> np.ndarray:
+  mask = np.zeros((POLICY_SIZE,), dtype=np.float32)
+  for move in legal_moves(position):
+    mask[int(move["index"])] = 1.0
+  return mask
+
+
 def liberties_bucket_planes(board, side_to_move: str) -> List[np.ndarray]:
   own, opp = board_arrays(board, side_to_move)
   occupied = own + opp
@@ -176,7 +287,7 @@ def encode_features(position: dict) -> Tuple[np.ndarray, np.ndarray, np.ndarray]
   rules_chinese = 1.0
   pass_recent = 1.0 if history and history[-1].get("pass") else 0.0
   global_features = np.asarray([(komi - 7.5) / 10.0, min(move_number, 300.0) / 300.0, rules_chinese, pass_recent], dtype=np.float32)
-  legal_mask = np.ones((POLICY_SIZE,), dtype=np.float32)
+  legal_mask = legal_policy_mask(position)
   return spatial, global_features, legal_mask
 
 
@@ -237,6 +348,11 @@ def normalize_policy(arr: np.ndarray) -> np.ndarray | None:
   if not np.isfinite(out).all():
     return None
   return out
+
+
+def mask_policy(policy: np.ndarray, legal_mask: np.ndarray) -> np.ndarray | None:
+  masked = np.asarray(policy, dtype=np.float32) * np.asarray(legal_mask, dtype=np.float32)
+  return normalize_policy(masked)
 
 
 def temperature_smooth(policy: np.ndarray, temperature: float) -> np.ndarray:
@@ -403,10 +519,23 @@ def split_for(position_id: str) -> str:
   return "holdout"
 
 
-def build_rows(positions: list, analysis: list, count: int, policy_source: str, temperature: float, top_n: int, tail_mass: float, blend_raw: float) -> Tuple[list, int, int]:
+def is_low_information(quality: dict, args) -> bool:
+  if not args.drop_low_information:
+    return False
+  if quality["flatTarget"] or quality["excessivePass"]:
+    return True
+  if quality["rootMoveCount"] < args.min_root_moves:
+    return True
+  if quality["teacherVisits"] < args.min_teacher_visits:
+    return True
+  return False
+
+
+def build_rows(positions: list, analysis: list, count: int, policy_source: str, temperature: float, top_n: int, tail_mass: float, blend_raw: float, args) -> Tuple[list, int, int, int]:
   pos_by_id = {p["positionId"]: p for p in positions}
   rows = []
   invalid = 0
+  low_information = 0
   duplicate_sample = 0
   seen_samples = set()
   for result_index, result in enumerate(analysis):
@@ -420,8 +549,15 @@ def build_rows(positions: list, analysis: list, count: int, policy_source: str, 
     except ValueError:
       invalid += 1
       continue
-    quality = policy_quality(result, policy, target_type)
     spatial, global_features, legal_mask = encode_features(position)
+    legal_policy = mask_policy(policy, legal_mask)
+    if legal_policy is None:
+      invalid += 1
+      continue
+    quality = policy_quality(result, legal_policy, target_type)
+    if is_low_information(quality, args):
+      low_information += 1
+      continue
     for symmetry in range(8 if count > len(pos_by_id) else 1):
       sample_id = f"{pid}|analysis{result_index}|{result.get('profile', 'unknown')}|sym{symmetry}"
       if sample_id in seen_samples:
@@ -433,15 +569,15 @@ def build_rows(positions: list, analysis: list, count: int, policy_source: str, 
         "result": result,
         "spatial": transform_spatial(spatial, symmetry),
         "global": global_features,
-        "legal": legal_mask,
-        "policy": transform_policy(policy, symmetry),
+        "legal": transform_policy(legal_mask, symmetry),
+        "policy": transform_policy(legal_policy, symmetry),
         "targetType": target_type,
         "quality": quality,
         "sampleId": sample_id,
         "basePositionId": pid,
         "symmetry": symmetry,
       })
-  return rows, duplicate_sample, invalid
+  return rows, duplicate_sample, invalid, low_information
 
 
 def quota_counts(total: int, proportions: dict) -> dict:
@@ -515,11 +651,27 @@ def select_phase_targeted(rows: list, count: int) -> list:
   return selected[:count]
 
 
+def sample_weight_for(row: dict, args) -> float:
+  weight = row["quality"]["confidenceWeight"] if args.confidence_weights else 1.0
+  phase = row["position"].get("phase", "unknown")
+  move_number = int(row["position"].get("moveNumber", 0) or 0)
+  family = tactical_family(row["position"])
+  if phase == "middlegame_61_120" or 61 <= move_number <= 120:
+    weight *= args.middlegame_weight
+  if phase == "early_middlegame_21_60" or 21 <= move_number <= 60:
+    weight *= args.early_middlegame_weight
+    if row["quality"]["top1VisitShare"] >= args.early_sharp_top1_threshold:
+      weight *= args.early_sharp_teacher_weight
+  if family in IMPORTANT_FAMILIES:
+    weight *= args.important_family_weight
+  return float(max(args.min_sample_weight, min(args.max_sample_weight, weight)))
+
+
 def generate(args) -> dict:
   positions = json.loads(Path(args.positions).read_text(encoding="utf8"))["positions"]
   analysis = json.loads(Path(args.analysis).read_text(encoding="utf8"))["results"]
   pos_by_id = {p["positionId"]: p for p in positions}
-  all_rows, duplicate, invalid = build_rows(positions, analysis, args.count, args.policy_source, args.temperature, args.top_n, args.tail_mass, args.blend_raw)
+  all_rows, duplicate, invalid, low_information = build_rows(positions, analysis, args.count, args.policy_source, args.temperature, args.top_n, args.tail_mass, args.blend_raw, args)
   rows = select_balanced(all_rows, args.count, args.balance_mode)
 
   if len(rows) != args.count:
@@ -542,7 +694,7 @@ def generate(args) -> dict:
   target_types = np.asarray([r["targetType"] for r in rows])
   symmetries = np.asarray([r["symmetry"] for r in rows], dtype=np.int8)
   visits = np.asarray([int(r["result"].get("visits", r["result"].get("rootInfo", {}).get("visits", 0))) for r in rows], dtype=np.int32)
-  sample_weights = np.asarray([r["quality"]["confidenceWeight"] if args.confidence_weights else 1.0 for r in rows], dtype=np.float32)
+  sample_weights = np.asarray([sample_weight_for(r, args) for r in rows], dtype=np.float32)
   teacher_top = np.asarray([int(np.argmax(r["policy"])) for r in rows], dtype=np.int16)
   entropy = np.asarray([r["quality"]["policyEntropy"] for r in rows], dtype=np.float32)
   root_move_counts = np.asarray([r["quality"]["rootMoveCount"] for r in rows], dtype=np.int16)
@@ -594,6 +746,13 @@ def generate(args) -> dict:
     "blendRaw": args.blend_raw,
     "balanceMode": args.balance_mode,
     "confidenceWeightsEnabled": bool(args.confidence_weights),
+    "middlegameWeight": args.middlegame_weight,
+    "importantFamilyWeight": args.important_family_weight,
+    "earlyMiddlegameWeight": args.early_middlegame_weight,
+    "earlySharpTeacherWeight": args.early_sharp_teacher_weight,
+    "earlySharpTop1Threshold": args.early_sharp_top1_threshold,
+    "minSampleWeight": args.min_sample_weight,
+    "maxSampleWeight": args.max_sample_weight,
     "scoreScale": args.score_scale,
     "scoreNormalization": f"clip_scoreLead_to_[-{args.score_scale},{args.score_scale}]_divide_by_{args.score_scale}",
     "valuePerspective": "current-player perspective from KataGo side-to-move analysis",
@@ -601,6 +760,10 @@ def generate(args) -> dict:
     "positionsGenerated": len(rows),
     "duplicateCount": duplicate,
     "invalidCount": invalid,
+    "lowInformationDropped": low_information,
+    "dropLowInformation": bool(args.drop_low_information),
+    "minRootMoves": args.min_root_moves,
+    "minTeacherVisits": args.min_teacher_visits,
     "shards": [{"path": str(shard), "rows": len(rows), "sizeBytes": shard.stat().st_size}],
     "phaseDistribution": dict(Counter(phases.tolist())),
     "tacticalFamilyDistribution": dict(Counter(families.tolist())),
@@ -648,6 +811,16 @@ def main():
   parser.add_argument("--balance-mode", choices=["round_robin", "phase_targets"], default="round_robin")
   parser.add_argument("--score-scale", type=float, default=SCORE_SCALE)
   parser.add_argument("--confidence-weights", action="store_true")
+  parser.add_argument("--middlegame-weight", type=float, default=1.0)
+  parser.add_argument("--important-family-weight", type=float, default=1.0)
+  parser.add_argument("--early-middlegame-weight", type=float, default=1.35)
+  parser.add_argument("--early-sharp-teacher-weight", type=float, default=1.20)
+  parser.add_argument("--early-sharp-top1-threshold", type=float, default=0.35)
+  parser.add_argument("--min-sample-weight", type=float, default=0.15)
+  parser.add_argument("--max-sample-weight", type=float, default=2.25)
+  parser.add_argument("--drop-low-information", action="store_true")
+  parser.add_argument("--min-root-moves", type=int, default=3)
+  parser.add_argument("--min-teacher-visits", type=int, default=0)
   args = parser.parse_args()
   print(json.dumps(generate(args), indent=2))
 

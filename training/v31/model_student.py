@@ -30,6 +30,7 @@ ARCHITECTURES: Dict[str, StudentArchitecture] = {
   "res6c64": StudentArchitecture("res6c64", 12, 6, 64),
   "res8c64": StudentArchitecture("res8c64", 12, 8, 64),
   "res6c96": StudentArchitecture("res6c96", 12, 6, 96),
+  "res8c96": StudentArchitecture("res8c96", 12, 8, 96),
 }
 
 

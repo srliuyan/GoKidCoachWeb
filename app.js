@@ -512,11 +512,21 @@ function applyReleaseDifficultyMode(settings) {
     adjusted.adaptiveWeakeningEnabled = false;
     adjusted.randomSofteningEnabled = false;
     adjusted.maxStrengthFixed = true;
+    adjusted.candidatePoolSize = 20;
+    adjusted.localReadingMaxCandidates = 12;
+    adjusted.shallowVerificationMaxCandidates = 18;
   } else {
     adjusted.randomness = Math.min(Number(adjusted.randomness) || 0.04, 0.04);
     adjusted.mistakeTolerance = Math.min(Number(adjusted.mistakeTolerance) || 16, 16);
+    adjusted.candidatePoolSize = 12;
+    adjusted.localReadingMaxCandidates = 8;
+    adjusted.shallowVerificationMaxCandidates = 12;
   }
   return adjusted;
+}
+
+function candidatePoolSizeForMode(mode = profile?.difficultyMode) {
+  return isMaxStrengthMode(mode) ? 20 : 12;
 }
 
 function phaseScaleForSource(source, moveNumber, point) {
@@ -1589,6 +1599,11 @@ function prioritizedCandidateList(candidates, maxCount = 12) {
   take(item => /capture|rescue|critical|necessary/.test(item.source));
   take(item => /weak_group|escape|connection_toward_support|defense/.test(item.source));
   take(item => /whole_board|invasion|reduction|policy_probe|position_probe/.test(item.source));
+  if (maxCount > 12) {
+    take(item => /counterattack|cut/.test(item.source));
+    take(item => /v201_invasion_reduction_probe|whole_board_strategy|large_whole_board_move/.test(item.source));
+    take(item => /policy_probe_local/.test(item.source));
+  }
   for (const item of sorted) {
     if (selected.length >= maxCount) break;
     const key = `${item.point.x},${item.point.y}`;
@@ -1676,7 +1691,7 @@ function generateMiddlegameCandidateMoves(color) {
   }
   addMaxStrengthWholeBoardStrategyCandidates(candidates, color, ownGroups);
   addV201CandidateRecallCandidates(candidates, color, ownGroups, enemyGroups);
-  return prioritizedCandidateList(candidates, 12);
+  return prioritizedCandidateList(candidates, candidatePoolSizeForMode());
 }
 
 function groupLibertyPoints(group) {
@@ -2102,8 +2117,8 @@ function chooseLocalAIMove(moves, color = aiStoneColor(), perfRecord = null) {
       ? ruleEngine.applyShallowTacticalVerification(stabilized, board, color, {
       positionHashes,
       moveNumber: moveHistory.length,
-      normalMaxCandidates: 12,
-      absoluteMaxCandidates: 16,
+      normalMaxCandidates: Number(settings.shallowVerificationMaxCandidates) || 12,
+      absoluteMaxCandidates: maxMode ? 20 : 16,
       maxReplies: 5,
       timeBudgetMs: 80
       })
@@ -2116,7 +2131,7 @@ function chooseLocalAIMove(moves, color = aiStoneColor(), perfRecord = null) {
         positionHashes,
         moveNumber: moveHistory.length,
         maxDepth: 3,
-        maxCandidates: maxMode ? 10 : 8,
+        maxCandidates: Number(settings.localReadingMaxCandidates) || (maxMode ? 12 : 8),
         maxOpponentReplies: 4,
         allowConditionalReply5: maxMode,
         difficultyMode: maxMode ? maxStrengthMode : currentDifficultyMode,
