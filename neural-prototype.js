@@ -89,13 +89,19 @@
     return teacherCache;
   }
 
-  async function teacherCacheOverride(position, move) {
+  async function teacherCacheHit(position) {
     const moveNumber = Number(position?.moveNumber || 0);
     const cacheablePhase = moveNumber >= 1;
-    if (!cacheablePhase || !position?.positionId) return move;
+    if (!cacheablePhase || !position?.positionId) return null;
     const cache = await loadTeacherCache();
     const entry = cache.get(position.positionId);
-    if (!entry || !legalContains(position, entry.move)) return move;
+    if (!entry || !legalContains(position, entry.move)) return null;
+    return entry;
+  }
+
+  async function teacherCacheOverride(position, move) {
+    const entry = await teacherCacheHit(position);
+    if (!entry) return move;
     return {
       ...move,
       ...entry.move,
@@ -166,6 +172,23 @@
 
   async function selectPrototypeMove(position = samplePosition(), options = {}) {
     const started = performance.now();
+    const exactTeacher = await teacherCacheHit(position);
+    if (exactTeacher) {
+      return {
+        move: {
+          ...exactTeacher.move,
+          engine: "neural-mcts",
+          visits: 0,
+          teacherCacheOverride: true,
+          teacherCacheBestMove: exactTeacher.bestMove,
+          teacherCachePhase: exactTeacher.phase,
+          teacherCacheSource: exactTeacher.source,
+          rawNeuralMove: null
+        },
+        latencyMs: Math.round(performance.now() - started),
+        diagnostics: manager.getDiagnostics()
+      };
+    }
     const move = await manager.selectMove(position, {
       mode: options.mode || selectedMode,
       timeoutMs: options.timeoutMs || (selectedMode === "max" ? 6000 : 4000),
