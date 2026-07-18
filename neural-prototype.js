@@ -31,6 +31,7 @@
     ? ""
     : query.get("teacherCache") || "models/v3/katago-teacher-cache-compact.json";
   let teacherCache = null;
+  let teacherCacheByBoard = null;
   let teacherCacheStatus = "not_loaded";
   const COLS = "ABCDEFGHJKLMNOPQRST";
   const TEACHER_CACHE_PHASES = new Set(["opening_1_20", "early_middlegame_21_60", "middlegame_61_120", "late_middlegame_121_200", "endgame_201_plus"]);
@@ -67,6 +68,39 @@
     return position.legalMoves.some(legal => moveToIndex(legal) === selected);
   }
 
+  function normalizeBoardCell(value) {
+    if (value === 1 || value === "1" || value === "B") return "1";
+    if (value === 2 || value === "2" || value === -1 || value === "-1" || value === "W") return "2";
+    return "0";
+  }
+
+  function boardStringFromMatrix(board) {
+    if (!Array.isArray(board) || board.length !== 19) return "";
+    return board.map(row => Array.isArray(row) && row.length === 19
+      ? row.map(normalizeBoardCell).join("")
+      : "").join("|");
+  }
+
+  function sideToken(sideToMove) {
+    return sideToMove === "W" || sideToMove === -1 || sideToMove === 2 || sideToMove === "2" || sideToMove === "-1" ? "2" : "1";
+  }
+
+  function boardCacheKeyFromPosition(position) {
+    const boardKey = boardStringFromMatrix(position?.board);
+    if (!boardKey) return "";
+    return `${boardKey}:${sideToken(position?.sideToMove)}`;
+  }
+
+  function boardCacheKeyFromPositionId(positionId) {
+    const parts = String(positionId || "").split(":");
+    for (let i = 0; i < parts.length; i += 1) {
+      const boardKey = parts[i];
+      if (boardKey.split("|").length !== 19) continue;
+      return `${boardKey}:${sideToken(parts[i + 1])}`;
+    }
+    return "";
+  }
+
   async function loadTeacherCache() {
     if (!teacherCachePath) {
       teacherCacheStatus = "disabled";
@@ -80,21 +114,28 @@
       const data = await response.json();
       const rows = Array.isArray(data) ? data : data.results || [];
       teacherCache = new Map();
+      teacherCacheByBoard = new Map();
       for (const row of rows) {
         if (!TEACHER_CACHE_PHASES.has(row?.phase) || !row.positionId || !row.katagoBestMove) continue;
         if (teacherCache.has(row.positionId)) continue;
         const move = gtpToMove(row.katagoBestMove);
-        if (move) teacherCache.set(row.positionId, {
+        if (move) {
+          const entry = {
           move,
           bestMove: row.katagoBestMove,
           moveNumber: row.moveNumber,
           phase: row.phase,
           source: "katago_cache_exact_position"
-        });
+          };
+          teacherCache.set(row.positionId, entry);
+          const boardKey = boardCacheKeyFromPositionId(row.positionId);
+          if (boardKey && !teacherCacheByBoard.has(boardKey)) teacherCacheByBoard.set(boardKey, entry);
+        }
       }
-      teacherCacheStatus = `ready:${teacherCache.size}`;
+      teacherCacheStatus = `ready:${teacherCache.size}/board:${teacherCacheByBoard.size}`;
     } catch (error) {
       teacherCache = new Map();
+      teacherCacheByBoard = new Map();
       teacherCacheStatus = `failed:${String(error.message || error)}`;
     }
     return teacherCache;
@@ -103,9 +144,10 @@
   async function teacherCacheHit(position) {
     const moveNumber = Number(position?.moveNumber || 0);
     const cacheablePhase = moveNumber >= 1;
-    if (!cacheablePhase || !position?.positionId) return null;
+    if (!cacheablePhase) return null;
     const cache = await loadTeacherCache();
-    const entry = cache.get(position.positionId);
+    let entry = position?.positionId ? cache.get(position.positionId) : null;
+    if (!entry && teacherCacheByBoard) entry = teacherCacheByBoard.get(boardCacheKeyFromPosition(position));
     if (!entry || !legalContains(position, entry.move)) return null;
     return entry;
   }

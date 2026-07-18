@@ -2278,7 +2278,7 @@ function v3MoveHistoryForEngine() {
   }));
 }
 
-async function waitForV3Harness(timeoutMs = 5000) {
+async function waitForV3Harness(timeoutMs = 1800) {
   const started = nowMs();
   while (nowMs() - started < timeoutMs) {
     const harness = window.GoKidCoachNeuralPrototypeHarness;
@@ -2302,8 +2302,11 @@ async function requestV3AIMove(aiColor, moves) {
     legalMoves: legal
   }, {
     mode: "max",
-    timeoutMs: 8000,
-    visitLimit: 256
+    timeoutMs: 2600,
+    timeLimitMs: 1800,
+    visitLimit: 96,
+    nodeLimit: 384,
+    maxChildrenPerNode: 10
   });
   const move = result?.move;
   if (!move || move.pass) return null;
