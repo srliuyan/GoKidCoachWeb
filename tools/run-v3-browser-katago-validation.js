@@ -378,7 +378,18 @@ async function main() {
       if (cpuct) options.cpuct = cpuct;
       if (rootSymmetryAveraging) options.rootSymmetryAveraging = true;
       const expression = `window.GoKidCoachNeuralPrototypeHarness.selectMove(${JSON.stringify(item.position)}, ${JSON.stringify(options)})`;
-      const result = await page.evaluate(expression);
+      let result;
+      try {
+        result = await page.evaluate(expression);
+      } catch (error) {
+        const failureDiagnostics = await page.evaluate("window.GoKidCoachNeuralPrototypeHarness?.diagnostics?.()");
+        throw new Error(`${String(error.message || error)}\nvalidation failure context: ${JSON.stringify({
+          phase: item.row.phase,
+          moveNumber: item.row.moveNumber,
+          positionId: item.row.positionId,
+          diagnostics: failureDiagnostics
+        }, null, 2)}`);
+      }
       const picked = selectedIndex(result?.move);
       const top = item.row.moveInfos.map(info => ({ index: katagoMoveToIndex(info.move), move: info.move, scoreLead: info.scoreLead, winrate: info.winrate }));
       const pickedInfo = top.find(info => info.index === picked);

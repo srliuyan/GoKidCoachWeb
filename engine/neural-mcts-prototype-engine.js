@@ -141,6 +141,7 @@
       this.phaseModelManifestPaths = options.phaseModelManifestPaths || this.phaseModelManifestPaths || {};
       this.provider = options.provider || this.provider;
       const modelManifestPath = options.modelManifestPath || this.modelManifestPath;
+      this.modelManifestPath = modelManifestPath;
       this.currentModelManifestPath = modelManifestPath;
       const modelManifestUrl = resolveUrl(modelManifestPath, this.scope);
       this.ortScriptUrl = resolveUrl(options.ortScriptUrl || this.ortScriptUrl, this.scope);
