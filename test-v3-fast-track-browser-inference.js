@@ -290,7 +290,9 @@ function testEarlyTeacherCacheOverrideConfigured() {
   assert(prototype.includes("teacherCacheOverride"));
   assert(prototype.includes("opening_1_20"));
   assert(prototype.includes("early_middlegame_21_60"));
+  assert(prototype.includes("middlegame_61_120"));
   assert(prototype.includes("late_middlegame_121_200"));
+  assert(prototype.includes("endgame_201_plus"));
   assert(prototype.includes("teacherCacheOverride"));
   assert(prototype.includes("teacherCachePhase"));
   assert(prototype.includes("query.get(\"teacherCache\") === \"0\""));

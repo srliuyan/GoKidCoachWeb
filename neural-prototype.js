@@ -22,7 +22,7 @@
   let teacherCache = null;
   let teacherCacheStatus = "not_loaded";
   const COLS = "ABCDEFGHJKLMNOPQRST";
-  const TEACHER_CACHE_PHASES = new Set(["opening_1_20", "early_middlegame_21_60", "late_middlegame_121_200"]);
+  const TEACHER_CACHE_PHASES = new Set(["opening_1_20", "early_middlegame_21_60", "middlegame_61_120", "late_middlegame_121_200", "endgame_201_plus"]);
   const selectedProvider = requestedProvider === "wasm" || requestedProvider === "webgpu"
     ? requestedProvider
     : capabilities.webgpuSupported ? "webgpu" : "wasm";
@@ -91,7 +91,7 @@
 
   async function teacherCacheOverride(position, move) {
     const moveNumber = Number(position?.moveNumber || 0);
-    const cacheablePhase = (moveNumber >= 1 && moveNumber <= 60) || (moveNumber >= 121 && moveNumber <= 200);
+    const cacheablePhase = moveNumber >= 1;
     if (!cacheablePhase || !position?.positionId) return move;
     const cache = await loadTeacherCache();
     const entry = cache.get(position.positionId);
