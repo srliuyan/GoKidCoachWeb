@@ -15,7 +15,6 @@ const detailedCandidateDiagnosticCap = 20;
 const rawStageTimingCap = 100;
 const recoverySnapshotInterval = 20;
 const maxStrengthMode = "MAX_STRENGTH_FIXED";
-const v3HighestStrengthUrl = "./neural-prototype.html?mode=max";
 const difficultyPresets = [
   { value: "adaptive", level: 880, key: "difficultyChallenge" },
   { value: maxStrengthMode, level: 980, key: "difficultyMax" }
@@ -2264,6 +2263,56 @@ function parseMoveText(text) {
   return { x, y };
 }
 
+function v3BoardForEngine() {
+  return board.map(row => row.map(value => {
+    if (value === black) return 1;
+    if (value === white) return -1;
+    return 0;
+  }));
+}
+
+function v3MoveHistoryForEngine() {
+  return moveHistory.map(item => ({
+    ...(item.pass ? { pass: true } : { x: item.x, y: item.y }),
+    color: item.color === black ? "B" : "W"
+  }));
+}
+
+async function waitForV3Harness(timeoutMs = 5000) {
+  const started = nowMs();
+  while (nowMs() - started < timeoutMs) {
+    const harness = window.GoKidCoachNeuralPrototypeHarness;
+    if (harness && typeof harness.selectMove === "function") return harness;
+    await new Promise(resolve => window.setTimeout(resolve, 100));
+  }
+  return null;
+}
+
+async function requestV3AIMove(aiColor, moves) {
+  const harness = await waitForV3Harness();
+  if (!harness) return null;
+  const legal = moves.map(point => ({ x: point.x, y: point.y }));
+  legal.push({ pass: true });
+  const result = await harness.selectMove({
+    board: v3BoardForEngine(),
+    sideToMove: aiColor === black ? "B" : "W",
+    komi: 7.5,
+    moveNumber: moveHistory.length + 1,
+    moveHistory: v3MoveHistoryForEngine(),
+    legalMoves: legal
+  }, {
+    mode: "max",
+    timeoutMs: 8000,
+    visitLimit: 256
+  });
+  const move = result?.move;
+  if (!move || move.pass) return null;
+  const point = { x: Number(move.x), y: Number(move.y) };
+  if (!Number.isInteger(point.x) || !Number.isInteger(point.y)) return null;
+  const legalResult = window.GoKidCoachRuleEngine?.evaluateMove?.({ board, point, color: aiColor, moveHistory, positionHashes });
+  return legalResult?.legal ? point : null;
+}
+
 function aiMove() {
   if (finished || !checkBuildConsistency()) return;
   const aiColor = aiStoneColor();
@@ -2297,6 +2346,24 @@ function aiMove() {
     if (!moves.length) {
       thinking.classList.add("hidden");
       pass();
+      return;
+    }
+
+    const v3Move = await measureStage(perfRecord, "diagnosticsMs", () => requestV3AIMove(aiColor, moves).catch(() => null));
+    if (v3Move) {
+      undoStack.push(snapshot());
+      playMove(v3Move, aiColor);
+      aiThinkTimes.push((typeof performance !== "undefined" && performance.now ? performance.now() : Date.now()) - started);
+      updateExportSnapshot("active");
+      measureStage(perfRecord, "persistenceMs", () => saveCurrentGame());
+      thinking.classList.add("hidden");
+      measureStage(perfRecord, "renderingMs", () => update());
+      perfRecord.totalAiThinkTimeMs = Math.max(0, nowMs() - started);
+      for (const key of ["boardCopyCount", "simulateMoveCount", "groupAtCallCount", "libertyPointsCallCount", "fullBoardScanCount", "JSONSerializeCount", "persistencePayloadBytes"]) {
+        perfRecord[key] = Math.max(0, Number(performanceDiagnostics.aggregate[key] || 0) - Number(counterStart[key] || 0));
+      }
+      perfRecord.estimatedMemoryBytes = estimateBytes({ moveHistory, undoStack, diagnostics: performanceDiagnostics.moveStages });
+      recordMovePerformance(perfRecord);
       return;
     }
 
@@ -2717,10 +2784,6 @@ function changeInitialDifficulty(value) {
   }
   saveProfile();
   saveCurrentGame();
-  if (isMaxStrengthMode(mode)) {
-    window.location.assign(v3HighestStrengthUrl);
-    return;
-  }
   update();
 }
 
@@ -3203,6 +3266,8 @@ function updateActiveAiSource() {
 function activeAiSourceText() {
   const remoteConfigured = Boolean(profile.remoteAIUrl || profile.kataGoUrl);
   if (remoteConfigured && remoteAiState === "connected") return "当前AI：远程 KataGo / AI";
+  if (window.GoKidCoachNeuralPrototypeHarness) return "当前AI：V3 Neural MCTS 最高棋力 + KataGo 教师缓存";
+  if (window.GoKidCoachEngineManager && window.GoKidCoachNeuralMctsPrototypeEngine) return "当前AI：V3 最高棋力正在加载";
 
   const policy = window.GoKidCoachPolicyModel;
   const policyState = policy?.state;
@@ -3618,6 +3683,7 @@ document.getElementById("continueGameBtn").addEventListener("click", continueGam
 document.getElementById("closeVictoryBtn").addEventListener("click", hideVictoryPopup);
 window.addEventListener("gokidcoach-policy-ready", updateActiveAiSource);
 window.addEventListener("gokidcoach-opening-book-ready", updateActiveAiSource);
+window.addEventListener("gokidcoach-v3-ready", updateActiveAiSource);
 document.getElementById("resetBtn").addEventListener("click", () => {
   try {
     localStorage.removeItem(profileStoreKey);
@@ -3653,10 +3719,6 @@ if (new URLSearchParams(window.location.search).get("demo") === "1") {
   setupDemoPosition();
 } else {
   loadCurrentGame();
-}
-
-if (isMaxStrengthMode(profile.difficultyMode) && new URLSearchParams(window.location.search).get("legacy") !== "1") {
-  window.location.replace(v3HighestStrengthUrl);
 }
 
 update();

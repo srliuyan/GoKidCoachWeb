@@ -255,6 +255,7 @@
       return diagnostics({ modeChanged: true });
     }
   };
+  window.dispatchEvent(new CustomEvent("gokidcoach-v3-ready", { detail: diagnostics() }));
 
   const gameCanvas = document.getElementById("v3Board");
   const gameCtx = gameCanvas?.getContext("2d");
