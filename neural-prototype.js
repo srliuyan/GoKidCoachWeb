@@ -11,7 +11,7 @@
   const ortScriptUrl = query.get("ort") || neuralModule.DEFAULT_ORT_SCRIPT;
   const ortMjsPath = query.get("mjs") || neuralModule.DEFAULT_ORT_MJS;
   const ortWasmPath = query.get("wasm") || neuralModule.DEFAULT_ORT_WASM;
-  const modelManifestPath = query.get("model") || "models/student-res6c64-fp16.dev.json";
+  const modelManifestPath = query.get("model") || "models/v3/default-curriculum/model-manifest.json";
   const openingEarlyModelManifestPath = query.get("openingEarlyModel") || "models/v3/opening-early-failed-1200/model-manifest.json";
   const earlyModelManifestPath = query.get("earlyModel") || "models/v3/early-cache-teacher-res8c96/model-manifest.json";
   const middlegameModelManifestPath = query.get("middlegameModel") || "";

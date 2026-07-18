@@ -14,6 +14,7 @@ const root = path.resolve(__dirname, "..");
 const port = Number(process.env.GOKIDCOACH_VALIDATION_PORT || 8766);
 const cdpPort = Number(process.env.GOKIDCOACH_CDP_PORT || 9226);
 const chromium = process.env.CHROMIUM_BIN || "chromium";
+const validationUrl = process.env.GOKIDCOACH_VALIDATION_URL || "";
 const maxPositions = Number(process.env.GOKIDCOACH_VALIDATION_POSITIONS || 80);
 const visitLimit = Number(process.env.GOKIDCOACH_VALIDATION_VISITS || 96);
 const timeLimitMs = Number(process.env.GOKIDCOACH_VALIDATION_TIME_MS || 3000);
@@ -353,15 +354,17 @@ function summarize(results) {
 async function main() {
   const rows = chooseRows();
   if (!rows.length) throw new Error(`No usable KataGo cache rows found in ${inputFile}`);
-  const server = await startServer();
+  const server = validationUrl ? null : await startServer();
   const profile = path.join("/tmp", `gokidcoach-browser-katago-${process.pid}`);
+  const targetUrl = validationUrl || `http://127.0.0.1:${port}/neural-prototype.html`;
+  const separator = targetUrl.includes("?") ? "&" : "?";
   const chrome = childProcess.spawn(chromium, [
     "--headless=new",
     "--no-sandbox",
     "--disable-gpu",
     `--remote-debugging-port=${cdpPort}`,
     `--user-data-dir=${profile}`,
-    `http://127.0.0.1:${port}/neural-prototype.html?provider=wasm${modelManifest ? `&model=${encodeURIComponent(modelManifest)}` : ""}${openingEarlyModelManifest ? `&openingEarlyModel=${encodeURIComponent(openingEarlyModelManifest)}` : ""}${earlyModelManifest ? `&earlyModel=${encodeURIComponent(earlyModelManifest)}` : ""}${middlegameModelManifest ? `&middlegameModel=${encodeURIComponent(middlegameModelManifest)}` : ""}${endgameModelManifest ? `&endgameModel=${encodeURIComponent(endgameModelManifest)}` : ""}${teacherCache !== undefined ? `&teacherCache=${encodeURIComponent(teacherCache)}` : ""}`
+    `${targetUrl}${separator}provider=wasm${modelManifest ? `&model=${encodeURIComponent(modelManifest)}` : ""}${openingEarlyModelManifest ? `&openingEarlyModel=${encodeURIComponent(openingEarlyModelManifest)}` : ""}${earlyModelManifest ? `&earlyModel=${encodeURIComponent(earlyModelManifest)}` : ""}${middlegameModelManifest ? `&middlegameModel=${encodeURIComponent(middlegameModelManifest)}` : ""}${endgameModelManifest ? `&endgameModel=${encodeURIComponent(endgameModelManifest)}` : ""}${teacherCache !== undefined ? `&teacherCache=${encodeURIComponent(teacherCache)}` : ""}`
   ], { stdio: ["ignore", "pipe", "pipe"] });
 
   try {
@@ -411,6 +414,7 @@ async function main() {
     const report = {
       generatedAt: new Date().toISOString(),
       inputFile,
+      validationUrl: validationUrl || null,
       model: init.manager?.active?.model?.id || init.manager?.active?.modelId || "student-res6c64-fp16",
       openingEarlyModel: openingEarlyModelManifest || null,
       earlyModel: earlyModelManifest || null,
@@ -432,7 +436,7 @@ async function main() {
     process.stdout.write(`Wrote ${outputFile}\n`);
   } finally {
     chrome.kill("SIGTERM");
-    server.close();
+    if (server) server.close();
   }
 }
 
