@@ -3,10 +3,10 @@
 (async function initPrototypePage() {
   const managerModule = window.GoKidCoachEngineManager;
   const neuralModule = window.GoKidCoachNeuralMctsPrototypeEngine;
-  let selectedMode = "adaptive";
+  const query = new URLSearchParams(window.location.search || "");
+  let selectedMode = query.get("mode") === "max" ? "max" : "adaptive";
   const manager = new managerModule.EngineManager({ timeoutMs: 30000 });
   const capabilities = neuralModule.detectStaticCapabilities(window);
-  const query = new URLSearchParams(window.location.search || "");
   const requestedProvider = query.get("provider");
   const ortScriptUrl = query.get("ort") || neuralModule.DEFAULT_ORT_SCRIPT;
   const ortMjsPath = query.get("mjs") || neuralModule.DEFAULT_ORT_MJS;

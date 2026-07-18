@@ -15,6 +15,7 @@ const detailedCandidateDiagnosticCap = 20;
 const rawStageTimingCap = 100;
 const recoverySnapshotInterval = 20;
 const maxStrengthMode = "MAX_STRENGTH_FIXED";
+const v3HighestStrengthUrl = "./neural-prototype.html?mode=max";
 const difficultyPresets = [
   { value: "adaptive", level: 880, key: "difficultyChallenge" },
   { value: maxStrengthMode, level: 980, key: "difficultyMax" }
@@ -2716,6 +2717,10 @@ function changeInitialDifficulty(value) {
   }
   saveProfile();
   saveCurrentGame();
+  if (isMaxStrengthMode(mode)) {
+    window.location.assign(v3HighestStrengthUrl);
+    return;
+  }
   update();
 }
 
@@ -3648,6 +3653,10 @@ if (new URLSearchParams(window.location.search).get("demo") === "1") {
   setupDemoPosition();
 } else {
   loadCurrentGame();
+}
+
+if (isMaxStrengthMode(profile.difficultyMode) && new URLSearchParams(window.location.search).get("legacy") !== "1") {
+  window.location.replace(v3HighestStrengthUrl);
 }
 
 update();
