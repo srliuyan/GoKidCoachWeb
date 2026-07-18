@@ -13,6 +13,23 @@
       <h1>围棋陪练 V3 最高棋力</h1>
     </header>
 
+    <section class="play-layout" aria-label="V3 对弈">
+      <div class="board-panel">
+        <canvas id="v3Board" width="900" height="900" aria-label="19路棋盘"></canvas>
+      </div>
+      <aside class="control-panel">
+        <h2 id="gameStatus">黑棋先行，请落子</h2>
+        <div class="score-row">
+          <div><strong id="moveCounter">0</strong><span>手数</span></div>
+          <div><strong id="engineLabel">V3</strong><span>当前AI</span></div>
+        </div>
+        <div class="actions compact-actions" aria-label="Game controls">
+          <button id="newGameBtn" type="button">新局</button>
+          <button id="passGameBtn" type="button">停一手</button>
+        </div>
+      </aside>
+    </section>
+
     <section class="status-grid" aria-label="Prototype status">
       <div><span>Architecture initialized</span><strong id="architectureStatus">pending</strong></div>
       <div><span>WebGPU supported</span><strong id="webgpuStatus">checking</strong></div>

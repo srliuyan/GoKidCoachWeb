@@ -1,6 +1,17 @@
 "use strict";
 
 (async function initPrototypePage() {
+  if (navigator.serviceWorker?.getRegistrations) {
+    navigator.serviceWorker.getRegistrations()
+      .then(registrations => Promise.all(registrations.map(registration => registration.unregister())))
+      .catch(() => {});
+  }
+  if (window.caches?.keys) {
+    window.caches.keys()
+      .then(keys => Promise.all(keys.filter(key => key.includes("gokidcoach")).map(key => window.caches.delete(key))))
+      .catch(() => {});
+  }
+
   const managerModule = window.GoKidCoachEngineManager;
   const neuralModule = window.GoKidCoachNeuralMctsPrototypeEngine;
   const query = new URLSearchParams(window.location.search || "");
@@ -244,6 +255,181 @@
       return diagnostics({ modeChanged: true });
     }
   };
+
+  const gameCanvas = document.getElementById("v3Board");
+  const gameCtx = gameCanvas?.getContext("2d");
+  const gameSize = 19;
+  let gameBoard = Array.from({ length: gameSize }, () => Array(gameSize).fill(0));
+  let gameHistory = [];
+  let gameBusy = false;
+
+  function gameText(id, value) {
+    const node = document.getElementById(id);
+    if (node) node.textContent = value;
+  }
+
+  function updateGameStatus(value) {
+    gameText("gameStatus", value);
+    gameText("moveCounter", String(gameHistory.length));
+    gameText("engineLabel", manager.getActiveEngineName() === "neural-mcts" ? "V3 Neural MCTS" : "V3 fallback");
+  }
+
+  function cloneBoard(board) {
+    return board.map(row => row.slice());
+  }
+
+  function adjacent(x, y) {
+    return [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]]
+      .filter(([nx, ny]) => nx >= 0 && nx < gameSize && ny >= 0 && ny < gameSize);
+  }
+
+  function collect(board, x, y) {
+    const color = board[y][x];
+    const stones = [{ x, y }];
+    const seen = new Set([`${x},${y}`]);
+    const liberties = new Set();
+    for (let i = 0; i < stones.length; i += 1) {
+      for (const [nx, ny] of adjacent(stones[i].x, stones[i].y)) {
+        if (board[ny][nx] === 0) liberties.add(`${nx},${ny}`);
+        else if (board[ny][nx] === color && !seen.has(`${nx},${ny}`)) {
+          seen.add(`${nx},${ny}`);
+          stones.push({ x: nx, y: ny });
+        }
+      }
+    }
+    return { stones, liberties };
+  }
+
+  function playOn(board, x, y, color) {
+    if (!Number.isInteger(x) || !Number.isInteger(y) || x < 0 || x >= gameSize || y < 0 || y >= gameSize || board[y][x] !== 0) return null;
+    const next = cloneBoard(board);
+    next[y][x] = color;
+    const opponent = -color;
+    adjacent(x, y).forEach(([nx, ny]) => {
+      if (next[ny][nx] !== opponent) return;
+      const group = collect(next, nx, ny);
+      if (group.liberties.size === 0) group.stones.forEach(stone => { next[stone.y][stone.x] = 0; });
+    });
+    return collect(next, x, y).liberties.size ? next : null;
+  }
+
+  function legalMoves(board, color) {
+    const moves = [];
+    for (let y = 0; y < gameSize; y += 1) {
+      for (let x = 0; x < gameSize; x += 1) {
+        if (playOn(board, x, y, color)) moves.push({ x, y });
+      }
+    }
+    moves.push({ pass: true });
+    return moves;
+  }
+
+  function enginePosition() {
+    return {
+      board: gameBoard,
+      sideToMove: "W",
+      komi: 7.5,
+      moveNumber: gameHistory.length + 1,
+      moveHistory: gameHistory,
+      legalMoves: legalMoves(gameBoard, -1)
+    };
+  }
+
+  function drawGame() {
+    if (!gameCanvas || !gameCtx) return;
+    const width = gameCanvas.width;
+    const pad = 44;
+    const gap = (width - pad * 2) / (gameSize - 1);
+    gameCtx.clearRect(0, 0, width, width);
+    gameCtx.fillStyle = "#d9a94d";
+    gameCtx.fillRect(0, 0, width, width);
+    gameCtx.strokeStyle = "#2d2416";
+    gameCtx.lineWidth = 2;
+    for (let i = 0; i < gameSize; i += 1) {
+      const p = pad + i * gap;
+      gameCtx.beginPath();
+      gameCtx.moveTo(pad, p);
+      gameCtx.lineTo(width - pad, p);
+      gameCtx.moveTo(p, pad);
+      gameCtx.lineTo(p, width - pad);
+      gameCtx.stroke();
+    }
+    [3, 9, 15].forEach(y => [3, 9, 15].forEach(x => {
+      gameCtx.beginPath();
+      gameCtx.arc(pad + x * gap, pad + y * gap, 5, 0, Math.PI * 2);
+      gameCtx.fillStyle = "#2d2416";
+      gameCtx.fill();
+    }));
+    gameBoard.forEach((row, y) => row.forEach((stone, x) => {
+      if (!stone) return;
+      const cx = pad + x * gap;
+      const cy = pad + y * gap;
+      gameCtx.beginPath();
+      gameCtx.arc(cx, cy, gap * 0.42, 0, Math.PI * 2);
+      gameCtx.fillStyle = stone === 1 ? "#111" : "#f8fafc";
+      gameCtx.fill();
+      gameCtx.strokeStyle = stone === 1 ? "#000" : "#9aa4b2";
+      gameCtx.stroke();
+    }));
+  }
+
+  async function playV3Move() {
+    gameBusy = true;
+    updateGameStatus("V3 正在思考...");
+    try {
+      const result = await selectPrototypeMove(enginePosition(), { mode: selectedMode, timeoutMs: 8000 });
+      const move = result.move || {};
+      if (move.pass) {
+        gameHistory.push({ pass: true, color: "W" });
+      } else {
+        const next = playOn(gameBoard, move.x, move.y, -1);
+        if (next) {
+          gameBoard = next;
+          gameHistory.push({ x: move.x, y: move.y, color: "W" });
+        }
+      }
+      updateGameStatus("轮到黑棋落子");
+    } catch (error) {
+      updateGameStatus(`V3 出错：${String(error.message || error)}`);
+    } finally {
+      gameBusy = false;
+      drawGame();
+    }
+  }
+
+  function resetV3Game() {
+    gameBoard = Array.from({ length: gameSize }, () => Array(gameSize).fill(0));
+    gameHistory = [];
+    gameBusy = false;
+    drawGame();
+    updateGameStatus("黑棋先行，请落子");
+  }
+
+  gameCanvas?.addEventListener("click", event => {
+    if (gameBusy) return;
+    const rect = gameCanvas.getBoundingClientRect();
+    const pad = 44;
+    const gap = (gameCanvas.width - pad * 2) / (gameSize - 1);
+    const x = Math.round(((event.clientX - rect.left) / rect.width * gameCanvas.width - pad) / gap);
+    const y = Math.round(((event.clientY - rect.top) / rect.height * gameCanvas.height - pad) / gap);
+    const next = playOn(gameBoard, x, y, 1);
+    if (!next) {
+      updateGameStatus("此处不能落子");
+      return;
+    }
+    gameBoard = next;
+    gameHistory.push({ x, y, color: "B" });
+    drawGame();
+    void playV3Move();
+  });
+
+  document.getElementById("newGameBtn")?.addEventListener("click", resetV3Game);
+  document.getElementById("passGameBtn")?.addEventListener("click", () => {
+    if (gameBusy) return;
+    gameHistory.push({ pass: true, color: "B" });
+    void playV3Move();
+  });
+  resetV3Game();
 
   document.getElementById("adaptiveModeBtn")?.addEventListener("click", () => {
     selectedMode = "adaptive";
