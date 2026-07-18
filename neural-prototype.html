@@ -3,15 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex">
-  <title>GoKidCoach Neural MCTS Prototype</title>
+  <title>围棋陪练 V3 最高棋力</title>
   <link rel="stylesheet" href="neural-prototype.css">
 </head>
 <body>
   <main class="prototype-shell">
     <header>
-      <p class="eyebrow">Development Only</p>
-      <h1>Neural MCTS Integration Prototype</h1>
+      <p class="eyebrow">GoKidCoach V3</p>
+      <h1>围棋陪练 V3 最高棋力</h1>
     </header>
 
     <section class="status-grid" aria-label="Prototype status">
@@ -23,11 +22,6 @@
       <div><span>Fallback status</span><strong id="fallbackStatus">default_legacy</strong></div>
       <div><span>Model status</span><strong id="modelStatus">pending</strong></div>
       <div><span>MCTS status</span><strong id="mctsStatus">pending</strong></div>
-    </section>
-
-    <section class="mode-row" aria-label="Mode">
-      <button id="adaptiveModeBtn" type="button" data-mode="adaptive">自适应对弈</button>
-      <button id="maxModeBtn" type="button" data-mode="max">当前最高棋力</button>
     </section>
 
     <section class="actions" aria-label="Diagnostics">

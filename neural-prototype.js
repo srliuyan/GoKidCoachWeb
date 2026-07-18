@@ -4,7 +4,7 @@
   const managerModule = window.GoKidCoachEngineManager;
   const neuralModule = window.GoKidCoachNeuralMctsPrototypeEngine;
   const query = new URLSearchParams(window.location.search || "");
-  let selectedMode = query.get("mode") === "max" ? "max" : "adaptive";
+  let selectedMode = query.get("mode") === "adaptive" ? "adaptive" : "max";
   const manager = new managerModule.EngineManager({ timeoutMs: 30000 });
   const capabilities = neuralModule.detectStaticCapabilities(window);
   const requestedProvider = query.get("provider");

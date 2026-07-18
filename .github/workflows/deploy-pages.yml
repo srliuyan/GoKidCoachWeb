@@ -43,9 +43,9 @@ jobs:
           rm -rf _site
           mkdir -p _site
           touch _site/.nojekyll
-          cp 404.html index.html neural-prototype.html build-info.js styles.css neural-prototype.css sw.js manifest.webmanifest _site/
-          cp engine-analysis.js offline-policy.js policy-pattern.js shape-library.js fuseki-library.js tactical-library.js joseki-library.js endgame-library.js opening-book.js _site/
-          cp rule-engine.js position-evaluator.js midgame-stability.js context-fusion.js product-support.js student-model.js difficulty-controller.js companion-engine.js move-quality-controller.js app.js neural-prototype.js _site/
+          cp neural-prototype.html _site/index.html
+          cp neural-prototype.html _site/neural-prototype.html
+          cp neural-prototype.css neural-prototype.js _site/
           cp -R assets _site/assets
           cp -R engine _site/engine
           mkdir -p _site/models
