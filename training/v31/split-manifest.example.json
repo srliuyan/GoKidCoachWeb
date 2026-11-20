@@ -1,9 +1,0 @@
-{
-  "seed": "gokidcoach-v312-split-v1",
-  "method": "sha256(basePositionId) bucket; all profiles and symmetries stay in the same split",
-  "splitDistribution": {
-    "train": 48,
-    "validation": 16
-  },
-  "positionHash": "e65c024f826b5a3fdcdba02352695b808b48543af391f61f5f8b40d59c01e289"
-}

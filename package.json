@@ -1,0 +1,30 @@
+{
+  "name": "gokidb10",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "test": "vitest run",
+    "check:assets": "node scripts/check-assets.mjs",
+    "backtest:level1": "node scripts/backtest-level1.mjs",
+    "measure:top-share": "vite-node --script scripts/measure-top-share.ts",
+    "verify": "npm run test && npm run build && npm run check:assets",
+    "preview": "vite preview",
+    "deploy:pages": "npm run verify && wrangler pages deploy dist --project-name gokidb10 --branch main --commit-dirty=true"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs": "4.22.0",
+    "@tensorflow/tfjs-backend-wasm": "4.22.0",
+    "@tensorflow/tfjs-backend-webgpu": "4.22.0",
+    "pako": "2.1.0"
+  },
+  "devDependencies": {
+    "@types/pako": "2.0.4",
+    "typescript": "5.9.3",
+    "vite": "7.2.4",
+    "vitest": "3.2.4",
+    "wrangler": "4.114.0"
+  }
+}

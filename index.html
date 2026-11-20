@@ -1,246 +1,211 @@
 <!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="围棋陪练">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#efe5d2">
-  <title>围棋陪练</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" type="image/png" href="assets/icon-192.png">
-  <link rel="apple-touch-icon" href="assets/icon-192.png">
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body class="child-mode">
-  <main class="app-shell">
-    <section class="board-section" aria-label="围棋棋盘">
-      <div class="board-wrap">
-        <canvas id="board" width="1000" height="1000"></canvas>
-        <div id="thinking" class="thinking hidden">AI 思考中...</div>
-      </div>
-    </section>
-
-    <aside class="panel">
-      <header class="header">
-        <div class="title-row">
-          <h1>围棋陪练</h1>
-          <span class="level-gem" aria-hidden="true"></span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f5c66b" />
+    <meta name="description" content="给孩子的 19 路围棋 AI 陪练" />
+    <title>GoKidB10 · 围棋小伙伴</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <div class="brand" aria-label="GoKidB10 围棋小伙伴">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+          <span><strong>围棋小伙伴</strong><small>GoKidB10</small></span>
         </div>
-        <p id="subtitle">19 路儿童自适应对弈网页版</p>
       </header>
 
-      <section class="card status-card">
-        <h2 id="status">黑棋先行，请孩子落子</h2>
-        <div class="metrics">
-          <div><strong id="moveCount">0</strong><span>手数</span></div>
-          <div><strong id="blackCaptures">0</strong><span>孩子吃子</span></div>
-          <div><strong id="whiteCaptures">0</strong><span>AI吃子</span></div>
-        </div>
-      </section>
+      <main class="game-layout">
+        <section id="board-card" class="board-card" aria-label="围棋对局">
+          <div class="turn-banner" id="turn-banner">
+            <div class="turn-main">
+              <span id="turn-stone" class="mini-stone black" aria-hidden="true"></span>
+              <div><small id="turn-kicker">轮到</small><strong id="turn-label">你下黑棋</strong></div>
+            </div>
+            <div class="board-tools">
+              <span id="save-state" class="save-state">已保存</span>
+              <button id="fullscreen-button" class="icon-button" type="button" aria-label="棋盘全屏" title="棋盘全屏">
+                <span aria-hidden="true">⛶</span>
+              </button>
+            </div>
+          </div>
 
-      <section class="actions">
-        <button id="undoBtn" type="button">悔棋</button>
-        <button id="continueBtn" type="button">继续上局</button>
-        <button id="newBtn" type="button">新局</button>
-        <button id="clearSaveBtn" type="button">清除存档</button>
-        <button id="finishBtn" type="button">结束</button>
-        <button id="hintBtn" type="button">提示</button>
-        <button id="passBtn" type="button">停一手</button>
-        <button id="moreBtn" type="button" aria-expanded="false">更多</button>
-        <button id="explainBtn" type="button">解释局面</button>
-        <button id="sgfBtn" type="button">导出SGF</button>
-        <button id="parentBtn" type="button">家长查看</button>
-      </section>
+          <div id="board-shell" class="board-shell">
+            <canvas id="go-board" role="grid" aria-label="19路围棋棋盘，点击交叉点落子" tabindex="0"></canvas>
+            <div id="coach-sticker" class="coach-sticker" aria-hidden="true" hidden>
+              <span id="coach-sticker-text">去角上</span>
+            </div>
+            <div id="capture-reward" class="capture-reward" aria-hidden="true" hidden>
+              <img id="reward-image" src="/images/treefrog-reward.png" alt="" />
+              <strong id="reward-text">呱呱</strong>
+            </div>
+            <div id="thinking-mask" class="thinking-mask" hidden>
+              <span class="thinking-stones" aria-hidden="true"><i></i><i></i><i></i></span>
+              <strong>小伙伴在想棋…</strong>
+              <small id="thinking-detail">准备 B10 引擎</small>
+            </div>
+          </div>
 
-      <section class="main-settings">
-        <label>
-          <span id="mainDifficultyLabel">难度</span>
-          <select id="mainDifficultySelect">
-            <option value="adaptive">自适应对弈</option>
-            <option value="MAX_STRENGTH_FIXED">当前最高棋力</option>
-          </select>
-        </label>
-        <p id="difficultyModeStatus" class="mode-status"></p>
-      </section>
+          <aside class="fullscreen-side" aria-label="全屏对局信息">
+            <section class="fs-card fs-actions">
+              <button id="fs-new-game-button" class="button button-primary">新对局</button>
+              <button id="fs-hint-button" class="button button-soft">提示</button>
+              <button id="fs-pass-button" class="button button-soft">停一手</button>
+              <button id="fs-resign-button" class="button button-soft danger-text">认输</button>
+            </section>
 
-      <section class="card setup-card">
-        <h2>学习设置</h2>
-        <label class="field-row">
-          <span id="childLabel">孩子</span>
-          <select id="childSelect"></select>
-        </label>
-        <div class="field-row split">
-          <input id="newChildName" type="text" maxlength="16" placeholder="新孩子名字">
-          <button id="addChildBtn" type="button" class="mini-btn">添加</button>
-        </div>
-        <label class="field-row">
-          <span id="difficultyLabel">初始难度</span>
-          <select id="difficultySelect">
-            <option value="adaptive">自适应对弈</option>
-            <option value="MAX_STRENGTH_FIXED">当前最高棋力</option>
-          </select>
-        </label>
-        <label class="field-row">
-          <span>孩子执棋</span>
-          <select id="childColorSelect">
-            <option value="black">孩子执黑</option>
-            <option value="white">孩子执白</option>
-          </select>
-        </label>
-        <label class="field-row">
-          <span id="languageLabel">语言</span>
-          <select id="languageSelect">
-            <option value="zh">中文</option>
-            <option value="yue">粤语</option>
-            <option value="en">English</option>
-            <option value="ja">日本語</option>
-            <option value="ko">한국어</option>
-          </select>
-        </label>
-        <div class="stage-row">
-          <span id="stageLabel">阶段</span>
-          <strong id="stageText">入门</strong>
-        </div>
-      </section>
+            <section id="fs-teaching-card" class="fs-card fs-teaching-card" aria-label="全屏教学提示" aria-live="polite" hidden>
+              <div class="panel-title"><span>教学</span><em>1-3级</em></div>
+              <p><strong id="fs-teaching-title">慢慢想，不着急。</strong><br /><span id="fs-teaching-text">先找角和边上的大地方。</span></p>
+            </section>
 
-      <section class="card skill-card" hidden>
-        <h2>能力档案</h2>
-        <div class="row"><span id="ratingLabel">总体棋力</span><progress id="rating" value="520" max="1000"></progress><b id="ratingText">520</b></div>
-        <div class="row"><span id="openingLabel">布局</span><progress id="opening" value="52" max="100"></progress><b id="openingText">52</b></div>
-        <div class="row"><span id="fightingLabel">战斗</span><progress id="fighting" value="58" max="100"></progress><b id="fightingText">58</b></div>
-        <div class="row"><span id="stabilityLabel">稳定</span><progress id="stability" value="48" max="100"></progress><b id="stabilityText">48</b></div>
-        <div class="metrics compact">
-          <div><strong id="gamesPlayed">0</strong><span id="playedLabel">已下</span></div>
-          <div><strong id="winRate">0%</strong><span id="winRateLabel">胜率</span></div>
-          <div><strong id="aiLevel">520</strong><span id="aiLevelLabel">AI强度</span></div>
-        </div>
-      </section>
+            <section id="fs-hint-card" class="fs-card fs-hint-card" aria-label="全屏提示" aria-live="polite" hidden>
+              <div class="panel-title"><span>提示</span><em id="fs-hint-point">想一想</em></div>
+              <p><strong id="fs-hint-title">这里有一步好棋。</strong><br /><span id="fs-hint-text">先看它能不能围空，也看自己的棋有没有连住。</span></p>
+            </section>
 
-      <section class="card support-card task-card" hidden>
-        <div class="card-title">
-          <h2 id="taskTitle">自适应对弈</h2>
-          <strong id="taskStatus">--</strong>
-        </div>
-        <p id="taskDescription">The AI adapts strength during the game and stays slightly stronger than the child.</p>
-      </section>
+            <section class="fs-card">
+              <div class="panel-title"><span>局面</span><em id="fs-position-status">刚开始</em></div>
+              <div class="winrate-row">
+                <div>
+                  <small>当前估算</small>
+                  <strong id="fs-child-winrate">--</strong>
+                </div>
+                <div>
+                  <small>建议</small>
+                  <strong id="fs-score-lead">--</strong>
+                </div>
+              </div>
+              <div class="winrate-meter" aria-hidden="true"><span id="fs-winrate-fill"></span></div>
+              <div class="position-meta">
+                <span id="fs-move-count">第 0 手</span>
+                <span id="fs-visit-count">等待 AI</span>
+              </div>
+            </section>
 
-      <section class="card support-card ai-analysis-card" hidden>
-        <h2 id="aiAnalysisTitle">AI 分析</h2>
-        <div class="analysis-grid">
-          <div><strong id="analysisWinrate">--</strong><span id="analysisWinrateLabel">胜率</span></div>
-          <div><strong id="analysisScoreLead">--</strong><span id="analysisScoreLeadLabel">目差</span></div>
-          <div><strong id="analysisBestMove">--</strong><span id="analysisBestMoveLabel">推荐</span></div>
-        </div>
-        <p id="analysisNote">连接 KataGo 后会显示分析结果。</p>
-        <p id="activeAiSource" class="ai-source">当前AI：内置启发式</p>
-      </section>
+            <section class="fs-card fs-stones">
+              <div class="stone-count">
+                <span class="mini-stone black" aria-hidden="true"></span>
+                <div><small id="fs-black-name">黑棋</small><strong id="fs-black-count">棋盘 0 · 提子 0</strong></div>
+              </div>
+              <div class="stone-count">
+                <span class="mini-stone white" aria-hidden="true"></span>
+                <div><small id="fs-white-name">白棋</small><strong id="fs-white-count">棋盘 0 · 提子 0</strong></div>
+              </div>
+            </section>
+          </aside>
 
-      <section class="card support-card">
-        <h2 id="reviewTitle">本局复盘</h2>
-        <ul id="review">
-          <li>完成一局后，这里会给 3 条简短反馈。</li>
-        </ul>
-      </section>
+          <p id="board-message" class="board-message" aria-live="polite">点一个交叉点，开始下棋吧。</p>
 
-      <section class="card support-card">
-        <div class="card-title">
-          <h2 id="recentTitle">最近对局</h2>
-          <button id="resetBtn" type="button" class="link-btn">重置</button>
-        </div>
-        <ul id="history" class="history">
-          <li>还没有完成的对局。</li>
-        </ul>
-      </section>
+        </section>
 
-      <section id="parentPanel" class="card parent-panel hidden">
-        <div class="card-title">
-          <h2>家长查看</h2>
-          <button id="closeParentBtn" type="button" class="link-btn">关闭</button>
-        </div>
-        <div class="parent-grid">
-          <div><strong id="parentAvgMoves">0</strong><span id="parentAvgMovesLabel">平均手数</span></div>
-          <div><strong id="parentAvgLevel">0</strong><span id="parentAvgLevelLabel">平均强度</span></div>
-          <div><strong id="parentTrend">暂无</strong><span id="parentTrendLabel">最近趋势</span></div>
-        </div>
-        <ul id="parentNotes" class="parent-notes">
-          <li>完成几局后，这里会显示趋势。</li>
-        </ul>
-        <div class="parent-controls">
-          <label>
-            <input id="rewardToggle" type="checkbox" checked>
-            <span id="rewardLabel">赢棋奖励</span>
-          </label>
-          <label>
-            <span id="remoteAiLabel">远程AI地址</span>
-            <input id="remoteAiUrl" type="url" placeholder="https://.../game/move">
-          </label>
-          <label>
-            <span id="kataGoLabel">KataGo分析地址</span>
-            <input id="kataGoUrl" type="url" placeholder="https://.../katago/analyze">
-          </label>
-          <p id="remoteAiStatus" class="remote-status">远程 AI 未配置</p>
-          <button id="saveParentSettingsBtn" type="button">保存设置</button>
-          <button id="exportBackupBtn" type="button">导出备份</button>
-          <button id="importBackupBtn" type="button">导入备份</button>
-          <input id="backupFileInput" type="file" accept="application/json,.json" class="hidden">
-          <button id="parentFinishBtn" type="button">结束并评估</button>
-          <button id="parentSgfBtn" type="button">导出SGF</button>
-          <button id="debugExportBtn" type="button">导出调试摘要</button>
-          <p id="versionText" class="remote-status">V1.0</p>
-        </div>
-      </section>
-    </aside>
-  </main>
+        <aside class="side-panel">
+          <section class="panel-card score-card" aria-label="对局信息">
+            <div class="score-player">
+              <span class="mini-stone black" aria-hidden="true"></span>
+              <div><small id="black-name">你 · 黑棋</small><strong id="black-captures">提子 0</strong></div>
+            </div>
+            <span class="versus">对</span>
+            <div class="score-player right">
+              <span class="mini-stone white" aria-hidden="true"></span>
+              <div><small id="white-name">AI · 白棋</small><strong id="white-captures">提子 0</strong></div>
+            </div>
+          </section>
 
-  <div id="endConfirmPopup" class="end-popup hidden" role="dialog" aria-live="polite" aria-label="终局确认">
-    <div class="end-card">
-      <h2>确认终局？</h2>
-      <p id="endEstimate">正在估算形势...</p>
-      <div class="end-actions">
-        <button id="confirmEndBtn" type="button">确认结束</button>
-        <button id="continueGameBtn" type="button">继续下</button>
-      </div>
+          <section class="quick-actions" aria-label="对局操作">
+            <button id="new-game-top" class="button button-primary">新对局</button>
+            <button id="hint-button" class="button button-soft">提示</button>
+            <button id="pass-button" class="button button-soft">停一手</button>
+            <button id="resign-button" class="button button-soft danger-text">认输</button>
+          </section>
+
+          <section class="panel-card difficulty-card">
+            <label class="level-control level-control-inline">
+              <span>难度</span>
+              <select id="level-select" aria-label="AI等级"></select>
+            </label>
+            <p id="difficulty-detail" class="difficulty-detail" aria-live="polite">第 3 级 · 陪练 · 常下好棋，也留机会</p>
+            <label class="level-control level-control-inline theme-control">
+              <span>皮肤</span>
+              <select id="theme-select" aria-label="界面皮肤"></select>
+            </label>
+            <div class="theme-preview" aria-hidden="true">
+              <img id="theme-preview-image" src="/images/treefrog-reward.png" alt="" />
+            </div>
+          </section>
+
+          <section class="panel-card position-card" aria-label="局面状态">
+            <div class="panel-title"><span>局面</span><em id="position-status">刚开始</em></div>
+            <div class="winrate-row">
+              <div>
+                <small>当前估算</small>
+                <strong id="child-winrate">--</strong>
+              </div>
+              <div>
+                <small>建议</small>
+                <strong id="score-lead">--</strong>
+              </div>
+            </div>
+            <div class="winrate-meter" aria-hidden="true"><span id="winrate-fill"></span></div>
+            <div class="position-meta">
+              <span id="move-count">第 0 手</span>
+              <span id="visit-count">等待 AI</span>
+            </div>
+          </section>
+
+          <section class="panel-card engine-card" aria-label="引擎状态">
+            <div class="engine-row"><span class="engine-dot loading" id="engine-dot"></span><strong id="engine-status">正在准备 B10</strong></div>
+            <progress id="model-progress" max="100" value="0"></progress>
+            <small id="engine-detail">正在启动页面，稍后显示下载进度</small>
+          </section>
+
+          <section id="teaching-card" class="gentle-tip teaching-tip" aria-label="教学提示" aria-live="polite">
+            <span aria-hidden="true">●</span>
+            <p><strong id="teaching-title">慢慢想，不着急。</strong><br /><span id="teaching-text">先找角和边上的大地方。</span></p>
+          </section>
+        </aside>
+      </main>
     </div>
-  </div>
 
-  <div id="victoryPopup" class="victory-popup hidden" role="dialog" aria-live="polite" aria-label="胜利奖励">
-    <div class="victory-card">
-      <img class="dino" src="assets/t-rex-victory.png" alt="">
-      <div class="speech">真棒</div>
-      <button id="closeVictoryBtn" type="button">继续</button>
+    <div id="new-game-dialog" class="dialog-backdrop" hidden>
+      <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="new-game-title">
+        <button id="close-dialog" class="dialog-close" aria-label="关闭">×</button>
+        <p class="eyebrow">准备好了吗？</p>
+        <h2 id="new-game-title">开始一盘新棋</h2>
+        <fieldset>
+          <legend>你想下哪一方？</legend>
+          <div class="color-options">
+            <label class="color-choice selected"><input type="radio" name="child-color" value="black" checked /><span class="big-stone black"></span><strong>我下黑棋</strong><small>我先下</small></label>
+            <label class="color-choice"><input type="radio" name="child-color" value="white" /><span class="big-stone white"></span><strong>我下白棋</strong><small>AI 先下</small></label>
+          </div>
+        </fieldset>
+        <button id="confirm-new-game" class="button button-primary button-wide">开始下棋</button>
+      </section>
     </div>
-  </div>
 
-  <script src="engine-analysis.js"></script>
-  <script src="policy-pattern.js"></script>
-  <script src="shape-library.js"></script>
-  <script src="fuseki-library.js"></script>
-  <script src="tactical-library.js"></script>
-  <script src="joseki-library.js"></script>
-  <script src="endgame-library.js"></script>
-  <script src="opening-book.js"></script>
-  <script src="rule-engine.js"></script>
-  <script src="position-evaluator.js"></script>
-  <script src="midgame-stability.js"></script>
-  <script src="context-fusion.js"></script>
-  <script src="build-info.js" data-build-id="gokidcoach-1.7.4.1-conditional-reply5-v1-20260715-1741"></script>
-  <script src="product-support.js" data-build-id="gokidcoach-1.7.4.1-conditional-reply5-v1-20260715-1741"></script>
-  <script src="student-model.js"></script>
-  <script src="difficulty-controller.js"></script>
-  <script src="companion-engine.js"></script>
-  <script src="move-quality-controller.js"></script>
-  <script src="engine/ai-engine-interface.js"></script>
-  <script src="engine/legacy-engine-adapter.js"></script>
-  <script src="engine/neural-mcts-prototype-engine.js"></script>
-  <script src="engine/engine-manager.js"></script>
-  <script src="neural-prototype.js"></script>
-  <script src="app.js"></script>
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./sw.js").catch(() => {});
-    }
-  </script>
-</body>
+    <div id="confirm-dialog" class="dialog-backdrop" hidden>
+      <section class="dialog dialog-small" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title">
+        <h2 id="confirm-title">要开始新对局吗？</h2>
+        <p id="confirm-message">现在这盘棋会结束。</p>
+        <div class="dialog-actions">
+          <button id="confirm-cancel" class="button button-soft">继续下棋</button>
+          <button id="confirm-ok" class="button button-primary">确定</button>
+        </div>
+      </section>
+    </div>
+
+    <div id="result-dialog" class="dialog-backdrop" hidden>
+      <section class="dialog dialog-small result-dialog" role="dialog" aria-modal="true" aria-labelledby="result-title">
+        <div id="result-emoji" class="result-emoji" aria-hidden="true">🌟</div>
+        <h2 id="result-title">这盘下完啦</h2>
+        <p id="result-message"></p>
+        <button id="result-new-game" class="button button-primary button-wide">再下一盘</button>
+        <button id="result-close" class="button button-plain">看看棋盘</button>
+      </section>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>

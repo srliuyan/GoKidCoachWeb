@@ -1,9 +1,8 @@
-name: Deploy GitHub Pages
+name: Build and deploy GoKidCoachWeb
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -16,52 +15,19 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Validate check mode
-        shell: bash
-        run: |
-          set -euo pipefail
-          node --check *.js
-          node test-product-release.js
-          node test-export-integrity.js
-          node test-phase-transition.js
-          node test-cleanup-integrity.js
-          node evaluation/run-long-game-performance.js --check
-
-      - name: Prepare runtime artifact
-        shell: bash
-        run: |
-          set -euo pipefail
-          rm -rf _site
-          mkdir -p _site
-          touch _site/.nojekyll
-          cp 404.html index.html neural-prototype.html build-info.js styles.css neural-prototype.css sw.js manifest.webmanifest _site/
-          cp engine-analysis.js offline-policy.js policy-pattern.js shape-library.js fuseki-library.js tactical-library.js joseki-library.js endgame-library.js opening-book.js _site/
-          cp rule-engine.js position-evaluator.js midgame-stability.js context-fusion.js product-support.js student-model.js difficulty-controller.js companion-engine.js move-quality-controller.js app.js neural-prototype.js _site/
-          cp -R assets _site/assets
-          cp -R engine _site/engine
-          mkdir -p _site/models
-          cp -R models/v3 _site/models/v3
-          mkdir -p _site/vendor/onnxruntime-web
-          cp -R vendor/onnxruntime-web/1.27.0 _site/vendor/onnxruntime-web/1.27.0
-          find _site -type f | sort
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          path: _site
-
-      - name: Deploy to GitHub Pages
-        id: deployment
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run verify
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
         uses: actions/deploy-pages@v4
