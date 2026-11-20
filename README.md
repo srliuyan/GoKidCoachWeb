@@ -4,7 +4,7 @@ GoKidB10 是面向约 6 岁儿童的 19 路围棋陪练网页。默认的**青�
 
 它只使用经过实体 iPad Safari 验证的 KataGo B10 / b10c128 模型，在浏览器本地 Worker 中完成真实推理，不需要账号、付费 AI 接口或长期运行的传统服务器。
 
-![青蛙动画儿童围棋陪练界面](artifacts/theme-frog.png)
+![小青蛙在棋盘上跳起吃子的动画界面](artifacts/frog-on-board.png)
 
 正式地址：https://gokidb10.pages.dev
 
